@@ -30,7 +30,7 @@ const features = [
 
 const Pricing = () => {
     return (
-        <section className="py-20 bg-white text-black">
+        <section id="pricing" className="py-20 bg-white text-black scroll-mt-20">
             <div className="container mx-auto px-4 max-w-4xl">
                 <h2 className="text-4xl font-bold text-center mb-6">Always Free</h2>
                 <p className="text-center text-gray-600 mb-14 text-lg max-w-xl mx-auto leading-relaxed">

@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { FiMenu, FiX } from 'react-icons/fi';
 
-
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
 
@@ -17,62 +16,60 @@ const Navbar = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
+    const handleNavClick = (e: React.MouseEvent, href: string) => {
+        e.preventDefault();
+        setIsOpen(false);
+        const id = href.replace(/^#/, '');
+        const el = document.getElementById(id);
+        if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    };
+
     return (
         <header className="bg-white shadow-sm sticky top-0 z-50">
-            <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between relative">
                 {/* Logo */}
-                <Link
-                    href="/"
-                    className="flex items-center space-x-3 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black rounded transition-all duration-300 ease-in-out"
-                    aria-label="Homepage"
-                >
-                    <Image src={'/logo.png'} alt='logo' width={50} height={50} />
-                    <span className="text-2xl font-bold tracking-wide text-gray-900 select-none transition-all duration-300 ease-in-out">
-                        Drop
-                    </span>
+                <Link href="/" aria-label="Homepage" className="flex items-center space-x-3">
+                    <Image src="/logo.png" alt="logo" width={50} height={50} />
+                    <span className="text-2xl font-bold text-gray-900 select-none">Drop</span>
                 </Link>
 
-                {/* Desktop nav (lg and above) */}
-                <nav className="hidden lg:flex space-x-4">
+                {/* Centered nav (desktop) */}
+                <nav className="hidden lg:flex space-x-6 absolute left-1/2 transform -translate-x-1/2">
                     {navLinks.map(({ name, href }) => (
-                        <Link
+                        <a
                             key={name}
                             href={href}
-                            className="text-gray-700 hover:bg-gray-200 rounded-md px-3 py-2 font-medium transition-all duration-300 ease-in-out hover:scale-[1.05] "
+                            onClick={e => handleNavClick(e, href)}
+                            className="text-gray-700 hover:bg-gray-200 rounded-md px-3 py-2 font-medium transition-all duration-300 ease-in-out hover:scale-[1.05]"
                         >
                             {name}
-                        </Link>
+                        </a>
                     ))}
                 </nav>
 
-                {/* Desktop actions (lg and above) */}
+                {/* Desktop actions */}
                 <div className="hidden lg:flex items-center space-x-5">
-                    <Link
-                        href="/login"
-                        className="text-gray-700 hover:bg-gray-200 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black transition-all duration-300 ease-in-out hover:scale-[1.05]"
-                    >
+                    <Link href="/login" className="text-gray-700 hover:bg-gray-200 rounded-md px-4 py-2 transition hover:scale-[1.05]">
                         Login
                     </Link>
-                    <Link
-                        href="/signup"
-                        className="px-5 py-2 bg-black text-white rounded-lg font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black transition-all duration-300 ease-in-out hover:bg-gray-800 hover:scale-[1.05]"
-                    >
+                    <Link href="/signup" className="px-5 py-2 bg-black text-white rounded-lg font-semibold transition hover:bg-gray-800 hover:scale-[1.05]">
                         Sign up
                     </Link>
                 </div>
 
-                {/* Mobile menu toggle (below lg) */}
+                {/* Mobile toggle */}
                 <button
-                    className="lg:hidden text-gray-900 transition-all duration-300 ease-in-out"
+                    className="lg:hidden text-gray-900"
                     aria-label="Toggle menu"
                     onClick={() => setIsOpen(!isOpen)}
-                    aria-expanded={isOpen}
                 >
                     {isOpen ? <FiX size={28} /> : <FiMenu size={28} />}
                 </button>
             </div>
 
-            {/* Mobile menu (below lg) */}
+            {/* Mobile menu */}
             <nav
                 className={`lg:hidden bg-white border-t border-gray-200 overflow-hidden transition-max-height duration-300 ease-in-out ${isOpen ? 'max-h-96' : 'max-h-0'
                     }`}
@@ -80,27 +77,19 @@ const Navbar = () => {
             >
                 <div className="flex flex-col px-6 py-4 space-y-4">
                     {navLinks.map(({ name, href }) => (
-                        <Link
+                        <a
                             key={name}
                             href={href}
-                            className="text-gray-700 hover:bg-gray-200 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black transition-all duration-300 ease-in-out hover:scale-[1.03]"
-                            onClick={() => setIsOpen(false)}
+                            onClick={e => handleNavClick(e, href)}
+                            className="text-gray-700 hover:bg-gray-200 rounded-md px-3 py-2 transition hover:scale-[1.03]"
                         >
                             {name}
-                        </Link>
+                        </a>
                     ))}
-                    <Link
-                        href="/login"
-                        className="text-gray-700 hover:bg-gray-200 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black transition-all duration-300 ease-in-out hover:scale-[1.03]"
-                        onClick={() => setIsOpen(false)}
-                    >
+                    <Link href="/login" onClick={() => setIsOpen(false)} className="text-gray-700 hover:bg-gray-200 rounded-md px-3 py-2 transition hover:scale-[1.03]">
                         Login
                     </Link>
-                    <Link
-                        href="/signup"
-                        className="px-4 py-2 bg-black text-white rounded-lg font-semibold text-center focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black transition-all duration-300 ease-in-out hover:bg-gray-800 hover:scale-[1.05]"
-                        onClick={() => setIsOpen(false)}
-                    >
+                    <Link href="/signup" onClick={() => setIsOpen(false)} className="px-4 py-2 bg-black text-white rounded-lg font-semibold transition hover:bg-gray-800 hover:scale-[1.05]">
                         Sign up
                     </Link>
                 </div>

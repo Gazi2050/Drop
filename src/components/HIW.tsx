@@ -21,7 +21,7 @@ const steps = [
 
 const HIW = () => {
     return (
-        <section id="how-it-works" className="py-20 bg-gray-50 text-black">
+        <section id="how-it-works" className="py-20 bg-gray-50 text-black scroll-mt-20">
             <div className="container mx-auto px-4 max-w-5xl">
                 <h2 className="text-4xl font-bold text-center mb-14">How It Works</h2>
 
