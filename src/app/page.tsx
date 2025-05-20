@@ -1,3 +1,4 @@
+import FAQ from "@/components/FAQ";
 import Features from "@/components/Features";
 import FileType from "@/components/FileType";
 import Hero from "@/components/Hero";
@@ -14,6 +15,7 @@ const page = () => {
       <FileType />
       <HIW />
       <Pricing />
+      <FAQ />
     </>
   );
 };

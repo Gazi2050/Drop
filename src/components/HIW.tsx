@@ -29,7 +29,7 @@ const HIW = () => {
                     {steps.map(({ icon: Icon, title, description }, idx) => (
                         <div
                             key={title}
-                            className="relative bg-white p-6 rounded-xl border border-gray-200 shadow-sm transition duration-300 hover:shadow-lg hover:scale-[1.03] cursor-pointer group"
+                            className="relative bg-white p-6 rounded-xl border border-gray-200 shadow-sm transition duration-300 hover:shadow-lg hover:scale-[1.03] cursor-pointer group text-center"
                         >
                             {/* Step Number Top Right, gray text no bg */}
                             <span className="absolute top-4 right-4 text-gray-400 font-semibold text-lg select-none">
