@@ -27,7 +27,7 @@ const socialLinks = [
 const Footer = () => {
     return (
         <footer className="bg-white text-black border-t border-gray-200 mt-auto py-12">
-            <div className="max-w-5xl mx-auto px-6">
+            <div className="max-w-6xl mx-auto px-6">
                 <div
                     className="
                     grid 
