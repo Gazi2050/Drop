@@ -3,6 +3,7 @@ import FileType from "@/components/FileType";
 import Hero from "@/components/Hero";
 import HIW from "@/components/HIW";
 import Navbar from "@/components/Navbar";
+import Pricing from "@/components/Pricing";
 
 const page = () => {
   return (
@@ -12,6 +13,7 @@ const page = () => {
       <Features />
       <FileType />
       <HIW />
+      <Pricing />
     </>
   );
 };
