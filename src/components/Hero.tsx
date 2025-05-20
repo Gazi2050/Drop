@@ -96,7 +96,7 @@ const Hero = () => {
     return (
         <section className="py-16 md:py-24 bg-white">
             <div className="container mx-auto px-4">
-                <div className="max-w-6xl mx-auto text-center">
+                <div className="max-w-5xl mx-auto text-center">
                     <h1 className="text-4xl md:text-5xl font-bold mb-6">
                         Upload and share files <span className="text-black">instantly</span>
                     </h1>

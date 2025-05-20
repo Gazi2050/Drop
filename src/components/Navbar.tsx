@@ -19,7 +19,7 @@ const Navbar = () => {
 
     return (
         <header className="bg-white shadow-sm sticky top-0 z-50">
-            <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
                 {/* Logo */}
                 <Link
                     href="/"
@@ -38,7 +38,7 @@ const Navbar = () => {
                         <Link
                             key={name}
                             href={href}
-                            className="text-gray-700 hover:bg-gray-200 rounded-md px-3 py-2 font-medium transition-all duration-300 ease-in-out hover:scale-[1.05] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+                            className="text-gray-700 hover:bg-gray-200 rounded-md px-3 py-2 font-medium transition-all duration-300 ease-in-out hover:scale-[1.05] "
                         >
                             {name}
                         </Link>
