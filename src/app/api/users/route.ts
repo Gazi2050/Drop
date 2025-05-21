@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { userSchema } from "@/schemas/userSchema";
 import { checkEmailExists, createUser, validateUser } from "@/services/userService";
+import { signToken } from "@/libs/jwt";
 
 export const POST = async (req: NextRequest) => {
     try {
@@ -45,8 +46,17 @@ export const GET = async (req: NextRequest) => {
             return NextResponse.json({ message: "Invalid credentials." }, { status: 401 });
         }
 
-        return NextResponse.json({ email, username });
+        // Generate JWT token with user info
+        const token = signToken({ email, username });
 
+        const response = NextResponse.json({ email, username });
+        // Set cookie with token — HttpOnly, Secure, SameSite=Strict, expires in 1 day
+        response.headers.set(
+            "Set-Cookie",
+            `token=${token}; HttpOnly; Path=/; Max-Age=86400; SameSite=Strict; Secure`
+        );
+
+        return response;
     } catch (error) {
         console.error("GET /api/users error:", error);
         return NextResponse.json({ message: "Server error", error }, { status: 500 });
