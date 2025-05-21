@@ -48,7 +48,7 @@ const Navbar = () => {
                             key={name}
                             href={href}
                             onClick={(e) => handleNavClick(e, href)}
-                            className="text-gray-700 hover:bg-gray-200 rounded-md px-3 py-2 font-medium transition-all duration-300 ease-in-out hover:scale-[1.05]"
+                            className="text-gray-700 hover:bg-gray-200 rounded-md px-3 py-2 font-medium transition-all duration-300 ease-in-out hover:scale-[1.04]"
                         >
                             {name}
                         </a>
@@ -65,7 +65,7 @@ const Navbar = () => {
                     </Link>
                     <Link
                         href="/signup"
-                        className="px-5 py-2 bg-black text-white rounded-lg font-semibold transition hover:bg-gray-800 hover:scale-[1.05]"
+                        className="px-5 py-2 bg-black text-white rounded-lg font-semibold transition hover:bg-gray-800 hover:scale-[1.04]"
                     >
                         Sign up
                     </Link>
