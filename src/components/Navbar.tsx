@@ -30,9 +30,15 @@ const Navbar = () => {
         <header className="bg-white shadow-sm sticky top-0 z-50">
             <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between relative">
                 {/* Logo */}
-                <Link href="/" aria-label="Homepage" className="flex items-center space-x-3">
+                <Link
+                    href="/"
+                    aria-label="Homepage"
+                    className="flex items-center space-x-3"
+                >
                     <Image src="/logo.png" alt="logo" width={50} height={50} />
-                    <span className="text-2xl font-bold text-gray-900 select-none">Drop</span>
+                    <span className="text-2xl font-bold text-gray-900 select-none">
+                        Drop
+                    </span>
                 </Link>
 
                 {/* Centered nav (desktop) */}
@@ -41,7 +47,7 @@ const Navbar = () => {
                         <a
                             key={name}
                             href={href}
-                            onClick={e => handleNavClick(e, href)}
+                            onClick={(e) => handleNavClick(e, href)}
                             className="text-gray-700 hover:bg-gray-200 rounded-md px-3 py-2 font-medium transition-all duration-300 ease-in-out hover:scale-[1.05]"
                         >
                             {name}
@@ -51,10 +57,16 @@ const Navbar = () => {
 
                 {/* Desktop actions */}
                 <div className="hidden lg:flex items-center space-x-5">
-                    <Link href="/login" className="text-gray-700 hover:bg-gray-200 rounded-md px-4 py-2 transition hover:scale-[1.05]">
+                    <Link
+                        href="/login"
+                        className="text-gray-700 hover:bg-gray-200 rounded-md px-4 py-2 transition hover:scale-[1.05]"
+                    >
                         Login
                     </Link>
-                    <Link href="/signup" className="px-5 py-2 bg-black text-white rounded-lg font-semibold transition hover:bg-gray-800 hover:scale-[1.05]">
+                    <Link
+                        href="/signup"
+                        className="px-5 py-2 bg-black text-white rounded-lg font-semibold transition hover:bg-gray-800 hover:scale-[1.05]"
+                    >
                         Sign up
                     </Link>
                 </div>
@@ -80,16 +92,24 @@ const Navbar = () => {
                         <a
                             key={name}
                             href={href}
-                            onClick={e => handleNavClick(e, href)}
+                            onClick={(e) => handleNavClick(e, href)}
                             className="text-gray-700 hover:bg-gray-200 rounded-md px-3 py-2 transition hover:scale-[1.03]"
                         >
                             {name}
                         </a>
                     ))}
-                    <Link href="/login" onClick={() => setIsOpen(false)} className="text-gray-700 hover:bg-gray-200 rounded-md px-3 py-2 transition hover:scale-[1.03]">
+                    <Link
+                        href="/login"
+                        onClick={() => setIsOpen(false)}
+                        className="text-gray-700 hover:bg-gray-200 rounded-md px-3 py-2 transition hover:scale-[1.03]"
+                    >
                         Login
                     </Link>
-                    <Link href="/signup" onClick={() => setIsOpen(false)} className="px-4 py-2 bg-black text-white rounded-lg font-semibold transition hover:bg-gray-800 hover:scale-[1.05]">
+                    <Link
+                        href="/signup"
+                        onClick={() => setIsOpen(false)}
+                        className="px-4 py-2 bg-black text-white rounded-lg font-semibold transition hover:bg-gray-800 hover:scale-[1.05]"
+                    >
                         Sign up
                     </Link>
                 </div>

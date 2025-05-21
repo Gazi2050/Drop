@@ -26,7 +26,9 @@ const FileType = () => {
                             key={type}
                             className="flex items-center justify-between px-6 py-4 hover:bg-gray-50 transition-colors"
                         >
-                            <span className="font-mono font-semibold text-lg tracking-wide">{type}</span>
+                            <span className="font-mono font-semibold text-lg tracking-wide">
+                                {type}
+                            </span>
                             <span className="text-sm text-gray-500">{label}</span>
                         </li>
                     ))}

@@ -14,25 +14,7 @@ const CTA = () => {
                 <div className="flex justify-center">
                     <Link
                         href="/signup"
-                        className="
-              inline-block
-              px-14
-              py-4
-              bg-white
-              text-black
-              font-semibold
-              rounded-lg
-              shadow-md
-              transform
-              transition
-              duration-300
-              ease-in-out
-              hover:scale-105
-              hover:shadow-lg
-              focus:outline-none
-              focus:ring-4
-              focus:ring-white/50
-            "
+                        className="inline-block px-14 py-4 bg-white text-black font-semibold rounded-lg shadow-md transform transition duration-300 ease-in-out hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-white/50"
                     >
                         Create Account
                     </Link>

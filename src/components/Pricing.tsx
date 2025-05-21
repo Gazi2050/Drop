@@ -65,8 +65,6 @@ const Pricing = () => {
                         <span>Get Started - It&apos;s Free!</span>
                         <FaArrowRight className="w-4 h-4" />
                     </button>
-
-
                 </div>
             </div>
         </section>

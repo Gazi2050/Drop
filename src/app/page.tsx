@@ -4,7 +4,7 @@ import Features from "@/components/Features";
 import FileType from "@/components/FileType";
 import Footer from "@/components/Footer";
 import Hero from "@/components/Hero";
-import HIW from "@/components/HIW";
+import HowItWorks from "@/components/HowItWorks";
 import Navbar from "@/components/Navbar";
 import Pricing from "@/components/Pricing";
 
@@ -15,7 +15,7 @@ const page = () => {
       <Hero />
       <Features />
       <FileType />
-      <HIW />
+      <HowItWorks />
       <Pricing />
       <FAQ />
       <CTA />

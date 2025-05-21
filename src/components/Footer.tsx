@@ -28,17 +28,7 @@ const Footer = () => {
     return (
         <footer className="bg-white text-black border-t border-gray-200 mt-auto py-12">
             <div className="max-w-6xl mx-auto px-6">
-                <div
-                    className="
-                    grid 
-                    grid-cols-1 
-                    md:grid-cols-2 
-                    lg:grid-cols-3
-                    xl:grid-cols-4
-                    gap-10 
-                    mb-12
-                  "
-                >
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-10 mb-12">
                     {/* Logo & About */}
                     <div>
                         <Link href="/" aria-label="Homepage" className="flex items-center space-x-3 mb-4">
@@ -114,7 +104,6 @@ const Footer = () => {
                                 Subscribe
                             </button>
                         </form>
-
                     </div>
                 </div>
 

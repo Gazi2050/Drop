@@ -45,19 +45,15 @@ const Hero = () => {
             return () => {
                 objectUrls.forEach((url) => URL.revokeObjectURL(url));
             };
-        } else {
-            setPreviews([]);
         }
+
+        setPreviews([]);
     }, [files]);
 
     const handleDrag = (e: React.DragEvent<HTMLDivElement>) => {
         e.preventDefault();
         e.stopPropagation();
-        if (e.type === 'dragenter' || e.type === 'dragover') {
-            setDragActive(true);
-        } else if (e.type === 'dragleave') {
-            setDragActive(false);
-        }
+        setDragActive(e.type === 'dragenter' || e.type === 'dragover');
     };
 
     const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
@@ -65,12 +61,9 @@ const Hero = () => {
         e.stopPropagation();
         setDragActive(false);
 
-        if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-            const droppedFiles = Array.from(e.dataTransfer.files);
-            if (validateFiles(droppedFiles)) {
-                setFiles(droppedFiles);
-            }
-            e.dataTransfer.clearData();
+        const droppedFiles = Array.from(e.dataTransfer.files || []);
+        if (validateFiles(droppedFiles)) {
+            setFiles(droppedFiles);
         }
     };
 
@@ -83,15 +76,65 @@ const Hero = () => {
         }
     };
 
-    const openFileDialog = () => {
-        inputRef.current?.click();
-    };
+    const openFileDialog = () => inputRef.current?.click();
 
     const removeFile = (index: number) => {
-        const newFiles = [...files];
-        newFiles.splice(index, 1);
-        setFiles(newFiles);
+        const updated = [...files];
+        updated.splice(index, 1);
+        setFiles(updated);
     };
+
+    const renderEmptyState = () => (
+        <div className="flex flex-col items-center justify-center space-y-4 py-12">
+            <FiUploadCloud className="h-12 w-12 text-gray-600" />
+            <p className="text-lg font-medium">Drag and drop files here</p>
+            <p className="text-sm text-gray-500">or click to browse</p>
+            <button
+                type="button"
+                onClick={(e) => {
+                    e.stopPropagation();
+                    openFileDialog();
+                }}
+                className="px-5 py-2.5 bg-black text-white rounded-lg hover:bg-gray-900 transition-colors duration-300 cursor-pointer"
+            >
+                Select Files
+            </button>
+        </div>
+    );
+
+    const renderFilePreview = () => (
+        <div className="flex flex-wrap justify-center items-center gap-6 py-4 max-h-[240px] overflow-y-auto">
+            {files.map((file, index) => (
+                <div
+                    key={index}
+                    className="relative w-36 h-44 flex flex-col items-center justify-start"
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    {file.type.startsWith('image/') && previews[index] ? (
+                        <img
+                            src={previews[index]}
+                            alt={file.name}
+                            className="h-32 w-32 object-cover rounded-xl"
+                        />
+                    ) : (
+                        file.type === 'application/pdf' && (
+                            <FiFile className="h-16 w-16 text-gray-500 mb-1" />
+                        )
+                    )}
+                    <p className="text-xs text-center mt-2 truncate max-w-[8rem]">{file.name}</p>
+
+                    <button
+                        type="button"
+                        onClick={() => removeFile(index)}
+                        className="absolute -top-1 right-1 p-1 rounded-full bg-gray-200 text-gray-600 hover:bg-red-500 hover:text-white transition-all shadow-md"
+                        aria-label={`Remove ${file.name}`}
+                    >
+                        <FiX size={16} />
+                    </button>
+                </div>
+            ))}
+        </div>
+    );
 
     return (
         <section className="py-16 md:py-24 bg-white">
@@ -104,7 +147,7 @@ const Hero = () => {
                         A simple and fast way to upload PDFs and images, and get shareable URLs in seconds.
                     </p>
 
-                    {/* Upload Area */}
+                    {/* Upload Box */}
                     <div
                         className={`w-full max-w-xl mx-auto mb-6 p-5 border-2 border-dashed rounded-xl cursor-pointer
               ${dragActive ? 'border-black bg-gray-100' : 'border-gray-300 bg-gray-50'}
@@ -129,66 +172,14 @@ const Hero = () => {
                             className="hidden"
                             accept="image/*,application/pdf"
                         />
-
-                        {files.length === 0 ? (
-                            <div className="flex flex-col items-center justify-center space-y-4 py-12">
-                                <FiUploadCloud className="h-12 w-12 text-gray-600" />
-                                <p className="text-lg font-medium">Drag and drop files here</p>
-                                <p className="text-sm text-gray-500">or click to browse</p>
-                                <button
-                                    type="button"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        openFileDialog();
-                                    }}
-                                    className="px-5 py-2.5 bg-black text-white rounded-lg hover:bg-gray-900 transition-colors duration-300 cursor-pointer"
-                                >
-                                    Select Files
-                                </button>
-                            </div>
-                        ) : (
-                            <div className="flex flex-wrap justify-center items-center gap-6 py-4 max-h-[240px] overflow-y-auto">
-                                {files.map((file, index) => (
-                                    <div
-                                        key={index}
-                                        className="relative w-36 h-44 flex flex-col items-center justify-start"
-                                        onClick={(e) => e.stopPropagation()}
-                                    >
-                                        {file.type.startsWith('image/') && previews[index] ? (
-                                            <>
-                                                <img
-                                                    src={previews[index]}
-                                                    alt={file.name}
-                                                    className="h-32 w-32 object-cover rounded-xl"
-                                                />
-                                                <p className="text-xs text-center mt-2 truncate max-w-[8rem]">{file.name}</p>
-                                            </>
-                                        ) : file.type === 'application/pdf' ? (
-                                            <>
-                                                <FiFile className="h-16 w-16 text-gray-500 mb-1" />
-                                                <p className="text-xs text-center mt-2 truncate max-w-[8rem]">{file.name}</p>
-                                            </>
-                                        ) : null}
-
-                                        <button
-                                            type="button"
-                                            onClick={() => removeFile(index)}
-                                            className="absolute -top-1 right-1 p-1 rounded-full bg-gray-200 text-gray-600 hover:bg-red-500 hover:text-white transition-all shadow-md"
-                                            aria-label={`Remove ${file.name}`}
-                                        >
-                                            <FiX size={16} />
-                                        </button>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
+                        {files.length === 0 ? renderEmptyState() : renderFilePreview()}
                     </div>
 
-                    {/* Post Button */}
+                    {/* Submit */}
                     {files.length > 0 && (
                         <button
                             type="button"
-                            className="px-6 py-3 bg-black text-white rounded-lg font-semibold hover:bg-gray-900 transition-colors duration-300"
+                            className="px-6 py-3 bg-black text-white rounded-lg font-semibold hover:bg-gray-900 transition-colors duration-300 cursor-pointer"
                             onClick={() => alert('Files ready to be posted!')}
                         >
                             Upload Files
