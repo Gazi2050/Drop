@@ -12,7 +12,7 @@ const Features = () => {
                     {featuresData.map(({ icon: Icon, title, description }) => (
                         <div
                             key={title}
-                            className="bg-white p-6 rounded-xl border border-gray-200 transition duration-300 hover:shadow-md hover:scale-[1.02] group"
+                            className="bg-white p-6 rounded-xl border border-gray-200 transition duration-300 hover:shadow-lg hover:scale-[1.02] group"
                         >
                             <div className="w-10 h-10 bg-gray-100 rounded-md flex items-center justify-center mb-4 text-black group-hover:bg-gray-200 transition">
                                 <Icon className="w-5 h-5" />

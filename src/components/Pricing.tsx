@@ -34,7 +34,7 @@ const Pricing = () => {
 
                     <button
                         type="button"
-                        className="w-full py-3 bg-black text-white font-semibold rounded-lg flex items-center justify-center space-x-2 hover:bg-gray-900 transition-all duration-500 ease-in-out hover:scale-105 transform"
+                        className="w-full py-3 bg-black text-white font-semibold rounded-lg flex items-center justify-center space-x-2 hover:bg-gray-900 transition-all duration-500 ease-in-out hover:scale-105 transform cursor-pointer"
                     >
                         <span>Get Started - It&apos;s Free!</span>
                         <FaArrowRight className="w-4 h-4" />
