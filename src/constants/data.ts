@@ -139,7 +139,7 @@ export const supportLinks = [
 ];
 
 export const socialLinks = [
-    { icon: FaTwitter, href: '#', label: 'Twitter' },
-    { icon: FaGithub, href: '#', label: 'GitHub' },
-    { icon: FaReddit, href: '#', label: 'Reddit' },
+    { icon: FaTwitter, href: 'https://x.com', label: 'Twitter' },
+    { icon: FaGithub, href: 'https://github.com/Gazi2050/Drop', label: 'GitHub' },
+    { icon: FaReddit, href: 'https://www.reddit.com', label: 'Reddit' },
 ];
