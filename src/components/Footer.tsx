@@ -1,28 +1,7 @@
 'use client';
+import { productLinks, socialLinks, supportLinks } from '@/constants/data';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
-import { FaTwitter, FaGithub, FaReddit } from 'react-icons/fa';
-
-const productLinks = [
-    { label: 'Features', href: '#features' },
-    { label: 'How it works', href: '#how-it-works' },
-    { label: 'Pricing', href: '#pricing' },
-    { label: 'FAQ', href: '#faq' },
-];
-
-const supportLinks = [
-    { label: 'Help Center', href: '#' },
-    { label: 'Contact Us', href: '#' },
-    { label: 'Privacy Policy', href: '#' },
-    { label: 'Terms of Service', href: '#' },
-];
-
-const socialLinks = [
-    { icon: FaTwitter, href: '#', label: 'Twitter' },
-    { icon: FaGithub, href: '#', label: 'GitHub' },
-    { icon: FaReddit, href: '#', label: 'Reddit' },
-];
 
 const Footer = () => {
     return (

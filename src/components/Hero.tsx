@@ -1,13 +1,7 @@
 'use client';
-
+import { features } from '@/constants/data';
 import { useState, useRef, useEffect } from 'react';
 import { FiUploadCloud, FiCheckCircle, FiFile, FiX } from 'react-icons/fi';
-
-const features = [
-    'No signup required',
-    'Instant sharing',
-    'Multiple file formats',
-];
 
 const Hero = () => {
     const [dragActive, setDragActive] = useState(false);

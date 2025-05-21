@@ -1,23 +1,5 @@
+import { steps } from "@/constants/data";
 import React from "react";
-import { FaFileUpload, FaLink, FaShareAlt } from "react-icons/fa";
-
-const steps = [
-    {
-        icon: FaFileUpload,
-        title: "Upload Your File",
-        description: "Drag and drop or select files to upload. No account needed.",
-    },
-    {
-        icon: FaLink,
-        title: "Get Your Link",
-        description: "Receive an instant shareable URL once your file is uploaded.",
-    },
-    {
-        icon: FaShareAlt,
-        title: "Share Anywhere",
-        description: "Share your link via email, messaging apps, or social media.",
-    },
-];
 
 const HowItWorks = () => {
     return (

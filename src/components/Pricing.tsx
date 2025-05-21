@@ -1,32 +1,6 @@
+import { PricingData } from "@/constants/data";
 import React from "react";
 import { FaCheckCircle, FaArrowRight } from "react-icons/fa";
-
-const features = [
-    {
-        title: "Easy Uploads",
-        subtitle: "Upload a variety of popular file formats with ease",
-    },
-    {
-        title: "Unlimited Storage",
-        subtitle: "Store all your files without limits",
-    },
-    {
-        title: "Advanced File Management",
-        subtitle: "Organize, delete, and manage your uploads seamlessly",
-    },
-    {
-        title: "Password Protection",
-        subtitle: "Secure your shared files with passwords",
-    },
-    {
-        title: "Multiple File Formats",
-        subtitle: "Support for PDFs, images, and more",
-    },
-    {
-        title: "No Ads or Tracking",
-        subtitle: "Enjoy a clean, distraction-free experience",
-    },
-];
 
 const Pricing = () => {
     return (
@@ -47,7 +21,7 @@ const Pricing = () => {
                     </div>
 
                     <ul className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-                        {features.map(({ title, subtitle }) => (
+                        {PricingData.map(({ title, subtitle }) => (
                             <li key={title} className="flex space-x-4 items-start">
                                 <FaCheckCircle className="text-primary mt-1 flex-shrink-0 w-7 h-7" />
                                 <div>

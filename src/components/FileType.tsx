@@ -1,13 +1,4 @@
-const fileTypes = [
-    { type: "PDF", label: "Documents" },
-    { type: "JPG", label: "Images" },
-    { type: "PNG", label: "Images" },
-    { type: "WEBP", label: "Images" },
-    { type: "GIF", label: "Animations" },
-    { type: "BMP", label: "Images" },
-    { type: "SVG", label: "Vector" },
-    { type: "HEIC", label: "Images" },
-];
+import { fileTypes } from "@/constants/data";
 
 const FileType = () => {
     return (
