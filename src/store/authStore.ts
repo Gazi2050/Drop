@@ -17,9 +17,18 @@ export const useAuthStore = create<AuthState>((set) => ({
     },
 
     logout: async () => {
-        document.cookie = "token=; Max-Age=0; path=/";
+        try {
+            await fetch("/api/users/logout", {
+                method: "POST",
+                credentials: "include",
+            });
+        } catch (err) {
+            console.error("Logout error:", err);
+        }
+
         set({ user: null, isAuthenticated: false });
-    },
+    }
+    ,
 
     fetchUser: async () => {
         try {
