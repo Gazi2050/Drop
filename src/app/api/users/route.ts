@@ -3,9 +3,14 @@ import { userSchema } from "@/schemas/userSchema";
 import { checkEmailExists, createUser, validateUser } from "@/services/userService";
 import { signToken } from "@/libs/jwt";
 
-export const POST = async (req: NextRequest) => {
+interface UserRequestBody {
+    email: string;
+    password: string;
+}
+
+export const POST = async (req: NextRequest): Promise<NextResponse> => {
     try {
-        const body = await req.json();
+        const body: UserRequestBody = await req.json();
         const parsed = userSchema.safeParse(body);
 
         if (!parsed.success) {
@@ -23,17 +28,25 @@ export const POST = async (req: NextRequest) => {
         const insertedId = await createUser(email, password, username);
         return NextResponse.json({ message: "User registered successfully", insertedId }, { status: 201 });
 
-    } catch (error) {
-        console.error("POST /api/users error:", error);
-        return NextResponse.json({ message: "Server error", error }, { status: 500 });
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            console.error("POST /api/users error:", error.message);
+        } else {
+            console.error("POST /api/users unknown error:", error);
+        }
+        return NextResponse.json({ message: "Server error" }, { status: 500 });
     }
 };
 
-export const GET = async (req: NextRequest) => {
+export const GET = async (req: NextRequest): Promise<NextResponse> => {
     try {
         const { searchParams } = new URL(req.url);
         const email = searchParams.get("email");
         const password = searchParams.get("password");
+
+        if (!email || !password) {
+            return NextResponse.json({ message: "Email and password required." }, { status: 400 });
+        }
 
         const parsed = userSchema.safeParse({ email, password });
 
@@ -41,24 +54,26 @@ export const GET = async (req: NextRequest) => {
             return NextResponse.json({ error: parsed.error.flatten().fieldErrors }, { status: 400 });
         }
 
-        const username = await validateUser(email!, password!);
+        const username = await validateUser(email, password);
         if (!username) {
             return NextResponse.json({ message: "Invalid credentials." }, { status: 401 });
         }
 
-        // Generate JWT token with user info
         const token = signToken({ email, username });
 
         const response = NextResponse.json({ email, username });
-        // Set cookie with token — HttpOnly, Secure, SameSite=Strict, expires in 1 day
         response.headers.set(
             "Set-Cookie",
             `token=${token}; HttpOnly; Path=/; Max-Age=86400; SameSite=Strict; Secure`
         );
 
         return response;
-    } catch (error) {
-        console.error("GET /api/users error:", error);
-        return NextResponse.json({ message: "Server error", error }, { status: 500 });
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            console.error("GET /api/users error:", error.message);
+        } else {
+            console.error("GET /api/users unknown error:", error);
+        }
+        return NextResponse.json({ message: "Server error" }, { status: 500 });
     }
 };
