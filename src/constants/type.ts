@@ -26,3 +26,16 @@ export type AuthState = {
     logout: () => Promise<void>;
     fetchUser: () => Promise<void>;
 };
+
+export interface FilePreviewProps {
+    file: File;
+    previewUrl?: string;
+    onRemove: () => void;
+}
+
+export interface UploadAreaProps {
+    files: File[];
+    setFiles: React.Dispatch<React.SetStateAction<File[]>>;
+    errorMessage: string;
+    setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
+}

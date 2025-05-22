@@ -2,13 +2,7 @@
 import { FiUploadCloud } from "react-icons/fi";
 import FilePreview from "./FilePreview";
 import { useEffect, useRef, useState } from "react";
-
-interface UploadAreaProps {
-    files: File[];
-    setFiles: React.Dispatch<React.SetStateAction<File[]>>;
-    errorMessage: string;
-    setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
-}
+import { UploadAreaProps } from "@/constants/type";
 
 const UploadArea = ({ files, setFiles, errorMessage, setErrorMessage }: UploadAreaProps) => {
     const [dragActive, setDragActive] = useState(false);
