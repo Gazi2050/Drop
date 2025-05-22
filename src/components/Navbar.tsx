@@ -1,5 +1,6 @@
 'use client';
 import { navLinks } from '@/constants/data';
+import { useAuthStore } from '@/store/authStore';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
@@ -7,7 +8,7 @@ import { FiMenu, FiX } from 'react-icons/fi';
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
-
+    const { isAuthenticated, logout } = useAuthStore();
     useEffect(() => {
         function handleResize() {
             if (window.innerWidth >= 1024) setIsOpen(false);
@@ -56,20 +57,39 @@ const Navbar = () => {
                 </nav>
 
                 {/* Desktop actions */}
-                <div className="hidden lg:flex items-center space-x-5">
-                    <Link
-                        href="/login"
-                        className="text-gray-700 hover:bg-gray-200 rounded-md px-4 py-2 transition hover:scale-[1.05]"
-                    >
-                        Login
-                    </Link>
-                    <Link
-                        href="/signup"
-                        className="px-5 py-2 bg-black text-white rounded-lg font-semibold transition hover:bg-gray-800 hover:scale-[1.04]"
-                    >
-                        Sign up
-                    </Link>
-                </div>
+
+
+                {isAuthenticated ?
+                    (<div className="hidden lg:flex items-center space-x-5">
+                        <button
+                            onClick={() => logout()}
+                            className="text-gray-700 hover:bg-gray-200 rounded-md px-4 py-2 transition hover:scale-[1.05]"
+                        >
+                            Logout
+                        </button>
+                        <Link
+                            href="/dashboard"
+                            className="px-5 py-2 bg-black text-white rounded-lg font-semibold transition hover:bg-gray-800 hover:scale-[1.04]"
+                        >
+                            Dashboard
+                        </Link>
+                    </div>)
+                    :
+                    (<div className="hidden lg:flex items-center space-x-5">
+                        <Link
+                            href="/login"
+                            className="text-gray-700 hover:bg-gray-200 rounded-md px-4 py-2 transition hover:scale-[1.05]"
+                        >
+                            Login
+                        </Link>
+                        <Link
+                            href="/signup"
+                            className="px-5 py-2 bg-black text-white rounded-lg font-semibold transition hover:bg-gray-800 hover:scale-[1.04]"
+                        >
+                            Sign up
+                        </Link>
+                    </div>)
+                }
 
                 {/* Mobile toggle */}
                 <button
@@ -98,20 +118,44 @@ const Navbar = () => {
                             {name}
                         </a>
                     ))}
-                    <Link
-                        href="/login"
-                        onClick={() => setIsOpen(false)}
-                        className="text-gray-700 hover:bg-gray-200 rounded-md px-3 py-2 transition hover:scale-[1.03]"
-                    >
-                        Login
-                    </Link>
-                    <Link
-                        href="/signup"
-                        onClick={() => setIsOpen(false)}
-                        className="px-4 py-2 bg-black text-white rounded-lg font-semibold transition hover:bg-gray-800 hover:scale-[1.05]"
-                    >
-                        Sign up
-                    </Link>
+                    {isAuthenticated ? (
+                        <>
+                            <button
+                                onClick={() => {
+                                    logout();
+                                    setIsOpen(false);
+                                }}
+                                className="text-gray-700 hover:bg-gray-200 rounded-md px-3 py-2 transition hover:scale-[1.03]"
+                            >
+                                Logout
+                            </button>
+                            <Link
+                                href="/dashboard"
+                                onClick={() => setIsOpen(false)}
+                                className="px-4 py-2 bg-black text-white rounded-lg font-semibold transition hover:bg-gray-800 hover:scale-[1.05] text-center"
+                            >
+                                Dashboard
+                            </Link>
+                        </>
+                    ) : (
+                        <>
+                            <Link
+                                href="/login"
+                                onClick={() => setIsOpen(false)}
+                                className="text-gray-700 hover:bg-gray-200 rounded-md px-3 py-2 transition hover:scale-[1.03] text-center"
+                            >
+                                Login
+                            </Link>
+                            <Link
+                                href="/signup"
+                                onClick={() => setIsOpen(false)}
+                                className="px-4 py-2 bg-black text-white rounded-lg font-semibold transition hover:bg-gray-800 hover:scale-[1.05] text-center"
+                            >
+                                Sign up
+                            </Link>
+                        </>
+                    )}
+
                 </div>
             </nav>
         </header>
