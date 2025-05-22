@@ -2,17 +2,23 @@
 
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { FcGoogle } from 'react-icons/fc';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useAuthStore } from '@/store/authStore';
 import { AuthFormProps, FormValues } from '@/constants/type';
 import PasswordErrors from './PasswordErrors';
+import { toast } from 'sonner';
 
 const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
     const isLogin = type === 'login';
     const [showPassword, setShowPassword] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+    const [formError, setFormError] = useState('');
+    const router = useRouter();
+
+    const { login, signup } = useAuthStore();
 
     const {
         register,
@@ -22,9 +28,24 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
 
     const onSubmit = async (data: FormValues) => {
         setIsLoading(true);
+        setFormError('');
+
         try {
-            await new Promise((resolve) => setTimeout(resolve, 2000));
-            console.log(data);
+            if (isLogin) {
+                await login(data.email, data.password);
+                toast.success('Logged in successfully');
+            } else {
+                await signup(data.email, data.password);
+                toast.success('Account created successfully');
+            }
+            router.push('/');
+        } catch (err) {
+            if (err instanceof Error) {
+                toast.error(err.message || 'Something went wrong');
+                setFormError(err.message);
+            } else {
+                setFormError('Something went wrong.');
+            }
         } finally {
             setIsLoading(false);
         }
@@ -33,34 +54,15 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-12">
             <div className="w-full max-w-md bg-white border border-gray-200 rounded-2xl shadow-md p-8 sm:p-10 transition-all">
-                {/* Logo */}
                 <Link href="/" className="flex justify-center items-center space-x-3 mb-6">
                     <Image src="/logo.png" alt="Drop Logo" width={40} height={40} />
                     <span className="text-xl font-bold text-gray-900 select-none">Drop</span>
                 </Link>
 
-                {/* Heading */}
                 <h2 className="text-2xl font-bold text-center text-gray-900 mb-6">
                     {isLogin ? 'Welcome back' : 'Create an account'}
                 </h2>
 
-                {/* Google Button */}
-                <button
-                    type="button"
-                    className="w-full flex items-center justify-center gap-2 text-[16px] font-medium border border-gray-300 rounded-lg py-2.5 bg-white hover:bg-gray-100 hover:shadow transition active:scale-[0.98] cursor-pointer"
-                >
-                    <FcGoogle className="w-6 h-6" />
-                    {isLogin ? 'Log in with Google' : 'Sign up with Google'}
-                </button>
-
-                {/* Divider */}
-                <div className="flex items-center gap-3 text-xs text-gray-400 my-6">
-                    <hr className="flex-1 border-gray-200" />
-                    or
-                    <hr className="flex-1 border-gray-200" />
-                </div>
-
-                {/* Form */}
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                     {/* Email */}
                     <div>
@@ -115,6 +117,11 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
                         <PasswordErrors error={errors.password} />
                     </div>
 
+                    {/* Form error */}
+                    {formError && (
+                        <p className="text-sm text-red-500 text-center">{formError}</p>
+                    )}
+
                     {/* Submit */}
                     <button
                         type="submit"
@@ -136,7 +143,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
 
                 {/* Switch */}
                 <p className="text-sm text-gray-500 text-center mt-6">
-                    {isLogin ? "Don't have an account ? " : 'Already have an account ? '}
+                    {isLogin ? "Don't have an account? " : 'Already have an account? '}
                     <Link
                         href={isLogin ? '/signup' : '/login'}
                         className="text-black font-medium hover:underline underline-offset-2"

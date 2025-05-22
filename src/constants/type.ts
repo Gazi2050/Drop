@@ -12,3 +12,17 @@ export type FormValues = {
 export type PasswordErrorsProps = {
     error?: FieldError;
 };
+
+export type User = {
+    email: string;
+    username: string;
+};
+
+export type AuthState = {
+    user: User | null;
+    isAuthenticated: boolean;
+    login: (email: string, password: string) => Promise<void>;
+    signup: (email: string, password: string) => Promise<void>;
+    logout: () => Promise<void>;
+    fetchUser: () => Promise<void>;
+};
