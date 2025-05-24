@@ -60,7 +60,7 @@ const Dashboard = () => {
 
                     <Link
                         href="/"
-                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-black text-white font-medium shadow-sm hover:bg-gray-900 active:scale-95 transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-black"
+                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-black text-white font-semibold shadow-sm hover:bg-gray-900 active:scale-95 transition focus:outline-none hover:scale-[1.04]"
                     >
                         <FiUpload className="w-5 h-5" />
                         Upload File
