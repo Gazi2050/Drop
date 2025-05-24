@@ -2,10 +2,8 @@ import { connectDB } from "@/libs/connectDB";
 import crypto from "crypto";
 
 const algorithm = "aes-256-cbc";
-
-// ⚠️ Use strong, securely stored key in production
-const key = crypto.createHash('sha256').update(String("your-secret-key")).digest("base64").substr(0, 32);
-const iv = Buffer.alloc(16, 0); // Fixed IV (16 bytes of zero)
+const key = crypto.createHash("sha256").update(String("your-secret-key")).digest("base64").substr(0, 32);
+const iv = Buffer.alloc(16, 0); // 16-byte IV
 
 function encrypt(text: string): string {
     const cipher = crypto.createCipheriv(algorithm, key, iv);
@@ -25,7 +23,7 @@ export const checkEmailExists = async (email: string) => {
     const client = await connectDB();
     const result = await client.query("SELECT 1 FROM users WHERE email = $1", [email]);
     client.release();
-    return result.rowCount && result.rowCount > 0;
+    return (result.rowCount ?? 0) > 0;
 };
 
 export const createUser = async (email: string, password: string, username: string) => {
@@ -44,7 +42,7 @@ export const createUser = async (email: string, password: string, username: stri
 export const validateUser = async (email: string, password: string) => {
     const client = await connectDB();
     const result = await client.query(
-        "SELECT username, password FROM users WHERE email = $1",
+        "SELECT username, password, profilepic, created_at, updated_at FROM users WHERE email = $1",
         [email]
     );
     client.release();
@@ -52,5 +50,12 @@ export const validateUser = async (email: string, password: string) => {
     if (result.rowCount === 0) return null;
 
     const decryptedPassword = decrypt(result.rows[0].password);
-    return decryptedPassword === password ? result.rows[0].username : null;
+    if (decryptedPassword !== password) return null;
+
+    return {
+        username: result.rows[0].username,
+        profilepic: result.rows[0].profilepic,
+        created_at: result.rows[0].created_at,
+        updated_at: result.rows[0].updated_at,
+    };
 };

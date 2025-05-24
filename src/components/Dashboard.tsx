@@ -1,3 +1,5 @@
+'use client'
+import { useAuthStore } from '@/store/authStore';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
@@ -5,7 +7,7 @@ import { FaEye, FaTrash, FaCalendarAlt } from 'react-icons/fa';
 import { FiUpload } from 'react-icons/fi';
 
 const Dashboard = () => {
-    const user = {
+    const userInfo = {
         username: 'JohnDoe',
         email: 'john@example.com',
         profilePic: 'https://placehold.co/600x400',
@@ -37,7 +39,8 @@ const Dashboard = () => {
             fileUrl: '#',
         },
     ];
-
+    const { user } = useAuthStore();
+    console.log(user);
     return (
         <div className="min-h-screen bg-white py-10 px-4 text-gray-800">
             <div className="max-w-6xl mx-auto space-y-12">
@@ -70,23 +73,23 @@ const Dashboard = () => {
                 <div className="bg-gray-50 border border-gray-200 rounded-xl p-6 flex flex-col sm:flex-row sm:items-center justify-between min-h-[120px]">
                     <div className="flex items-center gap-5">
                         <img
-                            src={user.profilePic}
+                            src={userInfo.profilePic}
                             alt="Profile"
                             className="w-20 h-20 rounded-full object-cover border border-gray-200"
                         />
                         <div>
-                            <h2 className="text-lg font-semibold">{user.username}</h2>
-                            <p className="text-sm text-gray-500">{user.email}</p>
+                            <h2 className="text-lg font-semibold">{userInfo.username}</h2>
+                            <p className="text-sm text-gray-500">{userInfo.email}</p>
                         </div>
                     </div>
                     <div className="mt-4 sm:mt-0 text-sm text-gray-500 sm:text-right">
                         <p className="mb-1 flex items-center justify-start sm:justify-end">
                             <FaCalendarAlt className="mr-2 text-gray-400" />
-                            Joined: {user.createdAt}
+                            Joined: {userInfo.createdAt}
                         </p>
                         <p className="flex items-center justify-start sm:justify-end">
                             <FaCalendarAlt className="mr-2 text-gray-400" />
-                            Last Update: {user.updatedAt}
+                            Last Update: {userInfo.updatedAt}
                         </p>
                     </div>
                 </div>

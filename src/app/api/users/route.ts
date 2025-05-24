@@ -54,14 +54,16 @@ export const GET = async (req: NextRequest): Promise<NextResponse> => {
             return NextResponse.json({ error: parsed.error.flatten().fieldErrors }, { status: 400 });
         }
 
-        const username = await validateUser(email, password);
-        if (!username) {
+        const user = await validateUser(email, password);
+        if (!user) {
             return NextResponse.json({ message: "Invalid credentials." }, { status: 401 });
         }
 
-        const token = signToken({ email, username });
+        const { username, profilepic, created_at, updated_at } = user;
 
-        const response = NextResponse.json({ email, username });
+        const token = signToken({ email, username, profilepic, created_at, updated_at });
+
+        const response = NextResponse.json({ email, username, profilepic, created_at, updated_at });
         response.headers.set(
             "Set-Cookie",
             `token=${token}; HttpOnly; Path=/; Max-Age=86400; SameSite=Strict; Secure`
