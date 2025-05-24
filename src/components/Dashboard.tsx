@@ -4,7 +4,7 @@ import dayjs from 'dayjs';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
-import { FaEye, FaTrash, FaCalendarAlt } from 'react-icons/fa';
+import { FaEye, FaTrash, FaCalendarAlt, FaEdit, FaHistory } from 'react-icons/fa';
 import { FiUpload } from 'react-icons/fi';
 
 const Dashboard = () => {
@@ -70,36 +70,50 @@ const Dashboard = () => {
                 </div>
 
                 {/* Profile Section */}
-                <div className="bg-gray-50 border border-gray-200 rounded-xl p-6 flex flex-col sm:flex-row sm:items-center justify-between min-h-[120px]">
+                {/* Profile Section */}
+                <div className="relative bg-gray-50 border border-gray-200 rounded-xl p-6 pr-14 flex flex-col sm:flex-row sm:items-center justify-between min-h-[120px]">
+                    {/* EDIT BUTTON in top-right */}
+                    <Link
+                        href="/editProfile"
+                        className="absolute top-4 right-4 inline-flex items-center justify-center p-2 bg-gray-200 rounded-md hover:bg-gray-300 transition border border-gray-300"
+                        aria-label="Edit Profile"
+                    >
+                        <FaEdit className="w-4 h-4 text-gray-600" />
+                    </Link>
+
+                    {/* LEFT: Avatar + Name/Email */}
                     <div className="flex items-center gap-5">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                             src={profilepic}
                             alt="Profile"
-                            className="w-20 h-20 rounded-full object-cover border border-gray-200"
+                            className="w-20 h-20 rounded-full object-cover border border-gray-300"
                         />
-
                         <div>
                             <h2 className="text-lg font-semibold">{username}</h2>
                             <p className="text-sm text-gray-500">{email}</p>
                         </div>
                     </div>
-                    <div className="mt-4 sm:mt-0 text-sm text-gray-500 sm:text-right">
+
+                    {/* RIGHT: Dates */}
+                    <div className="mt-4 sm:mt-0 text-sm text-gray-700 sm:text-right space-y-1">
                         {created_at && (
-                            <p className="mb-1 flex items-center justify-start sm:justify-end">
-                                <FaCalendarAlt className="mr-2 text-gray-400" />
-                                Joined : {created_at}
+                            <p className="flex items-center justify-start sm:justify-end gap-2">
+                                <FaCalendarAlt className="text-gray-500" />
+                                <span>Joined:</span>
+                                <span className="font-semibold text-gray-800">{created_at}</span>
                             </p>
                         )}
-
                         {updated_at && (
-                            <p className="flex items-center justify-start sm:justify-end">
-                                <FaCalendarAlt className="mr-2 text-gray-400" />
-                                Last Update : {updated_at}
+                            <p className="flex items-center justify-start sm:justify-end gap-2">
+                                <FaHistory className="text-gray-500" />
+                                <span>Last Update:</span>
+                                <span className="font-semibold text-gray-800">{updated_at}</span>
                             </p>
                         )}
-
                     </div>
                 </div>
+
 
                 {/* Stats */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
