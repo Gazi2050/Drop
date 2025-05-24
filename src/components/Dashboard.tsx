@@ -1,5 +1,6 @@
 'use client'
 import { useAuthStore } from '@/store/authStore';
+import dayjs from 'dayjs';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
@@ -7,13 +8,6 @@ import { FaEye, FaTrash, FaCalendarAlt } from 'react-icons/fa';
 import { FiUpload } from 'react-icons/fi';
 
 const Dashboard = () => {
-    const userInfo = {
-        username: 'JohnDoe',
-        email: 'john@example.com',
-        profilePic: 'https://placehold.co/600x400',
-        createdAt: '2024-08-14',
-        updatedAt: '2025-05-20',
-    };
 
     const stats = {
         filesUploaded: 42,
@@ -40,7 +34,13 @@ const Dashboard = () => {
         },
     ];
     const { user } = useAuthStore();
-    console.log(user);
+    const username = user?.username || 'Guest';
+    const email = user?.email || 'guest@example.com';
+    const profilepic = user?.profilepic || `https://placehold.co/600x400?text=${username[0]}`;
+    const created_at = user?.created_at ? dayjs(user.created_at).format('MMMM D, YYYY') : null;
+    const updated_at = user?.updated_at ? dayjs(user.updated_at).format('MMMM D, YYYY') : null;
+
+
     return (
         <div className="min-h-screen bg-white py-10 px-4 text-gray-800">
             <div className="max-w-6xl mx-auto space-y-12">
@@ -73,24 +73,31 @@ const Dashboard = () => {
                 <div className="bg-gray-50 border border-gray-200 rounded-xl p-6 flex flex-col sm:flex-row sm:items-center justify-between min-h-[120px]">
                     <div className="flex items-center gap-5">
                         <img
-                            src={userInfo.profilePic}
+                            src={profilepic}
                             alt="Profile"
                             className="w-20 h-20 rounded-full object-cover border border-gray-200"
                         />
+
                         <div>
-                            <h2 className="text-lg font-semibold">{userInfo.username}</h2>
-                            <p className="text-sm text-gray-500">{userInfo.email}</p>
+                            <h2 className="text-lg font-semibold">{username}</h2>
+                            <p className="text-sm text-gray-500">{email}</p>
                         </div>
                     </div>
                     <div className="mt-4 sm:mt-0 text-sm text-gray-500 sm:text-right">
-                        <p className="mb-1 flex items-center justify-start sm:justify-end">
-                            <FaCalendarAlt className="mr-2 text-gray-400" />
-                            Joined: {userInfo.createdAt}
-                        </p>
-                        <p className="flex items-center justify-start sm:justify-end">
-                            <FaCalendarAlt className="mr-2 text-gray-400" />
-                            Last Update: {userInfo.updatedAt}
-                        </p>
+                        {created_at && (
+                            <p className="mb-1 flex items-center justify-start sm:justify-end">
+                                <FaCalendarAlt className="mr-2 text-gray-400" />
+                                Joined : {created_at}
+                            </p>
+                        )}
+
+                        {updated_at && (
+                            <p className="flex items-center justify-start sm:justify-end">
+                                <FaCalendarAlt className="mr-2 text-gray-400" />
+                                Last Update : {updated_at}
+                            </p>
+                        )}
+
                     </div>
                 </div>
 
