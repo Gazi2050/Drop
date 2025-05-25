@@ -3,10 +3,14 @@ import { features } from "@/constants/data";
 import UploadArea from "./UploadArea";
 import { FiCheckCircle } from "react-icons/fi";
 import { useState } from "react";
+import { uploadFilesToServer } from "@/utils/uploadFilesToServer";
+import { toast } from "sonner";
 
 const Hero = () => {
     const [files, setFiles] = useState<File[]>([]);
     const [errorMessage, setErrorMessage] = useState('');
+    const [isUploading, setIsUploading] = useState(false);
+
     return (
         <section className="py-16 md:py-24 bg-white">
             <div className="container mx-auto px-4">
@@ -29,11 +33,23 @@ const Hero = () => {
                     {/* Upload button */}
                     {files.length > 0 && (
                         <button
+                            onClick={async () => {
+                                setIsUploading(true);
+                                const result = await uploadFilesToServer(files);
+                                setIsUploading(false);
+
+                                if (result.success) {
+                                    toast.success('File Uploaded');
+                                    setFiles([]); // clear files after success
+                                } else {
+                                    toast.error('Upload failed: ' + result.error);
+                                }
+                            }}
                             type="button"
-                            className="px-6 py-3 bg-black text-white rounded-lg font-semibold hover:bg-gray-900 transition-colors duration-300 cursor-pointer"
-                            onClick={() => alert('Files ready to be posted!')}
+                            disabled={isUploading}
+                            className="px-6 py-3 bg-black text-white rounded-lg font-semibold transition-colors duration-300 cursor-pointer hover:bg-gray-900 disabled:opacity-50"
                         >
-                            Upload Files
+                            {isUploading ? 'Uploading...' : 'Upload Files'}
                         </button>
                     )}
 
@@ -48,7 +64,7 @@ const Hero = () => {
                     </div>
                 </div>
             </div>
-        </section>
+        </section >
     );
 };
 
