@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getUserFromToken } from '@/utils/getUserFromToken';
 import { connectDB } from '@/libs/connectDB';
+import { getFilesByEmail } from '@/services/getFilesByEmail';
 
 export async function GET() {
     try {
@@ -10,13 +11,10 @@ export async function GET() {
         }
 
         const client = await connectDB();
-        const result = await client.query(
-            'SELECT * FROM files WHERE email = $1 ORDER BY created_at DESC',
-            [user.email]
-        );
+        const files = await getFilesByEmail(client, user.email);
         client.release();
 
-        return NextResponse.json({ success: true, files: result.rows });
+        return NextResponse.json({ success: true, files });
     } catch (error) {
         console.error('Dashboard fetch error:', error);
         return NextResponse.json(
