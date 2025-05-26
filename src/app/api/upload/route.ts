@@ -1,14 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import imagekit from 'imagekit';
-import { v4 as uuidv4 } from 'uuid';
+import imagekit from '@/utils/imagekit';
 import { getUserFromToken } from '@/utils/getUserFromToken';
 import { connectDB } from '@/libs/connectDB';
-
-const ik = new imagekit({
-    publicKey: process.env.IMAGEKIT_PUBLIC_KEY!,
-    privateKey: process.env.IMAGEKIT_PRIVATE_KEY!,
-    urlEndpoint: process.env.IMAGEKIT_URL_ENDPOINT!,
-});
+import { saveFileToDB } from '@/services/fileService';
 
 export async function POST(req: NextRequest) {
     try {
@@ -20,16 +14,14 @@ export async function POST(req: NextRequest) {
         }
 
         const user = await getUserFromToken();
-
-        const urls: string[] = [];
-
         const dbClient = user ? await connectDB() : null;
+        const urls: string[] = [];
 
         for (const file of files) {
             const arrayBuffer = await file.arrayBuffer();
             const buffer = Buffer.from(arrayBuffer);
 
-            const uploaded = await ik.upload({
+            const uploaded = await imagekit.upload({
                 file: buffer,
                 fileName: file.name,
                 folder: 'drop-folder',
@@ -38,21 +30,13 @@ export async function POST(req: NextRequest) {
             urls.push(uploaded.url);
 
             if (user && dbClient) {
-                const id = uuidv4();
-                await dbClient.query(
-                    `
-          INSERT INTO files (id, email, fileName, fileType, fileSize, fileUrl, created_at)
-          VALUES ($1, $2, $3, $4, $5, $6, NOW());
-        `,
-                    [
-                        id,
-                        user.email,
-                        file.name,
-                        file.type,
-                        file.size,
-                        uploaded.url,
-                    ]
-                );
+                await saveFileToDB(dbClient, {
+                    email: user.email,
+                    fileName: file.name,
+                    fileType: file.type,
+                    fileSize: file.size,
+                    fileUrl: uploaded.url,
+                });
             }
         }
 
