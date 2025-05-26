@@ -8,7 +8,9 @@ import { FiMenu, FiX } from 'react-icons/fi';
 
 const Navbar = () => {
     const [isOpen, setIsOpen] = useState(false);
+    const [isLoggingOut, setIsLoggingOut] = useState(false);
     const { isAuthenticated, logout } = useAuthStore();
+
     useEffect(() => {
         function handleResize() {
             if (window.innerWidth >= 1024) setIsOpen(false);
@@ -16,6 +18,12 @@ const Navbar = () => {
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
     }, []);
+
+    const handleLogout = async () => {
+        setIsLoggingOut(true);
+        await logout();
+        setIsLoggingOut(false);
+    };
 
     const handleNavClick = (e: React.MouseEvent, href: string) => {
         e.preventDefault();
@@ -31,18 +39,12 @@ const Navbar = () => {
         <header className="bg-white shadow-sm sticky top-0 z-50">
             <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between relative">
                 {/* Logo */}
-                <Link
-                    href="/"
-                    aria-label="Homepage"
-                    className="flex items-center space-x-3"
-                >
+                <Link href="/" aria-label="Homepage" className="flex items-center space-x-3">
                     <Image src="/logo.png" alt="logo" width={50} height={50} />
-                    <span className="text-2xl font-bold text-gray-900 select-none">
-                        Drop
-                    </span>
+                    <span className="text-2xl font-bold text-gray-900 select-none">Drop</span>
                 </Link>
 
-                {/* Centered nav (desktop) */}
+                {/* Center nav (desktop) */}
                 <nav className="hidden lg:flex space-x-6 absolute left-1/2 transform -translate-x-1/2">
                     {navLinks.map(({ name, href }) => (
                         <a
@@ -57,15 +59,14 @@ const Navbar = () => {
                 </nav>
 
                 {/* Desktop actions */}
-
-
-                {isAuthenticated ?
-                    (<div className="hidden lg:flex items-center space-x-5">
+                {isAuthenticated ? (
+                    <div className="hidden lg:flex items-center space-x-5">
                         <button
-                            onClick={() => logout()}
-                            className="text-gray-700 hover:bg-gray-200 rounded-md px-4 py-2 transition hover:scale-[1.05]"
+                            onClick={handleLogout}
+                            disabled={isLoggingOut}
+                            className="text-gray-700 hover:bg-gray-200 rounded-md px-4 py-2 transition hover:scale-[1.05] disabled:opacity-50"
                         >
-                            Logout
+                            {isLoggingOut ? 'Logging out...' : 'Logout'}
                         </button>
                         <Link
                             href="/dashboard"
@@ -73,9 +74,9 @@ const Navbar = () => {
                         >
                             Dashboard
                         </Link>
-                    </div>)
-                    :
-                    (<div className="hidden lg:flex items-center space-x-5">
+                    </div>
+                ) : (
+                    <div className="hidden lg:flex items-center space-x-5">
                         <Link
                             href="/login"
                             className="text-gray-700 hover:bg-gray-200 rounded-md px-4 py-2 transition hover:scale-[1.05]"
@@ -88,8 +89,8 @@ const Navbar = () => {
                         >
                             Sign up
                         </Link>
-                    </div>)
-                }
+                    </div>
+                )}
 
                 {/* Mobile toggle */}
                 <button
@@ -121,13 +122,14 @@ const Navbar = () => {
                     {isAuthenticated ? (
                         <>
                             <button
-                                onClick={() => {
-                                    logout();
+                                onClick={async () => {
                                     setIsOpen(false);
+                                    await handleLogout();
                                 }}
-                                className="text-gray-700 hover:bg-gray-200 rounded-md px-3 py-2 transition hover:scale-[1.03]"
+                                disabled={isLoggingOut}
+                                className="text-gray-700 hover:bg-gray-200 rounded-md px-3 py-2 transition hover:scale-[1.03] disabled:opacity-50"
                             >
-                                Logout
+                                {isLoggingOut ? 'Logging out...' : 'Logout'}
                             </button>
                             <Link
                                 href="/dashboard"
@@ -155,7 +157,6 @@ const Navbar = () => {
                             </Link>
                         </>
                     )}
-
                 </div>
             </nav>
         </header>
