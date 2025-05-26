@@ -34,8 +34,8 @@ const Dashboard = () => {
         },
     ];
     const { user } = useAuthStore();
-    const username = user?.username || 'Guest';
-    const email = user?.email || 'guest@example.com';
+    const username = user?.username || '_';
+    const email = user?.email || '_';
     const profilepic = user?.profilepic || `https://placehold.co/600x400?text=${username[0]}`;
     const created_at = user?.created_at ? dayjs(user.created_at).format('MMMM D, YYYY') : null;
     const updated_at = user?.updated_at ? dayjs(user.updated_at).format('MMMM D, YYYY') : null;
