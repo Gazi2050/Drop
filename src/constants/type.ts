@@ -52,3 +52,8 @@ export interface UserFile {
     fileurl: string;
     created_at: string;
 }
+
+export interface UploadSuccessModalProps {
+    urls: string[];
+    onClose: () => void;
+}
