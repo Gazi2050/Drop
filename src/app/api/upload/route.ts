@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
                 const id = uuidv4();
                 await dbClient.query(
                     `
-          INSERT INTO files (id, email, fileName, fileType, fileSize, fileUrl, createdAt)
+          INSERT INTO files (id, email, fileName, fileType, fileSize, fileUrl, created_at)
           VALUES ($1, $2, $3, $4, $5, $6, NOW());
         `,
                     [
