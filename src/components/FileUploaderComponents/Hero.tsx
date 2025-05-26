@@ -19,7 +19,7 @@ const Hero = () => {
         setIsUploading(false);
 
         if (result.success && result.urls) {
-            toast.success('File(s) Uploaded');
+            toast.success('Uploaded successfully');
             setFiles([]);
             setUploadedUrls(result.urls);
         } else {
