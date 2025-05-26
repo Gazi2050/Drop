@@ -8,16 +8,7 @@ import { FaEye, FaTrash, FaCalendarAlt, FaEdit, FaHistory } from 'react-icons/fa
 import { FiUpload } from 'react-icons/fi';
 import { fetchUserFiles } from '@/utils/fetchUserFiles';
 import UserSkeleton from './UserSkeleton';
-
-interface UserFile {
-    id: string;
-    filename: string;
-    filetype: string;
-    size: string;
-    filesize: string;
-    url: string;
-    created_at: string;
-}
+import { UserFile } from '@/constants/type';
 
 const Dashboard = () => {
     const [files, setFiles] = useState<UserFile[]>([]);
@@ -157,21 +148,21 @@ const Dashboard = () => {
                             </thead>
                             <tbody className="text-[15px]">
                                 {files.map((file) => (
-                                    <tr key={file.id} className="border-t border-gray-100 hover:bg-gray-50 transition">
+                                    <tr key={file?.id} className="border-t border-gray-100 hover:bg-gray-50 transition">
                                         <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                            {file.filename}
+                                            {file?.filename}
                                         </td>
-                                        <td className="px-6 py-4 text-gray-600">{file.filetype}</td>
+                                        <td className="px-6 py-4 text-gray-600">{file?.filetype}</td>
                                         <td className="px-6 py-4 text-gray-600">
-                                            {(parseInt(file.filesize) / (1024 * 1024)).toFixed(2)} MB
+                                            {(parseInt(file?.filesize) / (1024 * 1024)).toFixed(2)} MB
                                         </td>
                                         <td className="px-6 py-4 text-gray-600">
-                                            {dayjs(file.created_at).format('MMMM D, YYYY')}
+                                            {dayjs(file?.created_at).format('MMMM D, YYYY')}
                                         </td>
                                         <td className="px-6 py-4 text-center">
                                             <div className="inline-flex items-center gap-2 justify-center">
                                                 <a
-                                                    href={file.url}
+                                                    href={file?.fileurl}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
                                                     className="inline-flex items-center justify-center px-2.5 py-1.5 rounded-md bg-gray-100 text-gray-700 text-sm hover:bg-gray-200 hover:text-black transition focus:outline-none focus:ring-2 focus:ring-gray-300"

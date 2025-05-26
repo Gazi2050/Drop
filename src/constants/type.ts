@@ -42,3 +42,13 @@ export interface UploadAreaProps {
     errorMessage: string;
     setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
 }
+
+export interface UserFile {
+    id: string;
+    filename: string;
+    filetype: string;
+    size: string;
+    filesize: string;
+    fileurl: string;
+    created_at: string;
+}
