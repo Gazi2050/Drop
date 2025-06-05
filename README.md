@@ -17,7 +17,7 @@ Welcome to **Drop** — a lightweight and blazing-fast web app for uploading and
 ## 🧾 Supported File Types
 
 * **Documents**: PDF
-* **Images**: JPG, JPEG, PNG, WEBP, GIF, BMP, TIFF, SVG, HEIC
+* **Images**: JPG, PNG, WEBP, GIF, BMP,SVG, HEIC
 
 ## 🚀 Installation
 
