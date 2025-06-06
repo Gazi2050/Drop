@@ -7,7 +7,7 @@ Welcome to **Drop** — a lightweight and blazing-fast web app for uploading and
 * 📤 **Instant File Upload**: Upload PDFs and images with a single click—no sign-in required!
 * 🔗 **Shareable URLs**: Get a public link instantly after uploading.
 * 🧑‍💻 **Guest Uploads**: Upload files anonymously with limited functionality.
-* 🔐 **Authenticated Accounts**: Sign in via Google or email/password for:
+* 🔐 **Authenticated Accounts**: Sign in via email/password for:
 
   * Access to upload history
   * File management (delete uploads)
