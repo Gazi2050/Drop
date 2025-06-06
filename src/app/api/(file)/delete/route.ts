@@ -1,8 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connectDB } from '@/libs/connectDB';
 import { getUserFromToken } from '@/utils/getUserFromToken';
-import { deleteFile } from '@/services/fileService';
-
+import { deleteFileFromDB } from '@/services/fileService';
 
 export async function DELETE(req: NextRequest) {
     try {
@@ -19,7 +18,7 @@ export async function DELETE(req: NextRequest) {
 
         const dbClient = await connectDB();
         try {
-            await deleteFile(dbClient, fileId);
+            await deleteFileFromDB(dbClient, fileId);
         } finally {
             dbClient.release();
         }

@@ -72,11 +72,8 @@ const Dashboard = () => {
                                 error: 'Failed to delete file',
                             }
                         );
-
-                        // Update local state on success
                         setFiles((prev) => prev.filter((file) => file.id !== fileId));
                     } catch (err) {
-                        // Optional: handle unexpected errors
                         console.error(err);
                     } finally {
                         setDeletingFileId(null);

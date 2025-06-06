@@ -30,7 +30,7 @@ export async function saveFileToDB(
     );
 }
 
-export async function deleteFile(dbClient: PoolClient, fileId: string) {
+export async function deleteFileFromDB(dbClient: PoolClient, fileId: string) {
     // Delete from ImageKit
     const result = await new Promise((resolve, reject) => {
         imagekit.deleteFile(fileId, (error, result) => {
