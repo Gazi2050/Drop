@@ -1,4 +1,5 @@
 'use client';
+
 import { useAuthStore } from '@/store/authStore';
 import dayjs from 'dayjs';
 import Image from 'next/image';
@@ -7,13 +8,16 @@ import React, { useEffect, useState } from 'react';
 import { FaEye, FaTrash, FaCalendarAlt, FaEdit, FaHistory } from 'react-icons/fa';
 import { FiUpload } from 'react-icons/fi';
 import { fetchUserFiles } from '@/utils/fetchUserFiles';
+import { deleteFile } from '@/utils/deleteFile';
 import UserSkeleton from './UserSkeleton';
 import { UserFile } from '@/constants/type';
+import { toast } from 'sonner';
 
 const Dashboard = () => {
     const [files, setFiles] = useState<UserFile[]>([]);
     const [loading, setLoading] = useState(true);
     const [profileLoading, setProfileLoading] = useState(true);
+    const [deletingFileId, setDeletingFileId] = useState<string | null>(null);
 
     const { user } = useAuthStore();
 
@@ -34,8 +38,8 @@ const Dashboard = () => {
         loadFiles();
     }, []);
 
-    const username = user?.username || '_';
-    const email = user?.email || '_';
+    const username = user?.username || '';
+    const email = user?.email || '';
     const profilepic = user?.profilepic || `https://placehold.co/600x400?text=${username[0]}`;
     const created_at = user?.created_at ? dayjs(user.created_at).format('MMMM D, YYYY') : null;
     const updated_at = user?.updated_at ? dayjs(user.updated_at).format('MMMM D, YYYY') : null;
@@ -48,6 +52,40 @@ const Dashboard = () => {
         totalStorage: `${totalStorageMB.toFixed(2)} MB`,
         plan: 'Free',
     };
+
+    const handleDelete = (fileId: string) => {
+        const deletedFile = files.find((file) => file.id === fileId);
+        if (!deletedFile) return;
+
+        toast('Are you sure you want to delete this file?', {
+            action: {
+                label: 'Yes, Delete',
+                onClick: async () => {
+                    try {
+                        setDeletingFileId(fileId);
+
+                        toast.promise(
+                            deleteFile(fileId),
+                            {
+                                loading: 'Deleting file...',
+                                success: 'File deleted successfully',
+                                error: 'Failed to delete file',
+                            }
+                        );
+
+                        // Update local state on success
+                        setFiles((prev) => prev.filter((file) => file.id !== fileId));
+                    } catch (err) {
+                        // Optional: handle unexpected errors
+                        console.error(err);
+                    } finally {
+                        setDeletingFileId(null);
+                    }
+                },
+            },
+        });
+    };
+
 
     return (
         <div className="min-h-screen bg-white py-10 px-4 text-gray-800">
@@ -148,7 +186,10 @@ const Dashboard = () => {
                             </thead>
                             <tbody className="text-[15px]">
                                 {files.map((file) => (
-                                    <tr key={file?.id} className="border-t border-gray-100 hover:bg-gray-50 transition">
+                                    <tr
+                                        key={file?.id}
+                                        className="border-t border-gray-100 hover:bg-gray-50 transition"
+                                    >
                                         <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
                                             {file?.filename}
                                         </td>
@@ -169,8 +210,11 @@ const Dashboard = () => {
                                                 >
                                                     <FaEye className="w-4 h-4" />
                                                 </a>
+                                                {/*  */}
                                                 <button
+                                                    onClick={() => handleDelete(file.id)}
                                                     aria-label="Delete file"
+                                                    disabled={deletingFileId === file.id}
                                                     className="inline-flex items-center justify-center px-2.5 py-1.5 rounded-md bg-red-100 text-red-600 text-sm hover:bg-red-200 hover:text-red-700 transition focus:outline-none focus:ring-2 focus:ring-red-300"
                                                 >
                                                     <FaTrash className="w-4 h-4" />

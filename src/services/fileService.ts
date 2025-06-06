@@ -1,3 +1,4 @@
+import imagekit from '@/utils/imagekit';
 import { PoolClient } from 'pg';
 
 export async function saveFileToDB(
@@ -27,4 +28,19 @@ export async function saveFileToDB(
   `,
         [id, email, fileName, fileType, fileSize, fileUrl]
     );
+}
+
+export async function deleteFile(dbClient: PoolClient, fileId: string) {
+    // Delete from ImageKit
+    const result = await new Promise((resolve, reject) => {
+        imagekit.deleteFile(fileId, (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+        });
+    });
+
+    // Delete from database
+    await dbClient.query(`DELETE FROM files WHERE id = $1`, [fileId]);
+
+    return result;
 }
