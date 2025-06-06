@@ -58,12 +58,12 @@ CREATE TABLE users (
 );
 
 CREATE TABLE files (
-  id UUID PRIMARY KEY,
-  user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
-  file_name TEXT NOT NULL,
-  file_type TEXT NOT NULL,
-  file_size BIGINT NOT NULL,
-  file_url TEXT NOT NULL,
-  created_at TIMESTAMPTZ DEFAULT NOW()
+  id TEXT PRIMARY KEY,
+  email TEXT NOT NULL,
+  fileName TEXT NOT NULL,
+  fileType TEXT NOT NULL,
+  fileSize BIGINT NOT NULL,
+  fileUrl TEXT NOT NULL,
+  createdAt TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 ```

@@ -26,11 +26,12 @@ export async function POST(req: NextRequest) {
                 fileName: file.name,
                 folder: 'drop-folder',
             });
-
+            console.log('ImageKit upload response:', uploaded);
             urls.push(uploaded.url);
 
             if (user && dbClient) {
                 await saveFileToDB(dbClient, {
+                    id: uploaded.fileId,
                     email: user.email,
                     fileName: file.name,
                     fileType: file.type,
