@@ -1,32 +1,38 @@
-# ⚡ Drop - File Hosting Platform 🌐
+# ⚡ Drop — Fast & Simple File Hosting Platform 🌐
 
-Welcome to **Drop** — a lightweight and blazing-fast web app for uploading and sharing files like PDFs and images with instant, shareable links. No sign-up needed to start uploading, and registered users enjoy full file history and profile management. 🚀
+Welcome to **Drop**, a lightweight and lightning-fast web app designed for effortlessly uploading and sharing files like PDFs and images. Share instantly via public links—no sign-up required! For registered users, enjoy the added benefit of full file history and management. 🚀
 
 ## 🔑 Key Features
 
-* 📤 **Instant File Upload**: Upload PDFs and images with a single click—no sign-in required!
-* 🔗 **Shareable URLs**: Get a public link instantly after uploading.
-* 🧑‍💻 **Guest Uploads**: Upload files anonymously with limited functionality.
-* 🔐 **Authenticated Accounts**: Sign in via email/password for:
+* 📤 **Instant Uploads**
+  Upload PDFs and images with a single click — no sign-in necessary.
 
-  * Access to upload history
-  * File management (delete uploads)
-  * Profile customization
-  * Account deletion (removes all uploads automatically)
+* 🔗 **Instant Shareable Links**
+  Receive a public URL immediately after uploading your file.
+
+* 👤 **Anonymous Guest Uploads**
+  Upload files anonymously with basic access and limitations.
+
+* 🔐 **User Accounts with Email/Password**
+  Register or log in to access advanced features:
+
+  * View your complete upload history
+  * Manage files (delete or organize uploads)
 
 ## 🧾 Supported File Types
 
-* **Documents**: PDF
-* **Images**: JPG, PNG, WEBP, GIF, BMP,SVG, HEIC
+* **Documents:** PDF
+* **Images:** JPG, PNG, WEBP, GIF, BMP, SVG, HEIC
 
-## 🚀 Installation
+## 🚀 Installation Guide
 
-Follow these steps to get **Drop** up and running on your local machine:
+Get **Drop** running locally in just a few steps:
 
 1. **Clone the repository:**
 
    ```bash
    git clone https://github.com/Gazi2050/Drop.git
+   cd Drop
    ```
 
 2. **Install dependencies:**
@@ -41,10 +47,12 @@ Follow these steps to get **Drop** up and running on your local machine:
    npm run dev
    ```
 
-4. **Open your browser and go to:**
-   `http://localhost:3000` 🎉
+4. **Open your browser and navigate to:**
+   [http://localhost:3000](http://localhost:3000) 🎉
 
-## 🗄️ SQL Schema
+## 🗄️ Database Schema
+
+Use the following SQL schema for setting up your database tables:
 
 ```sql
 CREATE TABLE users (
@@ -52,9 +60,7 @@ CREATE TABLE users (
   email VARCHAR(255) UNIQUE NOT NULL,
   password VARCHAR(255) NOT NULL,
   username VARCHAR(255) NOT NULL,
-  profile_pic VARCHAR(255),
-  created_at TIMESTAMP DEFAULT NOW(),
-  updated_at TIMESTAMP
+  created_at TIMESTAMP DEFAULT NOW()
 );
 
 CREATE TABLE files (
@@ -67,3 +73,4 @@ CREATE TABLE files (
   createdAt TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 ```
+Feel free to contribute or open issues if you encounter any bugs or want to suggest features. Happy uploading! 🚀

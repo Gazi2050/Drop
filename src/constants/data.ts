@@ -77,12 +77,12 @@ export const PricingData = [
         subtitle: "Organize, delete, and manage your uploads seamlessly",
     },
     {
-        title: "Password Protection",
-        subtitle: "Secure your shared files with passwords",
+        title: "Stored Forever",
+        subtitle: "Your files are saved permanently unless you delete them",
     },
     {
         title: "Multiple File Formats",
-        subtitle: "Support for PDFs, images, and more",
+        subtitle: "Support for PDFs, images",
     },
     {
         title: "No Ads or Tracking",
@@ -94,32 +94,32 @@ export const faqData = [
     {
         question: "Is Drop really free to use?",
         answer:
-            "Yes, Drop is 100% free for everyone. We don’t have premium tiers or hidden charges—every feature is available to all users at no cost.",
+            "Yes, Drop is 100% free with no hidden fees or premium plans.\nAll features are available to everyone.",
     },
     {
         question: "What happens if I don’t sign in?",
         answer:
-            "Files uploaded without signing in are stored temporarily and will be deleted when you reload or close the tab. To keep files permanently, please create a free account.",
+            "Your files are stored permanently, but the link is lost if you close or reload the tab.\nSign in to keep access and manage your uploads.",
     },
     {
         question: "Can I use Drop links directly on my website?",
         answer:
-            "Yes! You can use your Drop file URLs as direct links on your website, blogs, or any platform to share your files seamlessly.",
+            "Yes, Drop links work on websites, blogs, or anywhere online.\nThey provide direct, seamless access to your files.",
     },
     {
-        question: "How secure is Drop?",
+        question: "How long are my files stored?",
         answer:
-            "Very secure. All uploads use encrypted connections (SSL/TLS) and are stored with AES-256 encryption. You can also password-protect and expire shared links.",
+            "All files are stored permanently.\nOnly registered users can manage or delete them.",
     },
     {
         question: "Can I delete my files?",
         answer:
-            "Yes. Registered users can delete files at any time. Guest files are automatically deleted after their temporary period and can’t be manually managed.",
+            "Yes, if you're signed in. Guest users can't delete files,\nbut their uploads are still stored.",
     },
     {
         question: "Do I need to create an account?",
         answer:
-            "No, you can use Drop without creating an account. However, creating a free account gives you permanent storage, file management tools, and more control over your uploads.",
+            "No, but without one you can't manage or recover your files later.\nAn account gives you full control and file access anytime.",
     },
 ];
 

@@ -42,7 +42,7 @@ export const createUser = async (email: string, password: string, username: stri
 export const validateUser = async (email: string, password: string) => {
     const client = await connectDB();
     const result = await client.query(
-        "SELECT username, password, profilepic, created_at, updated_at FROM users WHERE email = $1",
+        "SELECT username, password, created_at FROM users WHERE email = $1",
         [email]
     );
     client.release();
@@ -54,8 +54,6 @@ export const validateUser = async (email: string, password: string) => {
 
     return {
         username: result.rows[0].username,
-        profilepic: result.rows[0].profilepic,
         created_at: result.rows[0].created_at,
-        updated_at: result.rows[0].updated_at,
     };
 };

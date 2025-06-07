@@ -16,9 +16,7 @@ export type PasswordErrorsProps = {
 export interface User {
     email: string;
     username: string;
-    profilepic: string;
     created_at: string;
-    updated_at: string;
 }
 
 export type AuthState = {

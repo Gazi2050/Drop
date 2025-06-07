@@ -59,11 +59,11 @@ export const GET = async (req: NextRequest): Promise<NextResponse> => {
             return NextResponse.json({ message: "Invalid credentials." }, { status: 401 });
         }
 
-        const { username, profilepic, created_at, updated_at } = user;
+        const { username, created_at } = user;
 
-        const token = signToken({ email, username, profilepic, created_at, updated_at });
+        const token = signToken({ email, username, created_at });
 
-        const response = NextResponse.json({ email, username, profilepic, created_at, updated_at });
+        const response = NextResponse.json({ email, username, created_at });
         response.headers.set(
             "Set-Cookie",
             `token=${token}; HttpOnly; Path=/; Max-Age=86400; SameSite=Strict; Secure`

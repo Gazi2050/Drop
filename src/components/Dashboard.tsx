@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
-import { FaEye, FaTrash, FaCalendarAlt, FaEdit, FaHistory } from 'react-icons/fa';
+import { FaEye, FaTrash, FaCalendarAlt } from 'react-icons/fa';
 import { FiUpload } from 'react-icons/fi';
 import { fetchUserFiles } from '@/utils/fetchUserFiles';
 import { deleteFile } from '@/utils/deleteFile';
@@ -31,7 +31,7 @@ const Dashboard = () => {
 
         const delayProfile = () => {
             setProfileLoading(true);
-            setTimeout(() => setProfileLoading(false), 700); // simulate delay
+            setTimeout(() => setProfileLoading(false), 700);
         };
 
         delayProfile();
@@ -40,9 +40,8 @@ const Dashboard = () => {
 
     const username = user?.username || '';
     const email = user?.email || '';
-    const profilepic = user?.profilepic || `https://placehold.co/600x400?text=${username[0]}`;
+    const profilepic = `https://placehold.co/600x400?text=${username[0]}`;
     const created_at = user?.created_at ? dayjs(user.created_at).format('MMMM D, YYYY') : null;
-    const updated_at = user?.updated_at ? dayjs(user.updated_at).format('MMMM D, YYYY') : null;
 
     const totalStorageMB =
         files.reduce((acc, file) => acc + parseInt(file.filesize || '0'), 0) / (1024 * 1024);
@@ -108,13 +107,7 @@ const Dashboard = () => {
                         <UserSkeleton />
                     ) : (
                         <>
-                            <Link
-                                href="/editProfile"
-                                className="absolute top-4 right-4 inline-flex items-center justify-center p-2 bg-gray-200 rounded-md hover:bg-gray-300 transition border border-gray-300"
-                                aria-label="Edit Profile"
-                            >
-                                <FaEdit className="w-4 h-4 text-gray-600" />
-                            </Link>
+
 
                             <div className="flex items-center gap-5">
                                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -137,13 +130,7 @@ const Dashboard = () => {
                                         <span className="font-semibold text-gray-800">{created_at}</span>
                                     </p>
                                 )}
-                                {updated_at && (
-                                    <p className="flex items-center justify-start sm:justify-end gap-2">
-                                        <FaHistory className="text-gray-500" />
-                                        <span>Last Update:</span>
-                                        <span className="font-semibold text-gray-800">{updated_at}</span>
-                                    </p>
-                                )}
+
                             </div>
                         </>
                     )}

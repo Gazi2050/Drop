@@ -24,9 +24,7 @@ export const GET = async (req: NextRequest) => {
         return NextResponse.json({
             email: (payload as JwtPayload).email,
             username: (payload as JwtPayload).username,
-            profilepic: (payload as JwtPayload).profilepic,
             created_at: (payload as JwtPayload).created_at,
-            updated_at: (payload as JwtPayload).updated_at,
         });
     } catch (err) {
         return NextResponse.json({ message: "Server error", error: err }, { status: 500 });

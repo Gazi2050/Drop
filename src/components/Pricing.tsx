@@ -1,4 +1,5 @@
 import { PricingData } from "@/constants/data";
+import Link from "next/link";
 import React from "react";
 import { FaCheckCircle, FaArrowRight } from "react-icons/fa";
 
@@ -32,13 +33,13 @@ const Pricing = () => {
                         ))}
                     </ul>
 
-                    <button
-                        type="button"
+                    <Link
+                        href='/signup'
                         className="w-full py-3 bg-black text-white font-semibold rounded-lg flex items-center justify-center space-x-2 hover:bg-gray-900 transition-all duration-500 ease-in-out hover:scale-105 transform cursor-pointer"
                     >
                         <span>Get Started - It&apos;s Free!</span>
                         <FaArrowRight className="w-4 h-4" />
-                    </button>
+                    </Link>
                 </div>
             </div>
         </section>
