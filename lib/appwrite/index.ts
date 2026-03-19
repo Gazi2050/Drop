@@ -1,6 +1,6 @@
 "use server";
 
-import { Account, Databases, Client, Storage } from "node-appwrite";
+import { Account, Databases, Client, Storage, Tokens } from "node-appwrite";
 import { appwriteConfig } from "@/lib/appwrite/config";
 import { cookies } from "next/headers";
 
@@ -40,6 +40,9 @@ export const createAdminClient = async () => {
     },
     get storage() {
       return new Storage(client);
+    },
+    get tokens() {
+      return new Tokens(client);
     },
   };
 };

@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Thumbnail from "@/components/Thumbnail";
-import { convertFileSize } from "@/lib/utils";
+import { convertFileSize, getFileOpenUrl } from "@/lib/utils";
 import FormattedDateTime from "@/components/FormattedDateTime";
 import ActionDropdown from "@/components/ActionDropdown";
 
@@ -9,7 +9,11 @@ const Card = ({ file }: { file: FileDocument }) => {
   const ownerName = typeof owner === "object" && owner?.fullName ? owner.fullName : "—";
 
   return (
-    <Link href={file.url} target="_blank" className="file-card">
+    <Link
+      href={getFileOpenUrl(file.bucketFileId, file.type, file.extension, file.name)}
+      target="_blank"
+      className="file-card"
+    >
       <div className="flex justify-between">
         <Thumbnail
           type={file.type}

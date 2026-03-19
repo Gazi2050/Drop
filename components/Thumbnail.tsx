@@ -12,16 +12,17 @@ interface Props {
 export const Thumbnail = ({
   type,
   extension,
-  url = "",
+  url: _url = "",
   imageClassName,
   className,
 }: Props) => {
   const isImage = type === "image" && extension !== "svg";
+  const imageSrc = isImage ? "/assets/images/photo.png" : getFileIcon(extension, type);
 
   return (
     <figure className={cn("thumbnail", className)}>
       <Image
-        src={isImage ? url : getFileIcon(extension, type)}
+        src={imageSrc}
         alt="thumbnail"
         width={100}
         height={100}

@@ -7,7 +7,7 @@ import { FormattedDateTime } from "@/components/FormattedDateTime";
 import { Thumbnail } from "@/components/Thumbnail";
 import { Separator } from "@/components/ui/separator";
 import { getFiles, getTotalSpaceUsed } from "@/lib/actions/file.actions";
-import { convertFileSize, getUsageSummary } from "@/lib/utils";
+import { convertFileSize, getFileOpenUrl, getUsageSummary } from "@/lib/utils";
 
 const Dashboard = async () => {
   const [files, totalSpace] = await Promise.all([
@@ -61,7 +61,7 @@ const Dashboard = async () => {
           <ul className="mt-5 flex flex-col gap-5">
             {files.documents.map((file: FileDocument) => (
               <Link
-                href={file.url}
+                href={getFileOpenUrl(file.bucketFileId, file.type, file.extension, file.name)}
                 target="_blank"
                 className="flex items-center gap-3"
                 key={file.$id}

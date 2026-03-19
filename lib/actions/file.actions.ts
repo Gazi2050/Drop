@@ -3,9 +3,10 @@
 import { createAdminClient, createSessionClient } from "@/lib/appwrite";
 import { appwriteConfig } from "@/lib/appwrite/config";
 import { ID, Models, Query } from "node-appwrite";
-import { constructFileUrl, getFileType, parseStringify } from "@/lib/utils";
+import { getFileOpenUrl, getFileType, parseStringify } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
 import { getCurrentUser } from "@/lib/actions/user.actions";
+import { headers } from "next/headers";
 
 const handleError = (error: unknown, message: string) => {
   console.log(error, message);
@@ -31,11 +32,12 @@ export const uploadFile = async ({
       inputFile,
     );
 
+    const { type, extension } = getFileType(bucketFile.name);
     const fileDocument = {
-      type: getFileType(bucketFile.name).type,
+      type,
       name: bucketFile.name,
-      url: constructFileUrl(bucketFile.$id),
-      extension: getFileType(bucketFile.name).extension,
+      url: getFileOpenUrl(bucketFile.$id, type, extension, bucketFile.name),
+      extension,
       size: bucketFile.sizeOriginal,
       owner: ownerId,
       accountId,
@@ -233,3 +235,63 @@ export async function getTotalSpaceUsed() {
     handleError(error, "Error calculating total space used");
   }
 }
+
+export const createPublicFileLink = async ({
+  fileId,
+  bucketFileId,
+  extension,
+}: {
+  fileId: string;
+  bucketFileId: string;
+  extension?: string;
+}): Promise<{ url: string } | { error: string }> => {
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser) {
+      return { error: "Unauthorized" };
+    }
+
+    const { databases, tokens } = await createAdminClient();
+
+    const fileDoc = await databases.getDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.filesCollectionId,
+      fileId,
+    );
+
+    const ownerId = fileDoc.owner as string;
+    const users = (fileDoc.users as string[]) ?? [];
+    const hasAccess =
+      ownerId === currentUser.$id || users.includes(currentUser.email);
+
+    if (!hasAccess) {
+      return { error: "You don't have access to this file" };
+    }
+
+    const token = await tokens.createFileToken({
+      bucketId: appwriteConfig.bucketId,
+      fileId: bucketFileId,
+    });
+
+    const headersList = await headers();
+    const host = headersList.get("host") ?? "localhost:3000";
+    const protocol =
+      headersList.get("x-forwarded-proto") ??
+      (host.includes("localhost") ? "http" : "https");
+    const baseUrl = `${protocol}://${host}`;
+
+    const ext =
+      extension ||
+      (fileDoc.name as string)?.split(".").pop()?.toLowerCase() ||
+      "";
+    const params = new URLSearchParams({
+      token: token.secret,
+      ...(ext && { ext }),
+    });
+    const publicUrl = `${baseUrl}/api/files/${bucketFileId}/public?${params}`;
+    return { url: publicUrl };
+  } catch (error) {
+    console.error("Create public link error:", error);
+    return { error: "Failed to create public link" };
+  }
+};

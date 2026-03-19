@@ -19,10 +19,11 @@ import { useState } from "react";
 import Image from "next/image";
 import { actionsDropdownItems } from "@/constants";
 import Link from "next/link";
-import { constructDownloadUrl } from "@/lib/utils";
+import { getFileDownloadUrl } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
+  createPublicFileLink,
   deleteFile,
   renameFile,
   updateFileUsers,
@@ -37,6 +38,8 @@ const ActionDropdown = ({ file }: { file: FileDocument }) => {
   const [name, setName] = useState(file.name);
   const [isLoading, setIsLoading] = useState(false);
   const [emails, setEmails] = useState<string[]>([]);
+  const [publicLink, setPublicLink] = useState<string | null>(null);
+  const [publicLinkError, setPublicLinkError] = useState<string | null>(null);
 
   const path = usePathname();
 
@@ -45,6 +48,8 @@ const ActionDropdown = ({ file }: { file: FileDocument }) => {
     setIsDropdownOpen(false);
     setAction(null);
     setName(file.name);
+    setPublicLink(null);
+    setPublicLinkError(null);
   };
 
   const handleAction = async () => {
@@ -112,7 +117,53 @@ const ActionDropdown = ({ file }: { file: FileDocument }) => {
               <span className="delete-file-name">{file.name}</span>?
             </p>
           )}
+          {value === "makePublic" && (
+            <div className="flex flex-col gap-3">
+              <p className="body-2 text-light-100">
+                Anyone with this link can view the file without logging in.
+              </p>
+              {publicLinkError && (
+                <p className="body-2 text-error">{publicLinkError}</p>
+              )}
+              {publicLink && (
+                <div className="flex flex-col gap-2">
+                  <Input
+                    readOnly
+                    value={publicLink}
+                    className="share-input-field"
+                  />
+                  <Button
+                    onClick={() => {
+                      navigator.clipboard.writeText(publicLink);
+                    }}
+                    className="modal-submit-button"
+                  >
+                    Copy Link
+                  </Button>
+                </div>
+              )}
+              {!publicLink && !publicLinkError && (
+                <div className="flex items-center gap-2">
+                  <Image
+                    src="/assets/icons/loader.svg"
+                    alt="Loading"
+                    width={24}
+                    height={24}
+                    className="animate-spin"
+                  />
+                  <span className="body-2 text-light-200">Generating link...</span>
+                </div>
+              )}
+            </div>
+          )}
         </DialogHeader>
+        {(value === "makePublic" && (publicLink || publicLinkError)) && (
+          <DialogFooter>
+            <Button onClick={closeAllModals} className="modal-cancel-button">
+              Close
+            </Button>
+          </DialogFooter>
+        )}
         {["rename", "delete", "share"].includes(value) && (
           <DialogFooter className="flex flex-col gap-3 md:flex-row">
             <Button onClick={closeAllModals} className="modal-cancel-button">
@@ -160,17 +211,29 @@ const ActionDropdown = ({ file }: { file: FileDocument }) => {
                 setAction(actionItem);
 
                 if (
-                  ["rename", "share", "delete", "details"].includes(
+                  ["rename", "share", "delete", "details", "makePublic"].includes(
                     actionItem.value,
                   )
                 ) {
                   setIsModalOpen(true);
+                  if (actionItem.value === "makePublic") {
+                    setPublicLink(null);
+                    setPublicLinkError(null);
+                    createPublicFileLink({
+                      fileId: file.$id,
+                      bucketFileId: file.bucketFileId,
+                      extension: file.extension,
+                    }).then((result) => {
+                      if ("url" in result) setPublicLink(result.url);
+                      else setPublicLinkError(result.error);
+                    });
+                  }
                 }
               }}
             >
               {actionItem.value === "download" ? (
                 <Link
-                  href={constructDownloadUrl(file.bucketFileId)}
+                  href={getFileDownloadUrl(file.bucketFileId, file.extension, file.name)}
                   download={file.name}
                   className="flex items-center gap-2"
                 >

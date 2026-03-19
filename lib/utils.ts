@@ -171,6 +171,39 @@ export const constructDownloadUrl = (bucketFileId: string) => {
   return `${process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT}/storage/buckets/${process.env.NEXT_PUBLIC_APPWRITE_BUCKET}/files/${bucketFileId}/download?project=${process.env.NEXT_PUBLIC_APPWRITE_PROJECT}`;
 };
 
+/** File types that open in browser (view). Rest trigger download. */
+const VIEWABLE_EXTENSIONS = new Set([
+  "pdf", "txt",
+  "jpg", "jpeg", "png", "gif", "bmp", "svg", "webp",
+  "mp4", "avi", "mov", "mkv", "webm", "m4v", "3gp", "flv",
+  "mp3", "mpeg", "wav", "aac", "flac", "ogg", "wma", "m4a", "aiff", "alac",
+]);
+
+export const getFileOpenUrl = (
+  bucketFileId: string,
+  type: string,
+  extension: string,
+  name?: string
+) => {
+  const ext = extension?.toLowerCase() ?? "";
+  const isViewable =
+    VIEWABLE_EXTENSIONS.has(ext) || ["image", "video", "audio"].includes(type);
+  if (isViewable) {
+    return `/api/files/${bucketFileId}/view?ext=${ext}`;
+  }
+  const fileName = name ?? "file";
+  return `/api/files/${bucketFileId}/download?ext=${ext}&name=${encodeURIComponent(fileName)}`;
+};
+
+export const getFileDownloadUrl = (
+  bucketFileId: string,
+  extension: string,
+  name: string
+) => {
+  const ext = extension?.toLowerCase() ?? "";
+  return `/api/files/${bucketFileId}/download?ext=${ext}&name=${encodeURIComponent(name)}`;
+};
+
 export const getUsageSummary = (totalSpace: any) => {
   return [
     {
