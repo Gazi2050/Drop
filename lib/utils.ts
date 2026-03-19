@@ -217,6 +217,19 @@ export const getFileOpenUrl = (
   return `/api/files/${bucketFileId}/download?ext=${ext}&name=${encodeURIComponent(fileName)}`;
 };
 
+/** Returns an absolute URL for the file open path (for Appwrite URL attribute). */
+export const getFileOpenUrlAbsolute = (
+  baseUrl: string,
+  bucketFileId: string,
+  type: string,
+  extension: string,
+  name?: string
+) => {
+  const path = getFileOpenUrl(bucketFileId, type, extension, name);
+  const base = baseUrl.replace(/\/$/, "");
+  return `${base}${path.startsWith("/") ? path : `/${path}`}`;
+};
+
 export const getFileDownloadUrl = (
   bucketFileId: string,
   extension: string,

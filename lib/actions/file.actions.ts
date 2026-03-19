@@ -3,7 +3,7 @@
 import { createAdminClient, createSessionClient } from "@/lib/appwrite";
 import { appwriteConfig } from "@/lib/appwrite/config";
 import { ID, Models, Query } from "node-appwrite";
-import { getFileOpenUrl, getFileType, parseStringify } from "@/lib/utils";
+import { getFileOpenUrlAbsolute, getFileType, parseStringify } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
 import { getCurrentUser } from "@/lib/actions/user.actions";
 import { headers } from "next/headers";
@@ -33,10 +33,23 @@ export const uploadFile = async ({
     );
 
     const { type, extension } = getFileType(bucketFile.name);
+    const headersList = await headers();
+    const host = headersList.get("host") ?? "localhost:3000";
+    const protocol =
+      headersList.get("x-forwarded-proto") ??
+      (host.includes("localhost") ? "http" : "https");
+    const baseUrl = `${protocol}://${host}`;
+
     const fileDocument = {
       type,
       name: bucketFile.name,
-      url: getFileOpenUrl(bucketFile.$id, type, extension, bucketFile.name),
+      url: getFileOpenUrlAbsolute(
+        baseUrl,
+        bucketFile.$id,
+        type,
+        extension,
+        bucketFile.name
+      ),
       extension,
       size: bucketFile.sizeOriginal,
       owner: ownerId,
@@ -99,13 +112,11 @@ export const getFiles = async ({
   sort = "$createdAt-desc",
   limit,
 }: GetFilesProps) => {
-  const { databases } = await createAdminClient();
-
   try {
     const currentUser = await getCurrentUser();
+    if (!currentUser) return parseStringify({ documents: [], total: 0 });
 
-    if (!currentUser) throw new Error("User not found");
-
+    const { databases } = await createAdminClient();
     const queries = createQueries(currentUser, types, searchText, sort, limit);
 
     const files = await databases.listDocuments(
@@ -195,13 +206,23 @@ export const deleteFile = async ({
   }
 };
 
+const DEFAULT_TOTAL_SPACE = {
+  image: { size: 0, latestDate: "" },
+  document: { size: 0, latestDate: "" },
+  video: { size: 0, latestDate: "" },
+  audio: { size: 0, latestDate: "" },
+  other: { size: 0, latestDate: "" },
+  used: 0,
+  all: 2 * 1024 * 1024 * 1024,
+};
+
 export async function getTotalSpaceUsed() {
   try {
-    const { databases } = await createSessionClient();
+    const sessionClient = await createSessionClient();
     const currentUser = await getCurrentUser();
-    if (!currentUser) throw new Error("User is not authenticated.");
+    if (!sessionClient || !currentUser) return parseStringify(DEFAULT_TOTAL_SPACE);
 
-    const files = await databases.listDocuments(
+    const files = await sessionClient.databases.listDocuments(
       appwriteConfig.databaseId,
       appwriteConfig.filesCollectionId,
       [Query.equal("owner", [currentUser.$id])],

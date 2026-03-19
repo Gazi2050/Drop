@@ -4,16 +4,19 @@ import { Account, Databases, Client, Storage, Tokens } from "node-appwrite";
 import { appwriteConfig } from "@/lib/appwrite/config";
 import { cookies } from "next/headers";
 
-export const createSessionClient = async () => {
+export type SessionClient = {
+  get account(): Account;
+  get databases(): Databases;
+};
+
+export const createSessionClient = async (): Promise<SessionClient | null> => {
+  const session = (await cookies()).get("appwrite-session");
+  if (!session?.value) return null;
+
   const client = new Client()
     .setEndpoint(appwriteConfig.endpointUrl)
-    .setProject(appwriteConfig.projectId);
-
-  const session = (await cookies()).get("appwrite-session");
-
-  if (!session || !session.value) throw new Error("No session");
-
-  client.setSession(session.value);
+    .setProject(appwriteConfig.projectId)
+    .setSession(session.value);
 
   return {
     get account() {

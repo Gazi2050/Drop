@@ -84,7 +84,7 @@ export const verifySecret = async ({
       path: "/",
       httpOnly: true,
       sameSite: "strict",
-      secure: true,
+      secure: process.env.NODE_ENV === "production",
     });
 
     return parseStringify({ sessionId: session.$id });
@@ -95,8 +95,10 @@ export const verifySecret = async ({
 
 export const getCurrentUser = async () => {
   try {
-    const { databases, account } = await createSessionClient();
+    const client = await createSessionClient();
+    if (!client) return null;
 
+    const { databases, account } = client;
     const result = await account.get();
 
     const user = await databases.listDocuments(
@@ -108,20 +110,21 @@ export const getCurrentUser = async () => {
     if (user.total <= 0) return null;
 
     return parseStringify(user.documents[0]);
-  } catch (error) {
-    console.log(error);
+  } catch {
+    return null;
   }
 };
 
 export const signOutUser = async (_formData?: FormData) => {
-  const { account } = await createSessionClient();
-
   try {
-    await account.deleteSession("current");
-    (await cookies()).delete("appwrite-session");
-  } catch (error) {
-    handleError(error, "Failed to sign out user");
+    const client = await createSessionClient();
+    if (client) {
+      await client.account.deleteSession("current");
+    }
+  } catch {
+    // Ignore if session already invalid
   } finally {
+    (await cookies()).delete("appwrite-session");
     redirect("/sign-in");
   }
 };
