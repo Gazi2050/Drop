@@ -17,21 +17,24 @@ const Sidebar = ({ fullName, avatar, email }: Props) => {
 
   return (
     <aside className="sidebar">
-      <Link href="/">
+      <Link
+        href="/"
+        className="flex w-fit shrink-0 justify-center self-center rounded-xl border border-light-300/60 bg-brand/5 p-2 transition-colors hover:bg-brand/10"
+      >
         <Image
-          src="/assets/icons/logo-full-brand.svg"
-          alt="logo"
-          width={160}
-          height={50}
-          className="hidden h-auto lg:block"
+          src="/assets/images/logo-2.png"
+          alt="Drop"
+          width={48}
+          height={48}
+          className="hidden size-12 rounded-lg object-contain lg:block"
         />
 
         <Image
-          src="/assets/icons/logo-brand.svg"
-          alt="logo"
-          width={52}
-          height={52}
-          className="lg:hidden"
+          src="/assets/images/logo-2.png"
+          alt="Drop"
+          width={40}
+          height={40}
+          className="size-10 rounded-lg object-contain lg:hidden"
         />
       </Link>
 
@@ -64,7 +67,7 @@ const Sidebar = ({ fullName, avatar, email }: Props) => {
 
       <Image
         src="/assets/images/files-2.png"
-        alt="logo"
+        alt="Files illustration"
         width={506}
         height={418}
         className="w-full"

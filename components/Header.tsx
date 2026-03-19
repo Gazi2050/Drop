@@ -20,7 +20,7 @@ const Header = ({
           <Button type="submit" className="sign-out-button">
             <Image
               src="/assets/icons/logout.svg"
-              alt="logo"
+              alt="Logout"
               width={24}
               height={24}
               className="w-6"

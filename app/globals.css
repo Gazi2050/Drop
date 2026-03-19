@@ -341,12 +341,15 @@
     @apply mt-2 w-full text-[16px] font-medium leading-[24px] text-white/70 md:text-center lg:text-left;
   }
 
-  /* Header */
+  /* Header - matches q reference: Search | Upload | Logout, no logo */
   .header {
     @apply hidden items-center justify-between gap-5 p-5 sm:flex lg:py-7 xl:gap-10;
   }
+  .header .search {
+    @apply flex-1 min-w-0;
+  }
   .header-wrapper {
-    @apply flex min-w-fit items-center justify-center gap-4;
+    @apply flex min-w-fit shrink-0 items-center gap-4;
   }
   .sign-out-button {
     @apply flex h-[52px] min-w-[54px] items-center justify-center rounded-full bg-brand/10 p-0 text-brand shadow-none transition-all hover:bg-brand/20;
@@ -377,7 +380,7 @@
 
   /* Sidebar */
   .sidebar {
-    @apply hidden h-screen flex-col overflow-auto px-5 py-7 sm:flex lg:w-[280px] xl:w-[325px] w-[90px];
+    @apply hidden h-screen flex-col items-center overflow-auto px-5 py-7 sm:flex lg:w-[280px] xl:w-[325px] lg:items-stretch w-[90px];
   }
   .sidebar-nav {
     @apply mt-9 flex flex-1 gap-1 text-[16px] font-semibold leading-[24px] text-brand;
