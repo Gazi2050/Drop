@@ -206,70 +206,118 @@
 
   /* Typography */
   .body-2 {
-    @apply text-[14px] leading-[20px] font-normal;
+    @apply text-[14px] leading-5 font-normal;
   }
   .h1 {
-    @apply text-[34px] leading-[42px] font-bold;
+    @apply text-[34px] leading-10.5 font-bold;
   }
   .button {
-    @apply text-[14px] leading-[20px] font-medium;
+    @apply text-[14px] leading-5 font-medium;
   }
 
   /* Shadcn overrides */
   .shad-input {
-    @apply border-none shadow-none p-0 outline-none ring-offset-transparent focus:ring-transparent focus:ring-offset-0 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 placeholder:text-light-200 text-[14px] leading-[20px] font-normal;
+    @apply border-none shadow-none p-0 outline-none ring-offset-transparent focus:ring-transparent focus:ring-offset-0 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 placeholder:text-light-200 text-[14px] leading-5 font-normal;
   }
   .shad-form-item {
-    @apply flex h-[78px] flex-col justify-center rounded-xl border border-light-300 px-4 shadow-[var(--shadow-drop-1)];
+    @apply flex h-19.5 flex-col justify-center rounded-xl border border-light-300 px-4 shadow-[var(--shadow-drop-1)];
   }
   .shad-form-label {
-    @apply text-light-100 pt-2 text-[14px] leading-[20px] font-normal w-full;
+    @apply text-light-100 pt-2 text-[14px] leading-5 font-normal w-full;
   }
   .shad-form-message {
-    @apply text-error text-[14px] leading-[20px] font-normal ml-4;
+    @apply text-error text-[14px] leading-5 font-normal ml-4;
+  }
+
+  /* OTP modal (AlertDialog + InputOTP) */
+  .shad-alert-dialog {
+    @apply w-full! min-w-0! max-w-[95%]! gap-6! overflow-x-clip! rounded-xl! bg-white! px-4! pt-10! pb-6! shadow-(--shadow-drop-1)! ring-0! outline-none sm:w-full! sm:max-w-md! md:max-w-105! md:rounded-[30px]! md:px-8! md:pb-8!;
+  }
+
+  .shad-alert-dialog-footer {
+    @apply mx-0! mb-0! mt-0! flex! w-full! flex-col! gap-4! border-0! bg-transparent! p-0! shadow-none! sm:flex-col!;
+  }
+
+  .shad-submit-btn {
+    @apply h-12! w-full! min-w-0! max-w-full! shrink! rounded-full! border-0! bg-brand! text-[14px]! font-medium! leading-5! text-white! shadow-none! transition-all hover:bg-brand-100! focus-visible:ring-0! focus-visible:ring-offset-0!;
+  }
+
+  .shad-otp {
+    @apply grid! w-full! min-w-0! max-w-full! gap-2!;
+    grid-template-columns: repeat(6, minmax(2.125rem, 1fr));
+  }
+
+  @media (min-width: 640px) {
+    .shad-otp {
+      grid-template-columns: repeat(6, minmax(2.5rem, 1fr));
+    }
+  }
+
+  .shad-otp-slot {
+    @apply relative! flex! h-12! w-full! min-w-0! max-w-full! items-center! justify-center! rounded-xl! border-2! border-light-300! bg-white! text-[1.375rem]! font-medium! leading-none! text-brand-100! shadow-(--shadow-drop-1)! ring-0! outline-none!;
+  }
+
+  @media (min-width: 640px) {
+    .shad-otp-slot {
+      @apply text-2xl!;
+    }
+  }
+
+  @media (min-width: 768px) {
+    .shad-otp-slot {
+      @apply text-[1.75rem]!;
+    }
+  }
+
+  .shad-otp-slot[data-active] {
+    @apply z-10 border-brand! ring-2! ring-brand/30!;
+  }
+
+  .otp-close-button {
+    @apply absolute right-0 top-0 inline-flex size-8 cursor-pointer items-center justify-center rounded-md sm:right-0 sm:top-0;
   }
 
   /* Auth form */
   .auth-form {
-    @apply flex max-h-[800px] w-full max-w-[580px] flex-col justify-center space-y-6 transition-all lg:h-full lg:space-y-8;
+    @apply flex max-h-200 w-full max-w-145 flex-col justify-center space-y-6 transition-all lg:h-full lg:space-y-8;
   }
   .form-title {
-    @apply text-[34px] leading-[42px] font-bold text-center text-light-100 md:text-left;
+    @apply text-[34px] leading-10.5 font-bold text-center text-light-100 md:text-left;
   }
   .primary-btn {
-    @apply bg-brand! text-white! hover:bg-brand-100! transition-all rounded-full! text-[14px] leading-[20px] font-medium! border-0! shadow-none!;
+    @apply bg-brand! text-white! hover:bg-brand-100! transition-all rounded-full! text-[14px] leading-5 font-medium! border-0! shadow-none!;
   }
   .form-submit-button {
-    @apply bg-brand! text-white! hover:bg-brand-100! transition-all rounded-full! text-[14px] leading-[20px] font-medium! h-[66px] w-full border-0! shadow-none! focus-visible:ring-0! focus-visible:ring-offset-0!;
+    @apply bg-brand! text-white! hover:bg-brand-100! transition-all rounded-full! text-[14px] leading-5 font-medium! h-16.5 w-full border-0! shadow-none! focus-visible:ring-0! focus-visible:ring-offset-0!;
   }
   .error-message {
-    @apply text-[14px] leading-[20px] font-normal mx-auto w-fit rounded-xl bg-error/5 px-8 py-4 text-center text-error;
+    @apply text-[14px] leading-5 font-normal mx-auto w-fit rounded-xl bg-error/5 px-8 py-4 text-center text-error;
   }
 
   /* Typography (extended) */
   .body-1 {
-    @apply text-[16px] leading-[24px] font-normal;
+    @apply text-[16px] leading-6 font-normal;
   }
   .h2 {
-    @apply text-[24px] leading-[36px] font-bold;
+    @apply text-[24px] leading-9 font-bold;
   }
   .h3 {
-    @apply text-[20px] leading-[28px] font-semibold;
+    @apply text-[20px] leading-7 font-semibold;
   }
   .h4 {
-    @apply text-[18px] leading-[20px] font-medium;
+    @apply text-[18px] leading-5 font-medium;
   }
   .h5 {
-    @apply text-[16px] leading-[24px] font-semibold;
+    @apply text-[16px] leading-6 font-semibold;
   }
   .subtitle-1 {
-    @apply text-[16px] leading-[24px] font-medium;
+    @apply text-[16px] leading-6 font-medium;
   }
   .subtitle-2 {
-    @apply text-[14px] leading-[20px] font-semibold;
+    @apply text-[14px] leading-5 font-semibold;
   }
   .caption {
-    @apply text-[12px] leading-[16px] font-normal;
+    @apply text-[12px] leading-4 font-normal;
   }
   .flex-center {
     @apply flex items-center justify-center;
@@ -307,10 +355,10 @@
     @apply flex w-full flex-col xl:flex-row xl:justify-between;
   }
   .recent-file-name {
-    @apply line-clamp-1 w-full text-[14px] font-semibold leading-[20px] text-light-100 sm:max-w-[200px] lg:max-w-[250px];
+    @apply line-clamp-1 w-full text-[14px] font-semibold leading-5 text-light-100 sm:max-w-50 lg:max-w-62.5;
   }
   .empty-list {
-    @apply py-4 text-center text-[14px] font-normal leading-[20px] text-light-200;
+    @apply py-4 text-center text-[14px] font-normal leading-5 text-light-200;
   }
 
   /* Chart */
@@ -318,7 +366,7 @@
     @apply flex shrink-0 flex-col items-center rounded-[16px] bg-brand p-1.5 text-white xl:p-2;
   }
   .chart-container {
-    @apply mx-auto flex h-[165px] w-full min-w-[165px] max-w-[240px] items-center justify-center text-white xl:h-[185px] xl:max-w-[280px];
+    @apply mx-auto flex h-41.25 w-full min-w-41.25 max-w-60 items-center justify-center text-white xl:h-46.25 xl:max-w-70;
   }
   .chart-details {
     @apply flex w-full flex-col items-center px-2 pt-1.5 text-center xl:pt-2;

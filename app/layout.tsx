@@ -3,6 +3,7 @@ import { Poppins, Geist } from "next/font/google";
 
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import { Toaster } from "@/components/ui/toaster";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
@@ -26,6 +27,7 @@ export default function RootLayout({
     <html lang="en" className={cn("font-sans", geist.variable)}>
       <body className={`${poppins.variable} font-poppins antialiased`}>
         {children}
+        <Toaster />
       </body>
     </html>
   );
