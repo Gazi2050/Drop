@@ -25,6 +25,16 @@ const FILE_TYPE_COLORS: Record<string, string> = {
   Others: "#f9ab72",
 };
 
+/** Shared legend styling for pie charts (indicator size + label text). */
+const pieLegendLabelStyle = {
+  usePointStyle: true as const,
+  pointStyle: "circle" as const,
+  padding: 18,
+  font: { size: 13 },
+  boxWidth: 12,
+  boxHeight: 12,
+};
+
 export type TotalSpaceData = {
   document: { size: number; latestDate: string };
   image: { size: number; latestDate: string };
@@ -85,14 +95,8 @@ export const Chart = ({ totalSpace }: { totalSpace: TotalSpaceData | null }) => 
     plugins: {
       legend: {
         position: "right" as const,
-          labels: {
-          usePointStyle: true,
-          pointStyle: "circle",
-          /** Space between pie and legend (also vertical gap between rows). */
-          padding: 14,
-          font: { size: 10 },
-          boxWidth: 8,
-          boxHeight: 8,
+        labels: {
+          ...pieLegendLabelStyle,
           generateLabels: (chart: ChartJS) => {
             const dataset = chart.data.datasets[0];
             const data = chart.data.labels?.map((label, i) => ({
@@ -160,12 +164,7 @@ export const StorageUsageChart = ({
       legend: {
         position: "right" as const,
         labels: {
-          usePointStyle: true,
-          pointStyle: "circle",
-          padding: 14,
-          font: { size: 10 },
-          boxWidth: 8,
-          boxHeight: 8,
+          ...pieLegendLabelStyle,
           generateLabels: (chart: ChartJS) => {
             const dataset = chart.data.datasets[0];
             const labels = chart.data.labels ?? [];
