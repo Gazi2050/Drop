@@ -6,7 +6,15 @@
     "plugin:tailwindcss/recommended",
     "prettier"
   ],
+  "plugins": ["tailwindcss"],
   "rules": {
-    "no-undef": "off"
+    "no-undef": "off",
+    "tailwindcss/no-custom-classname": "off",
+    "@typescript-eslint/no-explicit-any": "warn"
+  },
+  "settings": {
+    "tailwindcss": {
+      "classRegex": "^(className|class)$"
+    }
   }
 }

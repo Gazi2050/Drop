@@ -18,8 +18,8 @@ import {
 import React, { useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-// import { verifySecret, sendEmailOTP } from "@/lib/actions/user.actions";
-// import { useRouter } from "next/navigation";
+import { verifySecret, sendEmailOTP } from "@/lib/actions/user.actions";
+import { useRouter } from "next/navigation";
 
 const OtpModal = ({
   accountId,
@@ -28,7 +28,7 @@ const OtpModal = ({
   accountId: string;
   email: string;
 }) => {
-  // const router = useRouter();
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(true);
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -38,19 +38,17 @@ const OtpModal = ({
     setIsLoading(true);
 
     try {
-      // const sessionId = await verifySecret({ accountId, password });
-      // if (sessionId) router.push("/");
-      console.log({ accountId, password });
+      const sessionId = await verifySecret({ accountId, password });
+      if (sessionId) router.push("/");
     } catch (error) {
       console.log("Failed to verify OTP", error);
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
   const handleResendOtp = async () => {
-    // await sendEmailOTP({ email });
-    console.log("Resend OTP", { email });
+    await sendEmailOTP({ email });
   };
 
   return (
@@ -105,7 +103,7 @@ const OtpModal = ({
             </AlertDialogAction>
 
             <div className="subtitle-2 mt-2 text-center text-light-100">
-              Did not get a code?
+              Didn&apos;t get a code?
               <Button
                 type="button"
                 variant="link"

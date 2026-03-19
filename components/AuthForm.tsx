@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import OtpModal from "@/components/OTPModal";
+import { createAccount, signInUser } from "@/lib/actions/user.actions";
 
 type FormType = "sign-in" | "sign-up";
 
@@ -50,16 +51,22 @@ const AuthForm = ({ type }: { type: FormType }) => {
     setErrorMessage("");
 
     try {
-      // TODO: add auth actions
-      // const user =
-      //   type === "sign-up"
-      //     ? await createAccount({
-      //         fullName: values.fullName || "",
-      //         email: values.email,
-      //       })
-      //     : await signInUser({ email: values.email });
-      // setAccountId(user.accountId);
-      console.log(values);
+      const user =
+        type === "sign-up"
+          ? await createAccount({
+              fullName: values.fullName || "",
+              email: values.email,
+            })
+          : await signInUser({ email: values.email });
+
+      if (user?.error === "User not found") {
+        setErrorMessage("User not found. Please sign up first.");
+        return;
+      }
+
+      if (user?.accountId) {
+        setAccountId(user.accountId);
+      }
     } catch {
       setErrorMessage("Failed to create account. Please try again.");
     } finally {

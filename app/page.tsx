@@ -1,7 +1,9 @@
+import AuthForm from "@/components/AuthForm";
+
 export default function Home() {
   return (
-    <div>
-      <h1 className="text-brand-100">drop</h1>
+    <div className="flex min-h-screen items-center justify-center p-6">
+      <AuthForm type="sign-in" />
     </div>
   );
 }

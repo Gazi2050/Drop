@@ -1,6 +1,4 @@
 @import "tailwindcss";
-@import "tw-animate-css";
-@import "shadcn/tailwind.css";
 @plugin "tailwindcss-animate";
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -204,5 +202,47 @@
   }
   html {
     @apply font-sans;
+  }
+
+  /* Typography */
+  .body-2 {
+    @apply text-[14px] leading-[20px] font-normal;
+  }
+  .h1 {
+    @apply text-[34px] leading-[42px] font-bold;
+  }
+  .button {
+    @apply text-[14px] leading-[20px] font-medium;
+  }
+
+  /* Shadcn overrides */
+  .shad-input {
+    @apply border-none shadow-none p-0 outline-none ring-offset-transparent focus:ring-transparent focus:ring-offset-0 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 placeholder:text-light-200 text-[14px] leading-[20px] font-normal;
+  }
+  .shad-form-item {
+    @apply flex h-[78px] flex-col justify-center rounded-xl border border-light-300 px-4 shadow-[var(--shadow-drop-1)];
+  }
+  .shad-form-label {
+    @apply text-light-100 pt-2 text-[14px] leading-[20px] font-normal w-full;
+  }
+  .shad-form-message {
+    @apply text-error text-[14px] leading-[20px] font-normal ml-4;
+  }
+
+  /* Auth form */
+  .auth-form {
+    @apply flex max-h-[800px] w-full max-w-[580px] flex-col justify-center space-y-6 transition-all lg:h-full lg:space-y-8;
+  }
+  .form-title {
+    @apply text-[34px] leading-[42px] font-bold text-center text-light-100 md:text-left;
+  }
+  .primary-btn {
+    @apply bg-brand! text-white! hover:bg-brand-100! transition-all rounded-full! text-[14px] leading-[20px] font-medium! border-0! shadow-none!;
+  }
+  .form-submit-button {
+    @apply bg-brand! text-white! hover:bg-brand-100! transition-all rounded-full! text-[14px] leading-[20px] font-medium! h-[66px] w-full border-0! shadow-none! focus-visible:ring-0! focus-visible:ring-offset-0!;
+  }
+  .error-message {
+    @apply text-[14px] leading-[20px] font-normal mx-auto w-fit rounded-xl bg-error/5 px-8 py-4 text-center text-error;
   }
 }
