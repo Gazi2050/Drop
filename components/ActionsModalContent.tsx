@@ -6,19 +6,28 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 
 const ImageThumbnail = ({ file }: { file: FileDocument }) => (
-  <div className="file-details-thumbnail">
+  <div className="mb-1 flex items-center gap-3 rounded-xl border border-light-200/40 bg-light-400/50 p-3">
     <Thumbnail type={file.type} extension={file.extension} url={file.url} />
     <div className="flex flex-col">
-      <p className="subtitle-2 mb-1">{file.name}</p>
-      <FormattedDateTime date={file.$createdAt} className="caption" />
+      <p className="text-[14px] leading-[20px] font-semibold mb-1">
+        {file.name}
+      </p>
+      <FormattedDateTime
+        date={file.$createdAt}
+        className="text-[12px] leading-[16px] font-normal"
+      />
     </div>
   </div>
 );
 
 const DetailRow = ({ label, value }: { label: string; value: string }) => (
   <div className="flex">
-    <p className="file-details-label text-left">{label}</p>
-    <p className="file-details-value text-left">{value}</p>
+    <p className="w-[30%] text-[14px] font-normal leading-[20px] text-light-100 text-left">
+      {label}
+    </p>
+    <p className="flex-1 text-[14px] font-semibold leading-[20px] text-left">
+      {value}
+    </p>
   </div>
 );
 
@@ -53,19 +62,21 @@ export const ShareInput = ({ file, onInputChange, onRemove }: Props) => {
       <ImageThumbnail file={file} />
 
       <div className="share-wrapper">
-        <p className="subtitle-2 pl-1 text-light-100">
+        <p className="text-[14px] leading-[20px] font-semibold pl-1 text-light-100">
           Share file with other users
         </p>
         <Input
           type="email"
           placeholder="Enter email address"
           onChange={(e) => onInputChange(e.target.value.trim().split(","))}
-          className="share-input-field"
+          className="h-[52px] w-full rounded-full border px-4 text-[14px] font-normal leading-[20px] shadow-[var(--shadow-drop-1)] outline-none focus:ring-0"
         />
         <div className="pt-4">
           <div className="flex justify-between">
-            <p className="subtitle-2 text-light-100">Shared with</p>
-            <p className="subtitle-2 text-light-200">
+            <p className="text-[14px] leading-[20px] font-semibold text-light-100">
+              Shared with
+            </p>
+            <p className="text-[14px] leading-[20px] font-semibold text-light-200">
               {users.length} users
             </p>
           </div>
@@ -76,17 +87,19 @@ export const ShareInput = ({ file, onInputChange, onRemove }: Props) => {
                 key={email}
                 className="flex items-center justify-between gap-2"
               >
-                <p className="subtitle-2">{email}</p>
+                <p className="text-[14px] leading-[20px] font-semibold">
+                  {email}
+                </p>
                 <Button
                   onClick={() => onRemove(email)}
-                  className="share-remove-user"
+                  className="rounded-full bg-transparent text-light-100 shadow-none hover:bg-transparent"
                 >
                   <Image
                     src="/assets/icons/remove.svg"
                     alt="Remove"
                     width={24}
                     height={24}
-                    className="remove-icon"
+                    className="aspect-square rounded-full"
                   />
                 </Button>
               </li>

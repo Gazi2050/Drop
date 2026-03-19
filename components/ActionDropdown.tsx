@@ -91,7 +91,7 @@ const ActionDropdown = ({ file }: { file: FileDocument }) => {
     const { value, label } = action;
 
     return (
-      <DialogContent className="shad-dialog button">
+      <DialogContent className="rounded-[26px] w-[90%] max-w-[400px] px-6 py-8 text-[14px] leading-[20px] font-medium">
         <DialogHeader className="flex flex-col gap-3">
           <DialogTitle className="text-center text-light-100">
             {label}
@@ -112,31 +112,33 @@ const ActionDropdown = ({ file }: { file: FileDocument }) => {
             />
           )}
           {value === "delete" && (
-            <p className="delete-confirmation">
+            <p className="text-center text-light-100">
               Are you sure you want to delete{` `}
-              <span className="delete-file-name">{file.name}</span>?
+              <span className="font-medium text-brand-100">{file.name}</span>?
             </p>
           )}
           {value === "makePublic" && (
             <div className="flex flex-col gap-3">
-              <p className="body-2 text-light-100">
+              <p className="text-[14px] leading-[20px] font-normal text-light-100">
                 Anyone with this link can view the file without logging in.
               </p>
               {publicLinkError && (
-                <p className="body-2 text-error">{publicLinkError}</p>
+                <p className="text-[14px] leading-[20px] font-normal text-error">
+                  {publicLinkError}
+                </p>
               )}
               {publicLink && (
                 <div className="flex flex-col gap-2">
                   <Input
                     readOnly
                     value={publicLink}
-                    className="share-input-field"
+                    className="h-[52px] w-full rounded-full border px-4 text-[14px] font-normal leading-[20px] shadow-[var(--shadow-drop-1)] outline-none focus:ring-0"
                   />
                   <Button
                     onClick={() => {
                       navigator.clipboard.writeText(publicLink);
                     }}
-                    className="modal-submit-button"
+                    className="h-[52px] w-full flex-1 rounded-full border-0 bg-brand text-[14px] font-medium leading-[20px] text-white transition-all hover:bg-brand-100"
                   >
                     Copy Link
                   </Button>
@@ -151,7 +153,9 @@ const ActionDropdown = ({ file }: { file: FileDocument }) => {
                     height={24}
                     className="animate-spin"
                   />
-                  <span className="body-2 text-light-200">Generating link...</span>
+                  <span className="text-[14px] leading-[20px] font-normal text-light-200">
+                    Generating link...
+                  </span>
                 </div>
               )}
             </div>
@@ -159,17 +163,26 @@ const ActionDropdown = ({ file }: { file: FileDocument }) => {
         </DialogHeader>
         {(value === "makePublic" && (publicLink || publicLinkError)) && (
           <DialogFooter>
-            <Button onClick={closeAllModals} className="modal-cancel-button">
+            <Button
+              onClick={closeAllModals}
+              className="h-[52px] flex-1 rounded-full bg-white text-light-100 hover:bg-transparent border border-light-300"
+            >
               Close
             </Button>
           </DialogFooter>
         )}
         {["rename", "delete", "share"].includes(value) && (
           <DialogFooter className="flex flex-col gap-3 md:flex-row">
-            <Button onClick={closeAllModals} className="modal-cancel-button">
+            <Button
+              onClick={closeAllModals}
+              className="h-[52px] flex-1 rounded-full bg-white text-light-100 hover:bg-transparent border border-light-300"
+            >
               Cancel
             </Button>
-            <Button onClick={handleAction} className="modal-submit-button">
+            <Button
+              onClick={handleAction}
+              className="h-[52px] w-full flex-1 rounded-full border-0 bg-brand text-[14px] font-medium leading-[20px] text-white transition-all hover:bg-brand-100"
+            >
               <p className="capitalize">{value}</p>
               {isLoading && (
                 <Image
@@ -190,7 +203,7 @@ const ActionDropdown = ({ file }: { file: FileDocument }) => {
   return (
     <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
       <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
-        <DropdownMenuTrigger className="shad-no-focus">
+        <DropdownMenuTrigger className="outline-none ring-offset-transparent focus:ring-transparent focus:ring-offset-0 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0">
           <Image
             src="/assets/icons/dots.svg"
             alt="dots"
@@ -206,7 +219,7 @@ const ActionDropdown = ({ file }: { file: FileDocument }) => {
           {actionsDropdownItems.map((actionItem) => (
             <DropdownMenuItem
               key={actionItem.value}
-              className="shad-dropdown-item"
+              className="cursor-pointer"
               onClick={() => {
                 setAction(actionItem);
 

@@ -55,7 +55,7 @@ const OtpModal = ({
     <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
       <AlertDialogContent className="shad-alert-dialog">
         <AlertDialogHeader className="relative flex justify-center">
-          <AlertDialogTitle className="h2 text-center">
+          <AlertDialogTitle className="text-[24px] leading-[36px] font-bold text-center">
             Enter Your OTP
             <Image
               src="/assets/icons/close-dark.svg"
@@ -66,7 +66,7 @@ const OtpModal = ({
               className="otp-close-button"
             />
           </AlertDialogTitle>
-          <AlertDialogDescription className="subtitle-2 text-center text-light-100">
+          <AlertDialogDescription className="text-[14px] leading-[20px] font-semibold text-center text-light-100">
             We&apos;ve sent a code to{" "}
             <span className="pl-1 text-brand">{email}</span>
           </AlertDialogDescription>
@@ -102,7 +102,7 @@ const OtpModal = ({
               )}
             </AlertDialogAction>
 
-            <div className="subtitle-2 mt-2 text-center text-light-100">
+            <div className="text-[14px] leading-[20px] font-semibold mt-2 text-center text-light-100">
               Didn&apos;t get a code?
               <Button
                 type="button"

@@ -35,12 +35,12 @@ const FileUploader = ({ ownerId, accountId, className }: Props) => {
 
           return toast({
             description: (
-              <p className="body-2 text-white">
+              <p className="text-[14px] leading-[20px] font-normal text-white">
                 <span className="font-semibold">{file.name}</span> is too large.
                 Max file size is 50MB.
               </p>
             ),
-            className: "error-toast",
+            className: "bg-red rounded-[10px]",
           });
         }
 
@@ -73,7 +73,13 @@ const FileUploader = ({ ownerId, accountId, className }: Props) => {
   return (
     <div {...getRootProps()} className="cursor-pointer">
       <input {...getInputProps()} />
-      <Button type="button" className={cn("uploader-button", className)}>
+      <Button
+        type="button"
+        className={cn(
+          "h-[52px] gap-2 rounded-full border-0 bg-brand px-10 text-[14px] font-medium leading-[20px] text-white shadow-[var(--shadow-drop-1)] transition-all hover:bg-brand-100",
+          className,
+        )}
+      >
         <Image
           src="/assets/icons/upload.svg"
           alt="upload"
@@ -83,8 +89,10 @@ const FileUploader = ({ ownerId, accountId, className }: Props) => {
         <p>Upload</p>
       </Button>
       {files.length > 0 && (
-        <ul className="uploader-preview-list">
-          <h4 className="h4 text-light-100">Uploading</h4>
+        <ul className="fixed bottom-10 right-10 z-50 flex size-full h-fit max-w-[480px] flex-col gap-3 rounded-[20px] bg-white p-7 shadow-[var(--shadow-drop-3)]">
+          <h4 className="text-[18px] leading-[20px] font-medium text-light-100">
+            Uploading
+          </h4>
 
           {files.map((file, index) => {
             const { type, extension } = getFileType(file.name);
@@ -92,7 +100,7 @@ const FileUploader = ({ ownerId, accountId, className }: Props) => {
             return (
               <li
                 key={`${file.name}-${index}`}
-                className="uploader-preview-item"
+                className="flex items-center justify-between gap-3 rounded-xl p-3 shadow-[var(--shadow-drop-3)]"
               >
                 <div className="flex items-center gap-3">
                   <Thumbnail
@@ -101,7 +109,7 @@ const FileUploader = ({ ownerId, accountId, className }: Props) => {
                     url={convertFileToUrl(file)}
                   />
 
-                  <div className="preview-item-name">
+                  <div className="mb-2 line-clamp-1 max-w-[300px] text-[14px] font-semibold leading-[20px]">
                     {file.name}
                     <Image
                       src="/assets/icons/file-loader.gif"

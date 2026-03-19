@@ -12,7 +12,7 @@ const Card = ({ file }: { file: FileDocument }) => {
     <Link
       href={getFileOpenUrl(file.bucketFileId, file.type, file.extension, file.name)}
       target="_blank"
-      className="file-card"
+      className="flex cursor-pointer flex-col gap-6 rounded-[18px] bg-white p-5 shadow-[var(--shadow-drop-1)] transition-all hover:shadow-[var(--shadow-drop-3)]"
     >
       <div className="flex justify-between">
         <Thumbnail
@@ -25,17 +25,21 @@ const Card = ({ file }: { file: FileDocument }) => {
 
         <div className="flex flex-col items-end justify-between">
           <ActionDropdown file={file} />
-          <p className="body-1">{convertFileSize(file.size)}</p>
+          <p className="text-[16px] leading-[24px] font-normal">
+            {convertFileSize(file.size)}
+          </p>
         </div>
       </div>
 
-      <div className="file-card-details">
-        <p className="subtitle-2 line-clamp-1">{file.name}</p>
+      <div className="flex flex-col gap-2 text-light-100">
+        <p className="text-[14px] leading-[20px] font-semibold line-clamp-1">
+          {file.name}
+        </p>
         <FormattedDateTime
           date={file.$createdAt}
-          className="body-2 text-light-100"
+          className="text-[14px] leading-[20px] font-normal text-light-100"
         />
-        <p className="caption line-clamp-1 text-light-200">
+        <p className="text-[12px] leading-[16px] font-normal line-clamp-1 text-light-200">
           By: {ownerName}
         </p>
       </div>

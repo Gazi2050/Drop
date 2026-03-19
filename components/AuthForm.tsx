@@ -77,8 +77,11 @@ const AuthForm = ({ type }: { type: FormType }) => {
   return (
     <>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="auth-form">
-          <h1 className="form-title">
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex max-h-[800px] w-full max-w-[580px] flex-col justify-center space-y-6 transition-all lg:h-full lg:space-y-8"
+        >
+          <h1 className="text-[34px] leading-[42px] font-bold text-center text-light-100 md:text-left">
             {type === "sign-in" ? "Sign In" : "Sign Up"}
           </h1>
           {type === "sign-up" && (
@@ -87,19 +90,21 @@ const AuthForm = ({ type }: { type: FormType }) => {
               name="fullName"
               render={({ field }) => (
                 <FormItem>
-                  <div className="shad-form-item">
-                    <FormLabel className="shad-form-label">Full Name</FormLabel>
+                  <div className="flex h-[78px] flex-col justify-center rounded-xl border border-light-300 px-4 shadow-[var(--shadow-drop-1)]">
+                    <FormLabel className="text-light-100 pt-2 text-[14px] leading-[20px] font-normal w-full">
+                      Full Name
+                    </FormLabel>
 
                     <FormControl>
                       <Input
                         placeholder="Enter your full name"
-                        className="shad-input"
+                        className="border-none shadow-none p-0 outline-none ring-offset-transparent focus:ring-transparent focus:ring-offset-0 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 placeholder:text-light-200 text-[14px] leading-[20px] font-normal"
                         {...field}
                       />
                     </FormControl>
                   </div>
 
-                  <FormMessage className="shad-form-message" />
+                  <FormMessage className="text-error text-[14px] leading-[20px] font-normal ml-4" />
                 </FormItem>
               )}
             />
@@ -110,26 +115,28 @@ const AuthForm = ({ type }: { type: FormType }) => {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <div className="shad-form-item">
-                  <FormLabel className="shad-form-label">Email</FormLabel>
+                <div className="flex h-[78px] flex-col justify-center rounded-xl border border-light-300 px-4 shadow-[var(--shadow-drop-1)]">
+                  <FormLabel className="text-light-100 pt-2 text-[14px] leading-[20px] font-normal w-full">
+                    Email
+                  </FormLabel>
 
                   <FormControl>
                     <Input
                       placeholder="Enter your email"
-                      className="shad-input"
+                      className="border-none shadow-none p-0 outline-none ring-offset-transparent focus:ring-transparent focus:ring-offset-0 focus-visible:outline-none focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0 placeholder:text-light-200 text-[14px] leading-[20px] font-normal"
                       {...field}
                     />
                   </FormControl>
                 </div>
 
-                <FormMessage className="shad-form-message" />
+                <FormMessage className="text-error text-[14px] leading-[20px] font-normal ml-4" />
               </FormItem>
             )}
           />
 
           <Button
             type="submit"
-            className="form-submit-button"
+            className="bg-brand! text-white! hover:bg-brand-100! transition-all rounded-full! text-[14px] leading-[20px] font-medium! h-[66px] w-full border-0! shadow-none! focus-visible:ring-0! focus-visible:ring-offset-0!"
             disabled={isLoading}
           >
             {type === "sign-in" ? "Sign In" : "Sign Up"}
@@ -145,9 +152,13 @@ const AuthForm = ({ type }: { type: FormType }) => {
             )}
           </Button>
 
-          {errorMessage && <p className="error-message">*{errorMessage}</p>}
+          {errorMessage && (
+            <p className="text-[14px] leading-[20px] font-normal mx-auto w-fit rounded-xl bg-error/5 px-8 py-4 text-center text-error">
+              *{errorMessage}
+            </p>
+          )}
 
-          <div className="body-2 flex justify-center">
+          <div className="text-[14px] leading-[20px] font-normal flex justify-center">
             <p className="text-light-100">
               {type === "sign-in"
                 ? "Don't have an account?"

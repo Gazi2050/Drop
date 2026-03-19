@@ -2,22 +2,20 @@
 
 import {
   ArcElement,
+  ChartOptions,
   Chart as ChartJS,
   Legend,
   Tooltip,
 } from "chart.js";
+import { ReactNode } from "react";
 import { Pie } from "react-chartjs-2";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
-import { convertFileSize } from "@/lib/utils";
+import ChartCard from "@/components/ChartCard";
+import { BYTES_PER_GB, formatStorageDisplay } from "@/lib/utils";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
+
+const TOTAL_STORAGE_BYTES = 2 * BYTES_PER_GB;
 
 const FILE_TYPE_COLORS: Record<string, string> = {
   Documents: "#FF7474",
@@ -37,6 +35,26 @@ export type TotalSpaceData = {
   all?: number;
 };
 
+type ReusableChartCardProps = {
+  title: string;
+  subtitle: string;
+  hasData?: boolean;
+  children: ReactNode;
+};
+
+const ReusableChartCard = ({
+  title,
+  subtitle,
+  hasData = true,
+  children,
+}: ReusableChartCardProps) => {
+  return (
+    <ChartCard title={title} subtitle={subtitle} hasData={hasData}>
+      {children}
+    </ChartCard>
+  );
+};
+
 export const Chart = ({ totalSpace }: { totalSpace: TotalSpaceData | null }) => {
   const chartData = [
     { name: "Documents", value: totalSpace?.document?.size ?? 0 },
@@ -46,8 +64,6 @@ export const Chart = ({ totalSpace }: { totalSpace: TotalSpaceData | null }) => 
     { name: "Others", value: totalSpace?.other?.size ?? 0 },
   ].filter((d) => d.value > 0);
 
-  const totalUsed = totalSpace?.used ?? 0;
-
   const data = {
     labels: chartData.map((d) => d.name),
     datasets: [
@@ -55,21 +71,28 @@ export const Chart = ({ totalSpace }: { totalSpace: TotalSpaceData | null }) => 
         data: chartData.map((d) => d.value),
         backgroundColor: chartData.map((d) => FILE_TYPE_COLORS[d.name] ?? "#888"),
         borderWidth: 0,
+        radius: "92%",
       },
     ],
   };
 
-  const options = {
+  const options: ChartOptions<"pie"> = {
     responsive: true,
     maintainAspectRatio: false,
+    layout: {
+      padding: { top: 6, right: 6, bottom: 6, left: 6 },
+    },
     plugins: {
       legend: {
         position: "right" as const,
           labels: {
           usePointStyle: true,
           pointStyle: "circle",
-          padding: 8,
-          font: { size: 11 },
+          /** Space between pie and legend (also vertical gap between rows). */
+          padding: 14,
+          font: { size: 10 },
+          boxWidth: 8,
+          boxHeight: 8,
           generateLabels: (chart: ChartJS) => {
             const dataset = chart.data.datasets[0];
             const data = chart.data.labels?.map((label, i) => ({
@@ -77,7 +100,7 @@ export const Chart = ({ totalSpace }: { totalSpace: TotalSpaceData | null }) => 
               value: dataset.data[i] as number,
             })) ?? [];
             return data.map((d) => ({
-              text: `${d.label}: ${convertFileSize(d.value)}`,
+              text: `${d.label}: ${formatStorageDisplay(d.value)}`,
               fillStyle: d.label ? FILE_TYPE_COLORS[d.label] : "#888",
             }));
           },
@@ -86,31 +109,91 @@ export const Chart = ({ totalSpace }: { totalSpace: TotalSpaceData | null }) => 
       tooltip: {
         callbacks: {
           label: (context: { label?: string; raw?: unknown }) =>
-            `${context.label ?? ""}: ${convertFileSize(Number(context.raw ?? 0))}`,
+            `${context.label ?? ""}: ${formatStorageDisplay(Number(context.raw ?? 0))}`,
         },
       },
     },
   };
 
   return (
-    <Card className="chart gap-1 py-2">
-      <CardContent className="flex-1 p-0 pt-0">
-        <div className="chart-container">
-          {chartData.length > 0 ? (
-            <Pie data={data} options={options} />
-          ) : (
-            <div className="flex h-full min-h-[165px] items-center justify-center text-white/70">
-              No files uploaded
-            </div>
-          )}
-        </div>
-      </CardContent>
-      <CardHeader className="chart-details">
-        <CardTitle className="chart-title">Storage by Type</CardTitle>
-        <CardDescription className="chart-description">
-          {convertFileSize(totalUsed)} / 2GB total
-        </CardDescription>
-      </CardHeader>
-    </Card>
+    <ReusableChartCard
+      title="Storage by Type"
+      subtitle="Breakdown by file category"
+      hasData={chartData.length > 0}
+    >
+      <Pie data={data} options={options} />
+    </ReusableChartCard>
+  );
+};
+
+const USED_COLOR = "#fa7275";
+const AVAILABLE_COLOR = "#e8eaed";
+
+export const StorageUsageChart = ({
+  totalSpace,
+}: {
+  totalSpace: TotalSpaceData | null;
+}) => {
+  const used = Number(totalSpace?.used ?? 0);
+  const all = Number(totalSpace?.all ?? TOTAL_STORAGE_BYTES);
+  const available = Math.max(0, all - used);
+
+  const data = {
+    labels: ["Used", "Available"],
+    datasets: [
+      {
+        data: [used, available],
+        backgroundColor: [USED_COLOR, AVAILABLE_COLOR],
+        borderWidth: 0,
+        radius: "92%",
+      },
+    ],
+  };
+
+  const options: ChartOptions<"pie"> = {
+    responsive: true,
+    maintainAspectRatio: false,
+    layout: {
+      padding: { top: 6, right: 6, bottom: 6, left: 6 },
+    },
+    plugins: {
+      legend: {
+        position: "right" as const,
+        labels: {
+          usePointStyle: true,
+          pointStyle: "circle",
+          padding: 14,
+          font: { size: 10 },
+          boxWidth: 8,
+          boxHeight: 8,
+          generateLabels: (chart: ChartJS) => {
+            const dataset = chart.data.datasets[0];
+            const labels = chart.data.labels ?? [];
+            const colors = Array.isArray(dataset.backgroundColor)
+              ? dataset.backgroundColor
+              : [USED_COLOR, AVAILABLE_COLOR];
+            return labels.map((label, i) => ({
+              text: `${label}: ${formatStorageDisplay(Number(dataset.data[i] ?? 0))}`,
+              fillStyle: (colors[i] as string) ?? "#888",
+            }));
+          },
+        },
+      },
+      tooltip: {
+        callbacks: {
+          label: (context: { label?: string; raw?: unknown }) =>
+            `${context.label ?? ""}: ${formatStorageDisplay(Number(context.raw ?? 0))}`,
+        },
+      },
+    },
+  };
+
+  return (
+    <ReusableChartCard
+      title="Storage Used"
+      subtitle="Used vs available space"
+    >
+      <Pie data={data} options={options} />
+    </ReusableChartCard>
   );
 };

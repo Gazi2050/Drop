@@ -20,7 +20,12 @@ export const Thumbnail = ({
   const imageSrc = isImage ? "/assets/images/photo.png" : getFileIcon(extension, type);
 
   return (
-    <figure className={cn("thumbnail", className)}>
+    <figure
+      className={cn(
+        "flex size-[50px] min-w-[50px] items-center justify-center overflow-hidden rounded-full bg-brand/10",
+        className,
+      )}
+    >
       <Image
         src={imageSrc}
         alt="thumbnail"
@@ -29,7 +34,7 @@ export const Thumbnail = ({
         className={cn(
           "size-8 object-contain",
           imageClassName,
-          isImage && "thumbnail-image",
+          isImage && "size-full object-cover object-center",
         )}
       />
     </figure>

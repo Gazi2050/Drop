@@ -16,7 +16,7 @@ const Sidebar = ({ fullName, avatar, email }: Props) => {
   const pathname = usePathname();
 
   return (
-    <aside className="sidebar">
+    <aside className="hidden h-screen flex-col items-center overflow-auto px-5 py-7 sm:flex lg:w-[280px] xl:w-[325px] lg:items-stretch w-[90px] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:w-0 [&::-webkit-scrollbar]:h-0">
       <Link
         href="/"
         className="flex w-fit shrink-0 justify-center self-center rounded-xl border border-light-300/60 bg-brand/5 p-2 transition-colors hover:bg-brand/10"
@@ -38,14 +38,14 @@ const Sidebar = ({ fullName, avatar, email }: Props) => {
         />
       </Link>
 
-      <nav className="sidebar-nav">
+      <nav className="mt-9 flex flex-1 gap-1 text-[16px] font-semibold leading-[24px] text-brand">
         <ul className="flex flex-1 flex-col gap-6">
           {navItems.map(({ url, name, icon: Icon }) => (
             <Link key={name} href={url} className="lg:w-full">
               <li
                 className={cn(
-                  "sidebar-nav-item",
-                  pathname === url && "shad-active",
+                  "flex h-[52px] items-center justify-center gap-4 rounded-xl text-[16px] font-semibold leading-[24px] text-light-100 lg:w-full lg:justify-start lg:rounded-full lg:px-[30px]",
+                  pathname === url && "bg-brand text-white shadow-[var(--shadow-drop-2)]",
                 )}
               >
                 <Icon
@@ -69,17 +69,19 @@ const Sidebar = ({ fullName, avatar, email }: Props) => {
         className="w-full"
       />
 
-      <div className="sidebar-user-info">
+      <div className="mt-4 flex items-center justify-center gap-2 rounded-full bg-brand/10 p-1 text-light-100 lg:justify-start lg:p-3">
         <Image
           src={avatar}
           alt="Avatar"
           width={44}
           height={44}
-          className="sidebar-user-avatar"
+          className="aspect-square w-10 rounded-full object-cover"
         />
         <div className="hidden lg:block">
-          <p className="subtitle-2 capitalize">{fullName}</p>
-          <p className="caption">{email}</p>
+          <p className="text-[14px] leading-[20px] font-semibold capitalize">
+            {fullName}
+          </p>
+          <p className="text-[12px] leading-[16px] font-normal">{email}</p>
         </div>
       </div>
     </aside>

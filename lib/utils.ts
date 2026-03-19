@@ -21,14 +21,36 @@ export const convertFileSize = (sizeInBytes: number, digits?: number) => {
     return sizeInBytes + " Bytes";
   } else if (sizeInBytes < 1024 * 1024) {
     const sizeInKB = sizeInBytes / 1024;
-    return sizeInKB.toFixed(digits || 1) + " KB";
+    return sizeInKB.toFixed(digits ?? 1) + " KB";
   } else if (sizeInBytes < 1024 * 1024 * 1024) {
     const sizeInMB = sizeInBytes / (1024 * 1024);
-    return sizeInMB.toFixed(digits || 1) + " MB";
+    return sizeInMB.toFixed(digits ?? 1) + " MB";
   } else {
     const sizeInGB = sizeInBytes / (1024 * 1024 * 1024);
-    return sizeInGB.toFixed(digits || 2) + " GB";
+    return sizeInGB.toFixed(digits ?? 2) + " GB";
   }
+};
+
+export const BYTES_PER_GB = 1024 * 1024 * 1024;
+
+const BYTES_PER_MB = 1024 * 1024;
+
+/**
+ * Storage UI formatter: max 2 digits after the decimal.
+ * KB/MB use rounding; GB uses truncation so ~1.999 GB shows as "1.99 GB" (not "2.00 GB").
+ */
+export const formatStorageDisplay = (bytes: number) => {
+  if (bytes < 1024) return bytes + " Bytes";
+  if (bytes < BYTES_PER_MB) {
+    const kb = bytes / 1024;
+    return kb.toFixed(2) + " KB";
+  }
+  if (bytes < BYTES_PER_GB) {
+    const mb = bytes / BYTES_PER_MB;
+    return mb.toFixed(2) + " MB";
+  }
+  const gb = bytes / BYTES_PER_GB;
+  return (Math.floor(gb * 100) / 100).toFixed(2) + " GB";
 };
 
 export const getFileType = (fileName: string) => {

@@ -300,12 +300,6 @@
   .dashboard-container {
     @apply grid min-h-0 w-full flex-1 grid-cols-1 gap-4 overflow-hidden md:grid-cols-2 md:gap-6 xl:gap-8;
   }
-  .dashboard-summary-list {
-    @apply grid min-h-0 flex-1 grid-cols-1 content-start gap-4 overflow-visible px-0.5 py-1 sm:grid-cols-2 sm:gap-x-4 sm:gap-y-5 sm:px-1 sm:py-2;
-  }
-  .dashboard-summary-item {
-    @apply flex min-w-0 flex-col py-0.5 sm:py-1;
-  }
   .dashboard-recent-files {
     @apply flex min-h-0 flex-col overflow-auto rounded-[16px] bg-white p-4 xl:p-6;
   }
@@ -481,22 +475,6 @@
   }
   .file-card-details {
     @apply flex flex-col gap-2 text-light-100;
-  }
-  /* Dashboard usage summary — same family as file-card, fixed min height, grid top row */
-  .dashboard-summary-card {
-    @apply relative isolate z-0 min-h-[216px] w-full max-w-full flex-col gap-6 transition-shadow;
-  }
-  .summary-card-top {
-    @apply grid w-full grid-cols-[auto_minmax(0,1fr)] items-start gap-x-4;
-  }
-  .summary-card-size-col {
-    @apply flex min-h-[88px] w-full min-w-0 flex-col items-end justify-between self-stretch;
-  }
-  .summary-card-details {
-    @apply mt-auto gap-2;
-  }
-  .dashboard-summary-thumb {
-    @apply !size-[88px];
   }
 
   /* ActionsModalContent */
