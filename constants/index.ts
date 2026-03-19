@@ -17,6 +17,11 @@ export const navItems: { name: string; icon: LucideIcon; url: string }[] = [
   { name: "Others", icon: PieChart, url: "/others" },
 ];
 
+/** Same Lucide icons as sidebar file-type nav (excludes Dashboard). */
+export const categoryIconsByName = Object.fromEntries(
+  navItems.filter((item) => item.url !== "/").map((item) => [item.name, item.icon]),
+) as Record<string, LucideIcon>;
+
 export const actionsDropdownItems = [
   {
     label: "Rename",

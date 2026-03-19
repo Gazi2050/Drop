@@ -1,57 +1,78 @@
-import Image from "next/image";
 import Link from "next/link";
 
 import ActionDropdown from "@/components/ActionDropdown";
 import { Chart } from "@/components/Chart";
 import { FormattedDateTime } from "@/components/FormattedDateTime";
 import { Thumbnail } from "@/components/Thumbnail";
-import { Separator } from "@/components/ui/separator";
 import { getFiles, getTotalSpaceUsed } from "@/lib/actions/file.actions";
+import { getCurrentUser } from "@/lib/actions/user.actions";
+import { categoryIconsByName } from "@/constants";
 import { convertFileSize, getFileOpenUrl, getUsageSummary } from "@/lib/utils";
 
 const Dashboard = async () => {
-  const [files, totalSpace] = await Promise.all([
+  const [files, totalSpace, currentUser] = await Promise.all([
     getFiles({ types: [], limit: 10 }),
     getTotalSpaceUsed(),
+    getCurrentUser(),
   ]);
+
+  const ownerName =
+    typeof currentUser?.fullName === "string" && currentUser.fullName.trim()
+      ? currentUser.fullName.trim()
+      : "—";
 
   const usageSummary = getUsageSummary(totalSpace ?? { document: { size: 0, latestDate: "" }, image: { size: 0, latestDate: "" }, video: { size: 0, latestDate: "" }, audio: { size: 0, latestDate: "" }, other: { size: 0, latestDate: "" }, used: 0, all: 0 });
 
   return (
     <div className="dashboard-container">
-      <section className="flex min-h-0 flex-col gap-3 overflow-hidden">
+      <section className="remove-scrollbar flex min-h-0 flex-col gap-4 overflow-x-hidden overflow-y-auto md:gap-5">
         <Chart totalSpace={totalSpace ?? null} />
 
         <ul className="dashboard-summary-list min-h-0 flex-1">
-          {usageSummary.map((summary) => (
-            <Link
-              href={summary.url}
-              key={summary.title}
-              className="dashboard-summary-card"
-            >
-              <div className="space-y-2">
-                <div className="flex justify-between gap-2">
-                  <Image
-                    src={summary.icon}
-                    width={140}
-                    height={70}
-                    alt={summary.title}
-                    className="summary-type-icon"
-                  />
-                  <h4 className="summary-type-size">
-                    {convertFileSize(summary.size) || 0}
-                  </h4>
-                </div>
+          {usageSummary.map((summary) => {
+            const CategoryIcon = categoryIconsByName[summary.title];
+            return (
+              <li key={summary.title} className="dashboard-summary-item">
+                <Link
+                  href={summary.url}
+                  className="file-card dashboard-summary-card"
+                >
+                  <div className="summary-card-top">
+                    <figure className="thumbnail dashboard-summary-thumb shrink-0">
+                      {CategoryIcon ? (
+                        <CategoryIcon
+                          className="size-[52px] shrink-0 text-brand"
+                          strokeWidth={1.75}
+                          aria-hidden
+                        />
+                      ) : null}
+                    </figure>
 
-                <h5 className="summary-type-title">{summary.title}</h5>
-                <Separator className="bg-light-400" />
-                <FormattedDateTime
-                  date={summary.latestDate}
-                  className="text-center text-[14px] xl:text-[16px]"
-                />
-              </div>
-            </Link>
-          ))}
+                    <div className="summary-card-size-col">
+                      <span
+                        className="inline-block size-[34px] shrink-0"
+                        aria-hidden
+                      />
+                      <p className="body-1 text-right tabular-nums">
+                        {convertFileSize(summary.size) || 0}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="file-card-details summary-card-details">
+                    <p className="subtitle-2 line-clamp-1">{summary.title}</p>
+                    <FormattedDateTime
+                      date={summary.latestDate}
+                      className="body-2 text-light-100"
+                    />
+                    <p className="caption line-clamp-1 capitalize text-light-200">
+                      By: {ownerName}
+                    </p>
+                  </div>
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       </section>
 

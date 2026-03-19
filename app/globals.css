@@ -275,8 +275,18 @@
     @apply flex items-center justify-center;
   }
 
-  /* Scrollbar */
-  .remove-scrollbar::-webkit-scrollbar {
+  /* Scrollbar — hide while keeping overflow scroll (no @apply: custom class) */
+  .remove-scrollbar,
+  .main-content,
+  .sidebar,
+  .dashboard-recent-files {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .remove-scrollbar::-webkit-scrollbar,
+  .main-content::-webkit-scrollbar,
+  .sidebar::-webkit-scrollbar,
+  .dashboard-recent-files::-webkit-scrollbar {
     width: 0;
     height: 0;
   }
@@ -291,19 +301,10 @@
     @apply grid min-h-0 w-full flex-1 grid-cols-1 gap-4 overflow-hidden md:grid-cols-2 md:gap-6 xl:gap-8;
   }
   .dashboard-summary-list {
-    @apply grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 xl:gap-6;
+    @apply grid min-h-0 flex-1 grid-cols-1 content-start gap-4 overflow-visible px-0.5 py-1 sm:grid-cols-2 sm:gap-x-4 sm:gap-y-5 sm:px-1 sm:py-2;
   }
-  .dashboard-summary-card {
-    @apply relative overflow-hidden rounded-[16px] bg-white p-4 transition-all hover:scale-[1.02] xl:p-5;
-  }
-  .summary-type-icon {
-    @apply absolute -left-2 top-[-12px] z-10 h-[70px] w-[140px] object-contain object-left;
-  }
-  .summary-type-size {
-    @apply relative z-20 w-full text-right text-[16px] font-medium leading-[20px] xl:text-[18px];
-  }
-  .summary-type-title {
-    @apply relative z-20 text-center text-[16px] font-semibold leading-[22px] xl:text-[18px];
+  .dashboard-summary-item {
+    @apply flex min-w-0 flex-col py-0.5 sm:py-1;
   }
   .dashboard-recent-files {
     @apply flex min-h-0 flex-col overflow-auto rounded-[16px] bg-white p-4 xl:p-6;
@@ -320,19 +321,19 @@
 
   /* Chart */
   .chart {
-    @apply flex shrink-0 items-center rounded-[16px] bg-brand p-3 text-white md:flex-col xl:flex-row xl:p-4;
+    @apply flex shrink-0 flex-col items-center rounded-[16px] bg-brand p-1.5 text-white xl:p-2;
   }
   .chart-container {
-    @apply mx-auto flex h-[180px] w-full min-w-[180px] max-w-[280px] items-center justify-center text-white xl:h-[200px] xl:max-w-[320px];
+    @apply mx-auto flex h-[165px] w-full min-w-[165px] max-w-[240px] items-center justify-center text-white xl:h-[185px] xl:max-w-[280px];
   }
   .chart-details {
-    @apply flex-1 shrink-0 items-start px-3 py-0 sm:px-4 lg:p-2 xl:pr-4;
+    @apply flex w-full flex-col items-center px-2 pt-1.5 text-center xl:pt-2;
   }
   .chart-title {
-    @apply font-bold text-[16px] leading-[22px] xl:text-[18px] md:text-center lg:text-left;
+    @apply font-bold text-[14px] leading-[20px] xl:text-[16px];
   }
   .chart-description {
-    @apply mt-1 w-full text-[14px] font-medium leading-[20px] text-white/70 xl:text-[16px] md:text-center lg:text-left;
+    @apply mt-0.5 w-full whitespace-nowrap text-[12px] font-medium leading-[18px] text-white/70 xl:text-[14px];
   }
 
   /* Header - matches q reference: Search | Upload | Logout, no logo */
@@ -480,6 +481,22 @@
   }
   .file-card-details {
     @apply flex flex-col gap-2 text-light-100;
+  }
+  /* Dashboard usage summary — same family as file-card, fixed min height, grid top row */
+  .dashboard-summary-card {
+    @apply relative isolate z-0 min-h-[216px] w-full max-w-full flex-col gap-6 transition-shadow;
+  }
+  .summary-card-top {
+    @apply grid w-full grid-cols-[auto_minmax(0,1fr)] items-start gap-x-4;
+  }
+  .summary-card-size-col {
+    @apply flex min-h-[88px] w-full min-w-0 flex-col items-end justify-between self-stretch;
+  }
+  .summary-card-details {
+    @apply mt-auto gap-2;
+  }
+  .dashboard-summary-thumb {
+    @apply !size-[88px];
   }
 
   /* ActionsModalContent */

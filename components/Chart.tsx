@@ -93,13 +93,13 @@ export const Chart = ({ totalSpace }: { totalSpace: TotalSpaceData | null }) => 
   };
 
   return (
-    <Card className="chart gap-2 py-3">
+    <Card className="chart gap-1 py-2">
       <CardContent className="flex-1 p-0 pt-0">
         <div className="chart-container">
           {chartData.length > 0 ? (
             <Pie data={data} options={options} />
           ) : (
-            <div className="flex h-full min-h-[200px] items-center justify-center text-white/70">
+            <div className="flex h-full min-h-[165px] items-center justify-center text-white/70">
               No files uploaded
             </div>
           )}
