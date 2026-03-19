@@ -2,6 +2,24 @@
 
 declare type FileType = "document" | "image" | "video" | "audio" | "other";
 
+declare interface FileDocument {
+  $id: string;
+  $createdAt: string;
+  $updatedAt: string;
+  $collectionId?: string;
+  $databaseId?: string;
+  $permissions?: string[];
+  $sequence?: number;
+  url: string;
+  type: FileType;
+  extension: string;
+  name: string;
+  size: number;
+  bucketFileId: string;
+  owner: { fullName?: string } | string;
+  users: string[];
+}
+
 declare interface ActionType {
   label: string;
   icon: string;

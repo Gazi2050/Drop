@@ -113,7 +113,7 @@ export const getCurrentUser = async () => {
   }
 };
 
-export const signOutUser = async () => {
+export const signOutUser = async (_formData?: FormData) => {
   const { account } = await createSessionClient();
 
   try {
