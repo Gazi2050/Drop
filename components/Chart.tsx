@@ -1,12 +1,12 @@
 "use client";
 
 import {
-  Label,
-  PolarGrid,
-  PolarRadiusAxis,
-  RadialBar,
-  RadialBarChart,
-} from "recharts";
+  ArcElement,
+  Chart as ChartJS,
+  Legend,
+  Tooltip,
+} from "chart.js";
+import { Pie } from "react-chartjs-2";
 
 import {
   Card,
@@ -15,85 +15,100 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
-import { ChartConfig, ChartContainer } from "@/components/ui/chart";
-import { calculatePercentage, convertFileSize } from "@/lib/utils";
+import { convertFileSize } from "@/lib/utils";
 
-const chartConfig = {
-  size: {
-    label: "Size",
-  },
-  used: {
-    label: "Used",
-    color: "white",
-  },
-} satisfies ChartConfig;
+ChartJS.register(ArcElement, Tooltip, Legend);
 
-export const Chart = ({ used = 0 }: { used: number }) => {
-  const chartData = [{ storage: "used", 10: used, fill: "white" }];
+const FILE_TYPE_COLORS: Record<string, string> = {
+  Documents: "#FF7474",
+  Images: "#56b8ff",
+  Video: "#3DD9B3",
+  Audio: "#eea8fd",
+  Others: "#f9ab72",
+};
+
+export type TotalSpaceData = {
+  document: { size: number; latestDate: string };
+  image: { size: number; latestDate: string };
+  video: { size: number; latestDate: string };
+  audio: { size: number; latestDate: string };
+  other: { size: number; latestDate: string };
+  used?: number;
+  all?: number;
+};
+
+export const Chart = ({ totalSpace }: { totalSpace: TotalSpaceData | null }) => {
+  const chartData = [
+    { name: "Documents", value: totalSpace?.document?.size ?? 0 },
+    { name: "Images", value: totalSpace?.image?.size ?? 0 },
+    { name: "Video", value: totalSpace?.video?.size ?? 0 },
+    { name: "Audio", value: totalSpace?.audio?.size ?? 0 },
+    { name: "Others", value: totalSpace?.other?.size ?? 0 },
+  ].filter((d) => d.value > 0);
+
+  const totalUsed = totalSpace?.used ?? 0;
+
+  const data = {
+    labels: chartData.map((d) => d.name),
+    datasets: [
+      {
+        data: chartData.map((d) => d.value),
+        backgroundColor: chartData.map((d) => FILE_TYPE_COLORS[d.name] ?? "#888"),
+        borderWidth: 0,
+      },
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: "right" as const,
+          labels: {
+          usePointStyle: true,
+          pointStyle: "circle",
+          padding: 8,
+          font: { size: 11 },
+          generateLabels: (chart: ChartJS) => {
+            const dataset = chart.data.datasets[0];
+            const data = chart.data.labels?.map((label, i) => ({
+              label: String(label),
+              value: dataset.data[i] as number,
+            })) ?? [];
+            return data.map((d) => ({
+              text: `${d.label}: ${convertFileSize(d.value)}`,
+              fillStyle: d.label ? FILE_TYPE_COLORS[d.label] : "#888",
+            }));
+          },
+        },
+      },
+      tooltip: {
+        callbacks: {
+          label: (context: { label?: string; raw?: unknown }) =>
+            `${context.label ?? ""}: ${convertFileSize(Number(context.raw ?? 0))}`,
+        },
+      },
+    },
+  };
 
   return (
-    <Card className="chart">
-      <CardContent className="flex-1 p-0">
-        <ChartContainer config={chartConfig} className="chart-container">
-          <RadialBarChart
-            data={chartData}
-            startAngle={90}
-            endAngle={Number(calculatePercentage(used)) + 90}
-            innerRadius={80}
-            outerRadius={110}
-          >
-            <PolarGrid
-              gridType="circle"
-              radialLines={false}
-              stroke="none"
-              className="polar-grid"
-              polarRadius={[86, 74]}
-            />
-            <RadialBar dataKey="storage" background cornerRadius={10} />
-            <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
-              <Label
-                content={({ viewBox }) => {
-                  if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                    return (
-                      <text
-                        x={viewBox.cx}
-                        y={viewBox.cy}
-                        textAnchor="middle"
-                        dominantBaseline="middle"
-                      >
-                        <tspan
-                          x={viewBox.cx}
-                          y={viewBox.cy}
-                          className="chart-total-percentage"
-                        >
-                          {used && calculatePercentage(used)
-                            ? calculatePercentage(used)
-                                .toString()
-                                .replace(/^0+/, "")
-                            : "0"}
-                          %
-                        </tspan>
-                        <tspan
-                          x={viewBox.cx}
-                          y={(viewBox.cy || 0) + 24}
-                          className="fill-white/70"
-                        >
-                          Space used
-                        </tspan>
-                      </text>
-                    );
-                  }
-                  return null;
-                }}
-              />
-            </PolarRadiusAxis>
-          </RadialBarChart>
-        </ChartContainer>
+    <Card className="chart gap-2 py-3">
+      <CardContent className="flex-1 p-0 pt-0">
+        <div className="chart-container">
+          {chartData.length > 0 ? (
+            <Pie data={data} options={options} />
+          ) : (
+            <div className="flex h-full min-h-[200px] items-center justify-center text-white/70">
+              No files uploaded
+            </div>
+          )}
+        </div>
       </CardContent>
       <CardHeader className="chart-details">
-        <CardTitle className="chart-title">Available Storage</CardTitle>
+        <CardTitle className="chart-title">Storage by Type</CardTitle>
         <CardDescription className="chart-description">
-          {used ? convertFileSize(used) : "2GB"} / 2GB
+          {convertFileSize(totalUsed)} / 2GB total
         </CardDescription>
       </CardHeader>
     </Card>

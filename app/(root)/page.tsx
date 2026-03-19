@@ -19,23 +19,23 @@ const Dashboard = async () => {
 
   return (
     <div className="dashboard-container">
-      <section>
-        <Chart used={totalSpace?.used ?? 0} />
+      <section className="flex min-h-0 flex-col gap-3 overflow-hidden">
+        <Chart totalSpace={totalSpace ?? null} />
 
-        <ul className="dashboard-summary-list">
+        <ul className="dashboard-summary-list min-h-0 flex-1">
           {usageSummary.map((summary) => (
             <Link
               href={summary.url}
               key={summary.title}
               className="dashboard-summary-card"
             >
-              <div className="space-y-4">
-                <div className="flex justify-between gap-3">
+              <div className="space-y-2">
+                <div className="flex justify-between gap-2">
                   <Image
                     src={summary.icon}
-                    width={100}
-                    height={100}
-                    alt="uploaded image"
+                    width={140}
+                    height={70}
+                    alt={summary.title}
                     className="summary-type-icon"
                   />
                   <h4 className="summary-type-size">
@@ -47,7 +47,7 @@ const Dashboard = async () => {
                 <Separator className="bg-light-400" />
                 <FormattedDateTime
                   date={summary.latestDate}
-                  className="text-center"
+                  className="text-center text-[14px] xl:text-[16px]"
                 />
               </div>
             </Link>
@@ -56,9 +56,9 @@ const Dashboard = async () => {
       </section>
 
       <section className="dashboard-recent-files">
-        <h2 className="h3 xl:h2 text-light-100">Recent files uploaded</h2>
+        <h2 className="h4 shrink-0 xl:h3 text-light-100">Recent files uploaded</h2>
         {files?.documents?.length > 0 ? (
-          <ul className="mt-5 flex flex-col gap-5">
+          <ul className="mt-3 flex flex-col gap-3 xl:mt-4 xl:gap-4">
             {files.documents.map((file: FileDocument) => (
               <Link
                 href={getFileOpenUrl(file.bucketFileId, file.type, file.extension, file.name)}

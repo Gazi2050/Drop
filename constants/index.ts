@@ -1,29 +1,20 @@
-export const navItems = [
-  {
-    name: "Dashboard",
-    icon: "/assets/icons/dashboard.svg",
-    url: "/",
-  },
-  {
-    name: "Documents",
-    icon: "/assets/icons/documents.svg",
-    url: "/documents",
-  },
-  {
-    name: "Images",
-    icon: "/assets/icons/images.svg",
-    url: "/images",
-  },
-  {
-    name: "Media",
-    icon: "/assets/icons/video.svg",
-    url: "/media",
-  },
-  {
-    name: "Others",
-    icon: "/assets/icons/others.svg",
-    url: "/others",
-  },
+import type { LucideIcon } from "lucide-react";
+import {
+  LayoutDashboard,
+  FolderOpen,
+  ImageIcon,
+  Video,
+  Music,
+  PieChart,
+} from "lucide-react";
+
+export const navItems: { name: string; icon: LucideIcon; url: string }[] = [
+  { name: "Dashboard", icon: LayoutDashboard, url: "/" },
+  { name: "Documents", icon: FolderOpen, url: "/documents" },
+  { name: "Images", icon: ImageIcon, url: "/images" },
+  { name: "Video", icon: Video, url: "/video" },
+  { name: "Audio", icon: Music, url: "/audio" },
+  { name: "Others", icon: PieChart, url: "/others" },
 ];
 
 export const actionsDropdownItems = [

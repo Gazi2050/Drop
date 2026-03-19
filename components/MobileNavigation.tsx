@@ -7,6 +7,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import Image from "next/image";
+import { Menu, LogOut } from "lucide-react";
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { Separator } from "@/components/ui/separator";
@@ -47,12 +48,7 @@ const MobileNavigation = ({
 
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger>
-          <Image
-            src="/assets/icons/menu.svg"
-            alt="Search"
-            width={30}
-            height={30}
-          />
+          <Menu className="size-8 text-light-100" />
         </SheetTrigger>
         <SheetContent className="shad-sheet h-screen px-3">
           <SheetTitle>
@@ -74,7 +70,7 @@ const MobileNavigation = ({
 
           <nav className="mobile-nav">
             <ul className="mobile-nav-list">
-              {navItems.map(({ url, name, icon }) => (
+              {navItems.map(({ url, name, icon: Icon }) => (
                 <Link key={name} href={url} className="lg:w-full">
                   <li
                     className={cn(
@@ -82,14 +78,10 @@ const MobileNavigation = ({
                       pathname === url && "shad-active",
                     )}
                   >
-                    <Image
-                      src={icon}
-                      alt={name}
-                      width={24}
-                      height={24}
+                    <Icon
                       className={cn(
-                        "nav-icon",
-                        pathname === url && "nav-icon-active",
+                        "size-6 shrink-0",
+                        pathname === url ? "text-white" : "text-brand",
                       )}
                     />
                     <p>{name}</p>
@@ -108,12 +100,7 @@ const MobileNavigation = ({
               className="mobile-sign-out-button"
               onClick={async () => await signOutUser()}
             >
-              <Image
-                src="/assets/icons/logout.svg"
-                alt="logo"
-                width={24}
-                height={24}
-              />
+              <LogOut className="size-6 shrink-0" />
               <p>Logout</p>
             </Button>
           </div>

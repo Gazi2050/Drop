@@ -221,14 +221,18 @@ export const getUsageSummary = (totalSpace: any) => {
       url: "/images",
     },
     {
-      title: "Media",
-      size: totalSpace.video.size + totalSpace.audio.size,
-      latestDate:
-        totalSpace.video.latestDate > totalSpace.audio.latestDate
-          ? totalSpace.video.latestDate
-          : totalSpace.audio.latestDate,
+      title: "Video",
+      size: totalSpace.video.size,
+      latestDate: totalSpace.video.latestDate,
       icon: "/assets/icons/file-video-light.svg",
-      url: "/media",
+      url: "/video",
+    },
+    {
+      title: "Audio",
+      size: totalSpace.audio.size,
+      latestDate: totalSpace.audio.latestDate,
+      icon: "/assets/icons/file-audio-light.svg",
+      url: "/audio",
     },
     {
       title: "Others",
@@ -246,8 +250,10 @@ export const getFileTypesParams = (type: string) => {
       return ["document"];
     case "images":
       return ["image"];
-    case "media":
-      return ["video", "audio"];
+    case "video":
+      return ["video"];
+    case "audio":
+      return ["audio"];
     case "others":
       return ["other"];
     default:

@@ -283,30 +283,30 @@
 
   /* Layout */
   .main-content {
-    @apply h-full flex-1 overflow-auto bg-light-400 px-5 py-7 sm:mr-7 sm:rounded-[30px] md:mb-7 md:px-9 md:py-10;
+    @apply flex min-h-0 flex-1 flex-col overflow-auto bg-light-400 px-4 py-7 sm:mr-6 sm:rounded-[30px] md:mb-7 md:px-6 md:py-10;
   }
 
   /* Dashboard */
   .dashboard-container {
-    @apply mx-auto grid max-w-7xl grid-cols-1 gap-6 md:grid-cols-2 xl:gap-10;
+    @apply grid min-h-0 w-full flex-1 grid-cols-1 gap-4 overflow-hidden md:grid-cols-2 md:gap-6 xl:gap-8;
   }
   .dashboard-summary-list {
-    @apply mt-6 grid grid-cols-1 gap-4 xl:mt-10 xl:grid-cols-2 xl:gap-9;
+    @apply grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 xl:gap-6;
   }
   .dashboard-summary-card {
-    @apply relative mt-6 rounded-[20px] bg-white p-5 transition-all hover:scale-105;
+    @apply relative overflow-hidden rounded-[16px] bg-white p-4 transition-all hover:scale-[1.02] xl:p-5;
   }
   .summary-type-icon {
-    @apply absolute -left-3 top-[-25px] z-10 w-[190px] object-contain;
+    @apply absolute -left-2 top-[-12px] z-10 h-[70px] w-[140px] object-contain object-left;
   }
   .summary-type-size {
-    @apply relative z-20 w-full text-right text-[18px] font-medium leading-[20px];
+    @apply relative z-20 w-full text-right text-[16px] font-medium leading-[20px] xl:text-[18px];
   }
   .summary-type-title {
-    @apply relative z-20 text-center text-[16px] font-semibold leading-[24px];
+    @apply relative z-20 text-center text-[16px] font-semibold leading-[22px] xl:text-[18px];
   }
   .dashboard-recent-files {
-    @apply h-full rounded-[20px] bg-white p-5 xl:p-8;
+    @apply flex min-h-0 flex-col overflow-auto rounded-[16px] bg-white p-4 xl:p-6;
   }
   .recent-file-details {
     @apply flex w-full flex-col xl:flex-row xl:justify-between;
@@ -315,30 +315,24 @@
     @apply line-clamp-1 w-full text-[14px] font-semibold leading-[20px] text-light-100 sm:max-w-[200px] lg:max-w-[250px];
   }
   .empty-list {
-    @apply mt-10 text-center text-[16px] font-normal leading-[24px] text-light-200;
+    @apply py-4 text-center text-[14px] font-normal leading-[20px] text-light-200;
   }
 
   /* Chart */
   .chart {
-    @apply flex items-center rounded-[20px] bg-brand p-5 text-white md:flex-col xl:flex-row;
+    @apply flex shrink-0 items-center rounded-[16px] bg-brand p-3 text-white md:flex-col xl:flex-row xl:p-4;
   }
   .chart-container {
-    @apply mx-auto aspect-square w-[180px] text-white xl:w-[250px];
-  }
-  .polar-grid {
-    @apply first:fill-white/20 last:fill-brand;
+    @apply mx-auto flex h-[180px] w-full min-w-[180px] max-w-[280px] items-center justify-center text-white xl:h-[200px] xl:max-w-[320px];
   }
   .chart-details {
-    @apply flex-1 items-start px-3 py-0 sm:px-5 lg:p-3 xl:pr-5;
-  }
-  .chart-total-percentage {
-    @apply fill-white text-4xl font-bold;
+    @apply flex-1 shrink-0 items-start px-3 py-0 sm:px-4 lg:p-2 xl:pr-4;
   }
   .chart-title {
-    @apply font-bold text-[20px] leading-[28px] md:text-center lg:text-left;
+    @apply font-bold text-[16px] leading-[22px] xl:text-[18px] md:text-center lg:text-left;
   }
   .chart-description {
-    @apply mt-2 w-full text-[16px] font-medium leading-[24px] text-white/70 md:text-center lg:text-left;
+    @apply mt-1 w-full text-[14px] font-medium leading-[20px] text-white/70 xl:text-[16px] md:text-center lg:text-left;
   }
 
   /* Header - matches q reference: Search | Upload | Logout, no logo */
