@@ -16,7 +16,7 @@ const Sidebar = ({ fullName, avatar, email }: Props) => {
   const pathname = usePathname();
 
   return (
-    <aside className="hidden h-screen flex-col items-center overflow-auto px-5 py-7 sm:flex lg:w-[280px] xl:w-[325px] lg:items-stretch w-[90px] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:w-0 [&::-webkit-scrollbar]:h-0">
+    <aside className="sidebar">
       <Link
         href="/"
         aria-label="Drop home"
@@ -45,13 +45,13 @@ const Sidebar = ({ fullName, avatar, email }: Props) => {
         </span>
       </Link>
 
-      <nav className="mt-9 flex flex-1 gap-1 text-[16px] font-semibold leading-[24px] text-brand">
+      <nav className="sidebar-nav">
         <ul className="flex flex-1 flex-col gap-6">
           {navItems.map(({ url, name, icon: Icon }) => (
             <Link key={name} href={url} className="group lg:w-full">
               <li
                 className={cn(
-                  "flex h-[52px] items-center justify-center gap-4 rounded-xl text-[16px] font-semibold leading-[24px] text-light-100 transition-colors duration-200 lg:w-full lg:justify-start lg:rounded-full lg:px-[30px]",
+                  "sidebar-nav-item transition-colors duration-200",
                   pathname === url
                     ? "bg-brand text-white shadow-[var(--shadow-drop-2)] hover:bg-brand-100"
                     : "hover:bg-brand/10 hover:text-brand",
@@ -80,13 +80,13 @@ const Sidebar = ({ fullName, avatar, email }: Props) => {
         className="w-full"
       />
 
-      <div className="mt-4 flex items-center justify-center gap-2 rounded-full bg-brand/10 p-1 text-light-100 lg:justify-start lg:p-3">
+      <div className="sidebar-user-info">
         <Image
           src={avatar}
           alt="Avatar"
           width={44}
           height={44}
-          className="aspect-square w-10 rounded-full object-cover"
+          className="sidebar-user-avatar"
         />
         <div className="hidden lg:block">
           <p className="text-[14px] leading-[20px] font-semibold capitalize">

@@ -341,21 +341,21 @@
 
   /* Layout */
   .main-content {
-    @apply flex min-h-0 flex-1 flex-col overflow-auto bg-light-400 px-4 py-7 sm:mr-6 sm:rounded-[30px] md:mb-7 md:px-6 md:py-10;
+    @apply flex min-h-0 h-full flex-1 flex-col overflow-auto bg-light-400 px-5 py-7 sm:mr-7 sm:rounded-[30px] md:mb-7 md:px-9 md:py-10;
   }
 
   /* Dashboard */
   .dashboard-container {
-    @apply grid min-h-0 w-full flex-1 grid-cols-1 gap-4 overflow-hidden md:grid-cols-2 md:gap-6 xl:gap-8;
+    @apply mx-auto grid min-h-0 w-full max-w-7xl flex-1 grid-cols-1 gap-6 overflow-hidden md:grid-cols-2 xl:gap-10;
   }
   .dashboard-recent-files {
-    @apply flex min-h-0 flex-col overflow-auto rounded-[16px] bg-white p-4 xl:p-6;
+    @apply flex min-h-0 h-full flex-col overflow-auto rounded-[20px] bg-white p-5 xl:p-8;
   }
   .recent-file-details {
     @apply flex w-full flex-col xl:flex-row xl:justify-between;
   }
   .recent-file-name {
-    @apply line-clamp-1 w-full text-[14px] font-semibold leading-5 text-light-100 sm:max-w-50 lg:max-w-62.5;
+    @apply line-clamp-1 w-full text-[14px] font-semibold leading-5 text-light-100 sm:max-w-[200px] lg:max-w-[250px];
   }
   .empty-list {
     @apply py-4 text-center text-[14px] font-normal leading-5 text-light-200;
@@ -409,7 +409,7 @@
     @apply flex flex-1 flex-col gap-4;
   }
   .mobile-nav-item {
-    @apply flex h-[52px] w-full items-center justify-start gap-4 rounded-full px-6 text-[16px] font-semibold leading-[24px] text-light-100;
+    @apply flex h-[52px] w-full items-center justify-start gap-4 rounded-full px-6 text-[16px] font-semibold leading-[24px] text-light-100 transition-colors duration-200 hover:bg-brand/10;
   }
   .mobile-sign-out-button {
     @apply flex h-[52px] w-full items-center gap-4 rounded-full bg-brand/10 px-6 text-[16px] font-semibold leading-[24px] text-brand shadow-none transition-all hover:bg-brand/20;
@@ -417,7 +417,7 @@
 
   /* Sidebar */
   .sidebar {
-    @apply hidden h-screen flex-col items-center overflow-auto px-5 py-7 sm:flex lg:w-[280px] xl:w-[325px] lg:items-stretch w-[90px];
+    @apply hidden h-screen w-[90px] flex-col overflow-auto px-5 py-7 sm:flex lg:w-[280px] xl:w-[325px];
   }
   .sidebar-nav {
     @apply mt-9 flex flex-1 gap-1 text-[16px] font-semibold leading-[24px] text-brand;

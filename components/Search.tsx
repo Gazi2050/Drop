@@ -52,8 +52,8 @@ const Search = () => {
   };
 
   return (
-    <div className="relative w-full md:max-w-[480px] flex-1 min-w-0">
-      <div className="flex h-[52px] flex-1 items-center gap-3 rounded-full px-4 shadow-[var(--shadow-drop-3)]">
+    <div className="search">
+      <div className="search-input-wrapper">
         <Image
           src="/assets/icons/search.svg"
           alt="Search"
@@ -63,12 +63,12 @@ const Search = () => {
         <Input
           value={query}
           placeholder="Search..."
-          className="w-full border-none p-0 text-[14px] font-normal leading-[20px] shadow-none outline-none placeholder:text-light-200 focus:ring-0"
+          className="search-input"
           onChange={(e) => setQuery(e.target.value)}
         />
 
         {open && (
-          <ul className="absolute left-0 top-16 z-50 flex w-full flex-col gap-3 rounded-[20px] bg-white p-4 shadow-[var(--shadow-drop-3)]">
+          <ul className="search-result">
             {results.length > 0 ? (
               results.map((file) => (
                 <li
@@ -95,7 +95,7 @@ const Search = () => {
                 </li>
               ))
             ) : (
-              <p className="text-center text-[14px] font-normal leading-[20px] text-light-100">
+              <p className="empty-result">
                 No files found
               </p>
             )}

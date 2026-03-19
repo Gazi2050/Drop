@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 
 const CHART_BOX_CLASS =
-  "mx-auto h-[250px] w-full max-w-[310px] shrink-0 sm:h-[290px] sm:max-w-[350px]";
+  "mx-auto h-[250px] w-full min-w-0 max-w-[min(100%,310px)] shrink-0 sm:h-[290px] sm:max-w-[350px]";
 
 type ChartCardProps = {
   title: string;

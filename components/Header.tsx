@@ -12,15 +12,12 @@ const Header = ({
   accountId: string;
 }) => {
   return (
-    <header className="hidden items-center justify-between gap-5 p-5 sm:flex lg:py-7 xl:gap-10">
+    <header className="header">
       <Search />
-      <div className="flex min-w-fit shrink-0 items-center gap-4">
+      <div className="header-wrapper">
         <FileUploader ownerId={userId} accountId={accountId} />
         <form action={signOutUser}>
-          <Button
-            type="submit"
-            className="flex h-[52px] min-w-[54px] items-center justify-center rounded-full bg-brand/10 p-0 text-brand shadow-none transition-all hover:bg-brand/20"
-          >
+          <Button type="submit" className="sign-out-button">
             <Image
               src="/assets/icons/logout.svg"
               alt="Logout"
