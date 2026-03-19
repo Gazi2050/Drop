@@ -1,0 +1,101 @@
+"use client";
+
+import Link from "next/link";
+import Image from "next/image";
+import { navItems } from "@/constants";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
+
+interface Props {
+  fullName: string;
+  avatar: string;
+  email: string;
+}
+
+const Sidebar = ({ fullName, avatar, email }: Props) => {
+  const pathname = usePathname();
+
+  return (
+    <aside className="sidebar">
+      <Link
+        href="/"
+        aria-label="Drop home"
+        className="flex w-fit shrink-0 flex-col items-center justify-center gap-1 self-center lg:flex-row lg:items-center lg:justify-center lg:gap-3"
+      >
+        <span className="shrink-0 rounded-xl border border-light-300/60 bg-brand/10 p-1 transition-colors duration-200 hover:border-light-300 hover:bg-brand/20">
+          <Image
+            src="/assets/images/logo-2.png"
+            alt=""
+            width={48}
+            height={48}
+            className="hidden size-12 rounded-lg object-contain lg:block"
+          />
+
+          <Image
+            src="/assets/images/logo-2.png"
+            alt=""
+            width={40}
+            height={40}
+            className="size-10 rounded-lg object-contain lg:hidden"
+          />
+        </span>
+
+        <span className="hidden text-xl font-bold leading-none tracking-tight text-brand lg:block xl:text-3xl">
+          Drop
+        </span>
+      </Link>
+
+      <nav className="sidebar-nav">
+        <ul className="flex flex-1 flex-col gap-6">
+          {navItems.map(({ url, name, icon: Icon }) => (
+            <Link key={name} href={url} className="group lg:w-full">
+              <li
+                className={cn(
+                  "sidebar-nav-item transition-colors duration-200",
+                  pathname === url
+                    ? "bg-brand text-white shadow-[var(--shadow-drop-2)] hover:bg-brand-100"
+                    : "hover:bg-brand/10 hover:text-brand",
+                )}
+              >
+                <Icon
+                  className={cn(
+                    "size-6 shrink-0 transition-colors duration-200",
+                    pathname === url
+                      ? "text-white"
+                      : "text-brand group-hover:text-brand-100",
+                  )}
+                />
+                <p className="hidden lg:block">{name}</p>
+              </li>
+            </Link>
+          ))}
+        </ul>
+      </nav>
+
+      <Image
+        src="/assets/images/files-2.png"
+        alt="Files illustration"
+        width={506}
+        height={418}
+        className="w-full"
+      />
+
+      <div className="sidebar-user-info">
+        <Image
+          src={avatar}
+          alt="Avatar"
+          width={44}
+          height={44}
+          className="sidebar-user-avatar"
+        />
+        <div className="hidden lg:block">
+          <p className="text-[14px] leading-[20px] font-semibold capitalize">
+            {fullName}
+          </p>
+          <p className="text-[12px] leading-[16px] font-normal">{email}</p>
+        </div>
+      </div>
+    </aside>
+  );
+};
+export default Sidebar;

@@ -1,18 +1,29 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  poweredByHeader: false,
+  reactStrictMode: true,
+  typescript: {
+    tsconfigPath: "./tsconfig.json",
+  },
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: '*', // This allows images from all domains with HTTPS
+        protocol: "https",
+        hostname: "img.freepik.com",
+        pathname: "/**",
       },
       {
-        protocol: 'http',
-        hostname: '*', // This allows images from all domains with HTTP
+        protocol: "https",
+        hostname: "cloud.appwrite.io",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "sgp.cloud.appwrite.io",
+        pathname: "/**",
       },
     ],
-    minimumCacheTTL: 60,
   },
 };
 
