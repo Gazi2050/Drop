@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import { useDropzone } from "react-dropzone";
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,10 @@ import Image from "next/image";
 import Thumbnail from "@/components/Thumbnail";
 import { MAX_FILE_SIZE } from "@/constants";
 import { useToast } from "@/hooks/use-toast";
-import { uploadFile } from "@/lib/actions/file.actions";
+import {
+  createFileDocumentFromBucketFile,
+  getUploadJwt,
+} from "@/lib/actions/file.actions";
 import { usePathname } from "next/navigation";
 
 interface Props {
@@ -18,19 +21,160 @@ interface Props {
   className?: string;
 }
 
+interface UploadItem {
+  id: string;
+  file: File;
+  progress: number;
+  status: "uploading" | "done" | "error";
+  startedAt: number;
+}
+
+const MIN_UPLOAD_VISIBLE_MS = 1200;
+const COMPLETE_REMOVE_DELAY_MS = 400;
+const PROGRESS_TICK_MS = 12;
+
 const FileUploader = ({ ownerId, accountId, className }: Props) => {
   const path = usePathname();
   const { toast } = useToast();
-  const [files, setFiles] = useState<File[]>([]);
+  const [uploadItems, setUploadItems] = useState<UploadItem[]>([]);
+  const progressIntervalsRef = useRef<
+    Record<string, ReturnType<typeof setInterval>>
+  >({});
+  const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  const clearProgressInterval = (uploadId: string) => {
+    const interval = progressIntervalsRef.current[uploadId];
+    if (!interval) return;
+    clearInterval(interval);
+    delete progressIntervalsRef.current[uploadId];
+  };
+
+  const animateProgressTo = (uploadId: string, target: number) => {
+    const safeTarget = Math.max(1, Math.min(target, 100));
+    clearProgressInterval(uploadId);
+
+    return new Promise<void>((resolve) => {
+      let hasResolved = false;
+
+      const resolveOnce = () => {
+        if (hasResolved) return;
+        hasResolved = true;
+        resolve();
+      };
+
+      progressIntervalsRef.current[uploadId] = setInterval(() => {
+        let shouldStop = false;
+
+        setUploadItems((prev) => {
+          let found = false;
+          const next = prev.map((uploadItem) => {
+            if (uploadItem.id !== uploadId) return uploadItem;
+            found = true;
+
+            const nextProgress = Math.min(uploadItem.progress + 1, safeTarget);
+            if (nextProgress >= safeTarget) shouldStop = true;
+            return { ...uploadItem, progress: nextProgress };
+          });
+
+          if (!found) shouldStop = true;
+          return next;
+        });
+
+        if (shouldStop) {
+          clearProgressInterval(uploadId);
+          resolveOnce();
+        }
+      }, PROGRESS_TICK_MS);
+    });
+  };
+
+  useEffect(() => {
+    return () => {
+      Object.keys(progressIntervalsRef.current).forEach((uploadId) => {
+        clearProgressInterval(uploadId);
+      });
+    };
+  }, []);
+
+  const uploadToAppwrite = (
+    file: File,
+    jwt: string,
+    onProgress: (progress: number) => void,
+  ): Promise<{ $id: string; name: string; sizeOriginal: number }> => {
+    return new Promise((resolve, reject) => {
+      const endpoint = process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT;
+      const projectId = process.env.NEXT_PUBLIC_APPWRITE_PROJECT;
+      const bucketId = process.env.NEXT_PUBLIC_APPWRITE_BUCKET;
+
+      if (!endpoint || !projectId || !bucketId) {
+        reject(new Error("Missing Appwrite client configuration"));
+        return;
+      }
+
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", `${endpoint}/storage/buckets/${bucketId}/files`, true);
+      xhr.setRequestHeader("X-Appwrite-Project", projectId);
+      xhr.setRequestHeader("X-Appwrite-JWT", jwt);
+
+      xhr.upload.onprogress = (event) => {
+        if (!event.lengthComputable) return;
+        const progress = Math.round((event.loaded / event.total) * 100);
+        onProgress(Math.min(progress, 100));
+      };
+
+      xhr.onload = () => {
+        if (xhr.status >= 200 && xhr.status < 300) {
+          try {
+            const response = JSON.parse(xhr.responseText) as {
+              $id: string;
+              name: string;
+              sizeOriginal: number;
+            };
+            resolve(response);
+          } catch {
+            reject(new Error("Invalid upload response"));
+          }
+          return;
+        }
+
+        reject(new Error(`Upload failed with status ${xhr.status}`));
+      };
+
+      xhr.onerror = () => reject(new Error("Network error during upload"));
+
+      const formData = new FormData();
+      formData.append("fileId", "unique()");
+      formData.append("file", file);
+      xhr.send(formData);
+    });
+  };
 
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
-      setFiles(acceptedFiles);
+      const { jwt } = (await getUploadJwt()) ?? { jwt: null };
+      if (!jwt) {
+        toast({
+          description: "Unable to authenticate upload. Please sign in again.",
+          className: "bg-red rounded-[10px]",
+        });
+        return;
+      }
 
-      const uploadPromises = acceptedFiles.map(async (file) => {
+      const items = acceptedFiles.map((file) => ({
+        id: `${file.name}-${file.lastModified}-${Math.random().toString(36).slice(2, 8)}`,
+        file,
+        progress: 5,
+        status: "uploading" as const,
+        startedAt: Date.now(),
+      }));
+
+      setUploadItems((prev) => [...prev, ...items]);
+
+      const uploadPromises = items.map(async (item) => {
+        const { file } = item;
         if (file.size > MAX_FILE_SIZE) {
-          setFiles((prevFiles) =>
-            prevFiles.filter((f) => f.name !== file.name),
+          setUploadItems((prev) =>
+            prev.filter((uploadItem) => uploadItem.id !== item.id),
           );
 
           return toast({
@@ -44,15 +188,46 @@ const FileUploader = ({ ownerId, accountId, className }: Props) => {
           });
         }
 
-        return uploadFile({ file, ownerId, accountId, path }).then(
-          (uploadedFile) => {
-            if (uploadedFile) {
-              setFiles((prevFiles) =>
-                prevFiles.filter((f) => f.name !== file.name),
-              );
-            }
-          },
-        );
+        try {
+          const bucketFile = await uploadToAppwrite(file, jwt, (progress) => {
+            void animateProgressTo(item.id, Math.min(progress, 95));
+          });
+
+          await createFileDocumentFromBucketFile({
+            bucketFileId: bucketFile.$id,
+            fileName: bucketFile.name,
+            size: bucketFile.sizeOriginal,
+            ownerId,
+            accountId,
+            path,
+          });
+
+          const elapsed = Date.now() - item.startedAt;
+          const remaining = Math.max(MIN_UPLOAD_VISIBLE_MS - elapsed, 0);
+          if (remaining > 0) await wait(remaining);
+          await animateProgressTo(item.id, 100);
+
+          setUploadItems((prev) =>
+            prev.map((uploadItem) =>
+              uploadItem.id === item.id
+                ? { ...uploadItem, progress: 100, status: "done" }
+                : uploadItem,
+            ),
+          );
+
+          setTimeout(() => {
+            setUploadItems((prev) =>
+              prev.filter((uploadItem) => uploadItem.id !== item.id),
+            );
+          }, COMPLETE_REMOVE_DELAY_MS);
+        } catch {
+          clearProgressInterval(item.id);
+          setUploadItems((prev) =>
+            prev.map((uploadItem) =>
+              uploadItem.id === item.id ? { ...uploadItem, status: "error" } : uploadItem,
+            ),
+          );
+        }
       });
 
       await Promise.all(uploadPromises);
@@ -64,10 +239,10 @@ const FileUploader = ({ ownerId, accountId, className }: Props) => {
 
   const handleRemoveFile = (
     e: React.MouseEvent<HTMLImageElement, MouseEvent>,
-    fileName: string,
+    uploadId: string,
   ) => {
     e.stopPropagation();
-    setFiles((prevFiles) => prevFiles.filter((file) => file.name !== fileName));
+    setUploadItems((prev) => prev.filter((uploadItem) => uploadItem.id !== uploadId));
   };
 
   return (
@@ -88,18 +263,19 @@ const FileUploader = ({ ownerId, accountId, className }: Props) => {
         />{" "}
         <p>Upload</p>
       </Button>
-      {files.length > 0 && (
+      {uploadItems.length > 0 && (
         <ul className="fixed bottom-10 right-10 z-50 flex size-full h-fit max-w-[480px] flex-col gap-3 rounded-[20px] bg-white p-7 shadow-[var(--shadow-drop-3)]">
           <h4 className="text-[18px] leading-[20px] font-medium text-light-100">
             Uploading
           </h4>
 
-          {files.map((file, index) => {
+          {uploadItems.map((uploadItem) => {
+            const { file, progress, status } = uploadItem;
             const { type, extension } = getFileType(file.name);
 
             return (
               <li
-                key={`${file.name}-${index}`}
+                key={uploadItem.id}
                 className="flex items-center justify-between gap-3 rounded-xl p-3 shadow-[var(--shadow-drop-3)]"
               >
                 <div className="flex items-center gap-3">
@@ -109,15 +285,24 @@ const FileUploader = ({ ownerId, accountId, className }: Props) => {
                     url={convertFileToUrl(file)}
                   />
 
-                  <div className="mb-2 line-clamp-1 max-w-[300px] text-[14px] font-semibold leading-[20px]">
-                    {file.name}
-                    <Image
-                      src="/assets/icons/file-loader.gif"
-                      width={80}
-                      height={26}
-                      alt="Loader"
-                      style={{ width: "auto", height: "auto" }}
-                    />
+                  <div className="mb-2 max-w-[300px]">
+                    <p className="line-clamp-1 text-[14px] font-semibold leading-[20px]">
+                      {file.name}
+                    </p>
+                    <div className="mt-2 flex items-center gap-2">
+                      <div className="h-2 w-[140px] overflow-hidden rounded-full bg-light-200/40">
+                        <div
+                          className={cn(
+                            "h-full rounded-full transition-all duration-200",
+                            status === "error" ? "bg-red" : "bg-brand",
+                          )}
+                          style={{ width: `${progress}%` }}
+                        />
+                      </div>
+                      <p className="text-[12px] font-normal leading-[16px] text-light-200">
+                        {status === "error" ? "Failed" : `${progress}%`}
+                      </p>
+                    </div>
                   </div>
                 </div>
 
@@ -126,7 +311,7 @@ const FileUploader = ({ ownerId, accountId, className }: Props) => {
                   width={24}
                   height={24}
                   alt="Remove"
-                  onClick={(e) => handleRemoveFile(e, file.name)}
+                  onClick={(e) => handleRemoveFile(e, uploadItem.id)}
                 />
               </li>
             );

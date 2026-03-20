@@ -77,6 +77,82 @@ export const uploadFile = async ({
   }
 };
 
+export const getUploadJwt = async () => {
+  try {
+    const sessionClient = await createSessionClient();
+    const currentUser = await getCurrentUser();
+    if (!sessionClient || !currentUser) return parseStringify({ jwt: null });
+
+    const jwt = await sessionClient.account.createJWT();
+    return parseStringify({ jwt: jwt.jwt });
+  } catch (error) {
+    handleError(error, "Failed to create upload JWT");
+  }
+};
+
+export const createFileDocumentFromBucketFile = async ({
+  bucketFileId,
+  fileName,
+  size,
+  ownerId,
+  accountId,
+  path,
+}: {
+  bucketFileId: string;
+  fileName: string;
+  size: number;
+  ownerId: string;
+  accountId: string;
+  path: string;
+}) => {
+  const { databases } = await createAdminClient();
+
+  try {
+    const currentUser = await getCurrentUser();
+    if (!currentUser || currentUser.$id !== ownerId) {
+      throw new Error("Unauthorized file metadata creation attempt");
+    }
+
+    const { type, extension } = getFileType(fileName);
+    const headersList = await headers();
+    const host = headersList.get("host") ?? "localhost:3000";
+    const protocol =
+      headersList.get("x-forwarded-proto") ??
+      (host.includes("localhost") ? "http" : "https");
+    const baseUrl = `${protocol}://${host}`;
+
+    const fileDocument = {
+      type,
+      name: fileName,
+      url: getFileOpenUrlAbsolute(
+        baseUrl,
+        bucketFileId,
+        type,
+        extension,
+        fileName,
+      ),
+      extension,
+      size,
+      owner: ownerId,
+      accountId,
+      users: [],
+      bucketFileId,
+    };
+
+    const newFile = await databases.createDocument(
+      appwriteConfig.databaseId,
+      appwriteConfig.filesCollectionId,
+      ID.unique(),
+      fileDocument,
+    );
+
+    revalidatePath(path);
+    return parseStringify(newFile);
+  } catch (error) {
+    handleError(error, "Failed to create file metadata");
+  }
+};
+
 const createQueries = (
   currentUser: Models.Document & { email: string },
   types: string[],
