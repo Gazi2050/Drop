@@ -101,7 +101,10 @@ const MobileNavigation = ({
           <div className="flex flex-col justify-between gap-5 pb-5">
             <FileUploader ownerId={ownerId} accountId={accountId} />
             <form action={signOutUser}>
-              <Button type="submit" className="mobile-sign-out-button">
+              <Button
+                type="submit"
+                className="flex h-[52px] w-full items-center gap-4 rounded-full bg-brand/10 px-6 text-[16px] font-semibold leading-[24px] text-brand shadow-none transition-all hover:bg-brand/20"
+              >
                 <LogOut className="size-6 shrink-0" />
                 <p>Logout</p>
               </Button>

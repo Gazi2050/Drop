@@ -389,7 +389,7 @@
     @apply flex min-w-fit shrink-0 items-center gap-4;
   }
   .sign-out-button {
-    @apply flex-center h-[52px] min-w-[54px] items-center rounded-full bg-brand/10 p-0 text-brand shadow-none transition-all hover:bg-brand/20 !important;
+    @apply size-[52px] rounded-full border border-brand/20 bg-white p-0 text-brand shadow-none transition-all hover:-translate-y-px hover:bg-brand/10 active:translate-y-0;
   }
 
   /* Mobile */

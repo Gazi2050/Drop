@@ -17,7 +17,12 @@ const Header = ({
       <div className="header-wrapper">
         <FileUploader ownerId={userId} accountId={accountId} />
         <form action={signOutUser}>
-          <Button type="submit" className="sign-out-button">
+          <Button
+            type="submit"
+            variant="ghost"
+            size="icon"
+            className="size-[52px] rounded-full border border-brand/20 bg-white p-0 text-brand shadow-none transition-all hover:-translate-y-px hover:bg-brand/10 active:translate-y-0"
+          >
             <Image
               src="/assets/icons/logout.svg"
               alt="Logout"
