@@ -125,7 +125,44 @@ export const getFiles = async ({
       queries,
     );
 
-    return parseStringify(files);
+    const ownerIds = Array.from(
+      new Set(
+        files.documents
+          .map((file) => file.owner)
+          .filter((owner): owner is string => typeof owner === "string"),
+      ),
+    );
+
+    let ownerNameById: Record<string, string> = {};
+    if (ownerIds.length > 0) {
+      const users = await databases.listDocuments(
+        appwriteConfig.databaseId,
+        appwriteConfig.usersCollectionId,
+        [Query.equal("$id", ownerIds)],
+      );
+
+      ownerNameById = users.documents.reduce<Record<string, string>>((acc, user) => {
+        acc[user.$id] = (user.fullName as string) || "—";
+        return acc;
+      }, {});
+    }
+
+    const hydratedFiles = {
+      ...files,
+      documents: files.documents.map((file) => {
+        if (typeof file.owner === "string") {
+          return {
+            ...file,
+            owner: {
+              fullName: ownerNameById[file.owner] ?? "—",
+            },
+          };
+        }
+        return file;
+      }),
+    };
+
+    return parseStringify(hydratedFiles);
   } catch (error) {
     handleError(error, "Failed to get files");
   }

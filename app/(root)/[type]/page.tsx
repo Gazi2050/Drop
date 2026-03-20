@@ -1,7 +1,7 @@
 import Sort from "@/components/Sort";
 import { getFiles } from "@/lib/actions/file.actions";
 import Card from "@/components/Card";
-import { getFileTypesParams } from "@/lib/utils";
+import { formatStorageDisplay, getFileTypesParams } from "@/lib/utils";
 
 interface PageProps {
   params: Promise<{ type?: string }>;
@@ -17,6 +17,11 @@ const Page = async ({ searchParams, params }: PageProps) => {
 
   const types = getFileTypesParams(type) as FileType[];
   const files = await getFiles({ types, searchText, sort });
+  const routeUsageBytes =
+    files?.documents?.reduce(
+      (total: number, file: FileDocument) => total + Number(file.size ?? 0),
+      0,
+    ) ?? 0;
 
   return (
     <div className="page-container">
@@ -25,7 +30,7 @@ const Page = async ({ searchParams, params }: PageProps) => {
 
         <div className="total-size-section">
           <p className="body-1">
-            Total: <span className="h5">0 MB</span>
+            Total: <span className="h5">{formatStorageDisplay(routeUsageBytes)}</span>
           </p>
 
           <div className="sort-container">
