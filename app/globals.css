@@ -460,7 +460,7 @@
     @apply flex h-[52px] flex-1 items-center gap-3 rounded-full px-4 shadow-[var(--shadow-drop-3)];
   }
   .search-input {
-    @apply w-full border-none p-0 text-[14px] font-normal leading-[20px] shadow-none outline-none placeholder:text-light-200 focus:ring-0;
+    @apply w-full border-none p-0 text-[14px] font-normal leading-[20px] shadow-none outline-none placeholder:text-light-200 focus:ring-0 focus:ring-transparent focus-visible:border-transparent focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0;
   }
   .search-result {
     @apply absolute left-0 top-16 z-50 flex w-full flex-col gap-3 rounded-[20px] bg-white p-4 shadow-[var(--shadow-drop-3)];

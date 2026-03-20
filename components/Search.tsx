@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import Image from "next/image";
 import { Input } from "@/components/ui/input";
@@ -16,6 +16,7 @@ const Search = () => {
   const searchQuery = searchParams.get("query") || "";
   const [results, setResults] = useState<FileDocument[]>([]);
   const [open, setOpen] = useState(false);
+  const searchRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
   const path = usePathname();
   const [debouncedQuery] = useDebounce(query, 300);
@@ -42,6 +43,28 @@ const Search = () => {
     }
   }, [searchQuery]);
 
+  useEffect(() => {
+    const onDocumentMouseDown = (event: MouseEvent) => {
+      if (!searchRef.current?.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    };
+
+    const onDocumentKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", onDocumentMouseDown);
+    document.addEventListener("keydown", onDocumentKeyDown);
+
+    return () => {
+      document.removeEventListener("mousedown", onDocumentMouseDown);
+      document.removeEventListener("keydown", onDocumentKeyDown);
+    };
+  }, []);
+
   const handleClickItem = (file: FileDocument) => {
     setOpen(false);
     setResults([]);
@@ -52,7 +75,7 @@ const Search = () => {
   };
 
   return (
-    <div className="search">
+    <div className="search" ref={searchRef}>
       <div className="search-input-wrapper">
         <Image
           src="/assets/icons/search.svg"
@@ -63,7 +86,7 @@ const Search = () => {
         <Input
           value={query}
           placeholder="Search..."
-          className="search-input"
+          className="w-full border-none p-0 text-[14px] font-normal leading-[20px] shadow-none outline-none placeholder:text-light-200 focus:ring-0 focus:ring-transparent focus-visible:border-transparent focus-visible:ring-0 focus-visible:ring-transparent focus-visible:ring-offset-0"
           onChange={(e) => setQuery(e.target.value)}
         />
 
