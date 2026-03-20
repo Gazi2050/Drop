@@ -2,7 +2,7 @@
 
 import { createAdminClient, createSessionClient } from "@/lib/appwrite";
 import { appwriteConfig } from "@/lib/appwrite/config";
-import { ID, Models, Query } from "node-appwrite";
+import { Databases, ID, Models, Query } from "node-appwrite";
 import { getFileOpenUrlAbsolute, getFileType, parseStringify } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
 import { getCurrentUser } from "@/lib/actions/user.actions";
@@ -11,6 +11,34 @@ import { headers } from "next/headers";
 const handleError = (error: unknown, message: string) => {
   console.log(error, message);
   throw error;
+};
+
+const addNameSuffix = (fileName: string, suffix: string) => {
+  const dotIndex = fileName.lastIndexOf(".");
+  if (dotIndex <= 0) return `${fileName}-${suffix}`;
+
+  const base = fileName.slice(0, dotIndex);
+  const ext = fileName.slice(dotIndex);
+  return `${base}-${suffix}${ext}`;
+};
+
+const getUniqueFileName = async (
+  databases: Databases,
+  ownerId: string,
+  desiredName: string,
+) => {
+  let candidate = desiredName;
+
+  while (true) {
+    const existing = await databases.listDocuments(
+      appwriteConfig.databaseId,
+      appwriteConfig.filesCollectionId,
+      [Query.equal("owner", [ownerId]), Query.equal("name", [candidate]), Query.limit(1)],
+    );
+
+    if (existing.total === 0) return candidate;
+    candidate = addNameSuffix(desiredName, Math.random().toString(36).slice(2, 7));
+  }
 };
 
 export const uploadFile = async ({
@@ -32,7 +60,8 @@ export const uploadFile = async ({
       inputFile,
     );
 
-    const { type, extension } = getFileType(bucketFile.name);
+    const uniqueName = await getUniqueFileName(databases, ownerId, bucketFile.name);
+    const { type, extension } = getFileType(uniqueName);
     const headersList = await headers();
     const host = headersList.get("host") ?? "localhost:3000";
     const protocol =
@@ -42,13 +71,13 @@ export const uploadFile = async ({
 
     const fileDocument = {
       type,
-      name: bucketFile.name,
+      name: uniqueName,
       url: getFileOpenUrlAbsolute(
         baseUrl,
         bucketFile.$id,
         type,
         extension,
-        bucketFile.name
+        uniqueName
       ),
       extension,
       size: bucketFile.sizeOriginal,
@@ -113,7 +142,8 @@ export const createFileDocumentFromBucketFile = async ({
       throw new Error("Unauthorized file metadata creation attempt");
     }
 
-    const { type, extension } = getFileType(fileName);
+    const uniqueName = await getUniqueFileName(databases, ownerId, fileName);
+    const { type, extension } = getFileType(uniqueName);
     const headersList = await headers();
     const host = headersList.get("host") ?? "localhost:3000";
     const protocol =
@@ -123,13 +153,13 @@ export const createFileDocumentFromBucketFile = async ({
 
     const fileDocument = {
       type,
-      name: fileName,
+      name: uniqueName,
       url: getFileOpenUrlAbsolute(
         baseUrl,
         bucketFileId,
         type,
         extension,
-        fileName,
+        uniqueName,
       ),
       extension,
       size,

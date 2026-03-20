@@ -267,7 +267,7 @@ const FileUploader = ({ ownerId, accountId, className }: Props) => {
         <p>Upload</p>
       </Button>
       {uploadItems.length > 0 && (
-        <ul className="fixed bottom-10 right-10 z-50 flex size-full h-fit max-w-[480px] flex-col gap-3 rounded-[20px] bg-white p-7 shadow-[var(--shadow-drop-3)]">
+        <ul className="fixed inset-x-4 bottom-4 z-50 mx-auto flex max-h-[70vh] w-auto max-w-[480px] flex-col gap-3 overflow-y-auto rounded-[20px] bg-white p-4 shadow-[var(--shadow-drop-3)] sm:inset-x-auto sm:bottom-10 sm:right-10 sm:w-full sm:p-7">
           <h4 className="text-[18px] leading-[20px] font-medium text-light-100">
             Uploading
           </h4>
@@ -279,21 +279,21 @@ const FileUploader = ({ ownerId, accountId, className }: Props) => {
             return (
               <li
                 key={uploadItem.id}
-                className="flex items-center justify-between gap-3 rounded-xl p-3 shadow-[var(--shadow-drop-3)]"
+                className="flex items-center justify-between gap-2 rounded-xl p-3 shadow-[var(--shadow-drop-3)] sm:gap-3"
               >
-                <div className="flex items-center gap-3">
+                <div className="flex min-w-0 items-center gap-2 sm:gap-3">
                   <Thumbnail
                     type={type}
                     extension={extension}
                     url={convertFileToUrl(file)}
                   />
 
-                  <div className="mb-2 max-w-[300px]">
+                  <div className="mb-2 min-w-0 max-w-[220px] sm:max-w-[300px]">
                     <p className="line-clamp-1 text-[14px] font-semibold leading-[20px]">
                       {file.name}
                     </p>
                     <div className="mt-2 flex items-center gap-2">
-                      <div className="h-2 w-[140px] overflow-hidden rounded-full bg-light-200/40">
+                      <div className="h-2 w-24 overflow-hidden rounded-full bg-light-200/40 sm:w-[140px]">
                         <div
                           className={cn(
                             "h-full rounded-full transition-all duration-200",
@@ -314,6 +314,7 @@ const FileUploader = ({ ownerId, accountId, className }: Props) => {
                   width={24}
                   height={24}
                   alt="Remove"
+                  className="shrink-0"
                   onClick={(e) => handleRemoveFile(e, uploadItem.id)}
                 />
               </li>
