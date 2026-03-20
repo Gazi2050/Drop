@@ -1,36 +1,90 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Drop - Storage Management App
+
+![Drop Hero](https://ik.imagekit.io/uc8ejfj1j/drop-folder/readme-hero_zCOqLXkV61.png)
+
+Drop is a full-stack file storage and management app built with Next.js and Appwrite. It supports OTP authentication, file uploads with progress UI, search, sharing, public links, and storage analytics by file type.
+
+## Features
+
+- OTP-based authentication (email token + verification flow)
+- Protected app routes for authenticated users
+- Upload files with drag-and-drop and per-file progress UI
+- Auto-rename duplicate file names per user (e.g. `img01-a3end.png`)
+- Browse files by category: Documents, Images, Video, Audio, Others
+- Sort files by created date, name, and size
+- Global file search with debounced results
+- File actions: rename, details, share, make public, download, delete
+- Public link generation for files via tokenized endpoint
+- Storage summary and charts (used vs total, by type)
+- Responsive UI for desktop and mobile navigation
+- Generated user avatars with DiceBear
+
+## Tech Stack
+
+- Next.js (App Router)
+- React + TypeScript
+- Tailwind CSS
+- Radix UI
+- Appwrite (Auth, Database, Storage, Tokens)
+- Recharts / Chart.js
+- react-dropzone
+
+## Project Structure
+
+- `app/(auth)` - sign-in / sign-up routes and auth layout
+- `app/(root)` - authenticated app routes (dashboard + type pages)
+- `app/api/files/*` - secure file view/download/public APIs
+- `components` - UI and feature components (uploader, search, dropdown actions, charts)
+- `lib/actions` - server actions for users and files
+- `lib/appwrite` - Appwrite clients and config
+- `lib/utils.ts` - utility functions and file-type helpers
 
 ## Getting Started
 
-First, run the development server:
+1. Clone the project
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/Gazi2050/Drop.git
+cd Drop
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+pnpm install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+3. Create `.env.local` and set your Appwrite variables:
 
-## Learn More
+```bash
+NEXT_PUBLIC_APPWRITE_ENDPOINT=
+NEXT_PUBLIC_APPWRITE_PROJECT=
+NEXT_PUBLIC_APPWRITE_DATABASE=
+NEXT_PUBLIC_APPWRITE_USERS_COLLECTION=
+NEXT_PUBLIC_APPWRITE_FILES_COLLECTION=
+NEXT_PUBLIC_APPWRITE_BUCKET=
+NEXT_APPWRITE_KEY=
+```
 
-To learn more about Next.js, take a look at the following resources:
+4. Run development server
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+pnpm dev
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+5. Build for production
 
-## Deploy on Vercel
+```bash
+pnpm build
+pnpm start
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Notes
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Max upload size is `50MB` per file.
+- File access is permission-checked for owner/shared users.
+- Public file links are token-based.
+
+## License
+
+This project is for educational and personal development use unless otherwise specified.
