@@ -1,7 +1,7 @@
-# ⚡ Drop — Smart File Storage Platform 🌐
+# 🚀 Drop — Modern File Storage & Management Platform
 
 <p align="center">
-  <img src="https://ik.imagekit.io/uc8ejfj1j/drop-folder/readme-hero_zCOqLXkV61.png" alt="Drop Hero" width="900" />
+  <img src="https://ik.imagekit.io/uc8ejfj1j/drop-folder/readme-hero_zCOqLXkV61.png" alt="Drop Hero" width="700" />
 </p>
 
 Welcome to **Drop** 🚀 — a modern full-stack file storage and management app built with **Next.js + Appwrite**.  
@@ -46,25 +46,6 @@ Upload, organize, search, share, and manage files with a clean responsive UI and
 - **Video:** MP4, MOV, MKV, WEBM, AVI
 - **Audio:** MP3, WAV, OGG, FLAC, AAC, and more
 - **Others:** Any unsupported extension fallback
-
-## 🧰 Tech Stack
-
-- ⚛️ Next.js (App Router)
-- ⚛️ React + TypeScript
-- 🎨 Tailwind CSS + Radix UI
-- ☁️ Appwrite (Auth, Database, Storage, Tokens)
-- 📈 Recharts / Chart.js
-- 📦 react-dropzone
-
-## 🗂️ Project Structure
-
-- `app/(auth)` — auth pages and auth layout
-- `app/(root)` — protected app pages (dashboard + file type routes)
-- `app/api/files/*` — secure file view/download/public APIs
-- `components` — reusable UI + feature components
-- `lib/actions` — server actions for user and file operations
-- `lib/appwrite` — Appwrite clients/config
-- `lib/utils.ts` — helpers for file types, URLs, formatting, and avatars
 
 ## 🚀 Installation Guide
 
@@ -111,7 +92,3 @@ pnpm start
 - Max upload size is **50MB** per file.
 - File access is permission-checked for owner/shared users.
 - Public links are tokenized and validated through API routes.
-
-## 📄 License
-
-This project is for educational and personal development use unless stated otherwise.
