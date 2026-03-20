@@ -1,11 +1,8 @@
-# Drop — Modern File Storage & Management Platform
-
 <p align="center">
   <img src="https://ik.imagekit.io/uc8ejfj1j/drop-folder/readme-hero_7EtL3-Al5q.png" alt="Drop Hero" width="900" />
 </p>
 
-Welcome to **Drop** — a modern file storage and management platform.  
-Upload, organize, search, share, and manage files with a clean responsive interface and secure access control.
+> ### Welcome to **Drop** — a modern file storage and management platform. Upload, organize, search, share, and manage files with a clean responsive interface and secure access control.
 
 ## 🔑 Key Features
 
