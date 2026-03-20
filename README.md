@@ -1,60 +1,87 @@
-# Drop - Storage Management App
+# ⚡ Drop — Smart File Storage Platform 🌐
 
-![Drop Hero](https://ik.imagekit.io/uc8ejfj1j/drop-folder/readme-hero_zCOqLXkV61.png)
+<p align="center">
+  <img src="https://ik.imagekit.io/uc8ejfj1j/drop-folder/readme-hero_zCOqLXkV61.png" alt="Drop Hero" width="900" />
+</p>
 
-Drop is a full-stack file storage and management app built with Next.js and Appwrite. It supports OTP authentication, file uploads with progress UI, search, sharing, public links, and storage analytics by file type.
+Welcome to **Drop** 🚀 — a modern full-stack file storage and management app built with **Next.js + Appwrite**.  
+Upload, organize, search, share, and manage files with a clean responsive UI and secure access control.
 
-## Features
+## 🔑 Key Features
 
-- OTP-based authentication (email token + verification flow)
-- Protected app routes for authenticated users
-- Upload files with drag-and-drop and per-file progress UI
-- Auto-rename duplicate file names per user (e.g. `img01-a3end.png`)
-- Browse files by category: Documents, Images, Video, Audio, Others
-- Sort files by created date, name, and size
-- Global file search with debounced results
-- File actions: rename, details, share, make public, download, delete
-- Public link generation for files via tokenized endpoint
-- Storage summary and charts (used vs total, by type)
-- Responsive UI for desktop and mobile navigation
-- Generated user avatars with DiceBear
+- 🔐 **OTP Authentication**  
+  Email OTP sign-up/sign-in flow with protected routes.
 
-## Tech Stack
+- 📤 **Upload with Smooth Progress UI**  
+  Drag-and-drop uploads with per-file progress bars and mobile-friendly upload tray.
 
-- Next.js (App Router)
-- React + TypeScript
-- Tailwind CSS
-- Radix UI
-- Appwrite (Auth, Database, Storage, Tokens)
-- Recharts / Chart.js
-- react-dropzone
+- 🧠 **Smart Duplicate Filename Handling**  
+  If a user uploads the same file name again, Drop auto-renames it (example: `img01-a3end.png`).
 
-## Project Structure
+- 📂 **File Type Organization**  
+  Separate pages for **Documents, Images, Video, Audio, Others**.
 
-- `app/(auth)` - sign-in / sign-up routes and auth layout
-- `app/(root)` - authenticated app routes (dashboard + type pages)
-- `app/api/files/*` - secure file view/download/public APIs
-- `components` - UI and feature components (uploader, search, dropdown actions, charts)
-- `lib/actions` - server actions for users and files
-- `lib/appwrite` - Appwrite clients and config
-- `lib/utils.ts` - utility functions and file-type helpers
+- 🔎 **Debounced Global Search**  
+  Real-time search suggestions with quick navigation to matching files.
 
-## Getting Started
+- 🛠️ **Advanced File Actions**  
+  Rename, Details, Share, Make Public, Download, Delete.
 
-1. Clone the project
+- 🔗 **Public Link Sharing**  
+  Generate token-based public links for secure external access.
+
+- 📊 **Storage Analytics**  
+  View total usage and category-wise usage with charts.
+
+- 📱 **Responsive Experience**  
+  Desktop sidebar + mobile navigation and optimized components.
+
+- 👤 **Generated User Avatars**  
+  DiceBear avatar generation based on user name/email.
+
+## 🧾 Supported File Types
+
+- **Documents:** PDF, DOC, DOCX, CSV, TXT, XLS/XLSX, and more
+- **Images:** JPG, JPEG, PNG, GIF, BMP, SVG, WEBP
+- **Video:** MP4, MOV, MKV, WEBM, AVI
+- **Audio:** MP3, WAV, OGG, FLAC, AAC, and more
+- **Others:** Any unsupported extension fallback
+
+## 🧰 Tech Stack
+
+- ⚛️ Next.js (App Router)
+- ⚛️ React + TypeScript
+- 🎨 Tailwind CSS + Radix UI
+- ☁️ Appwrite (Auth, Database, Storage, Tokens)
+- 📈 Recharts / Chart.js
+- 📦 react-dropzone
+
+## 🗂️ Project Structure
+
+- `app/(auth)` — auth pages and auth layout
+- `app/(root)` — protected app pages (dashboard + file type routes)
+- `app/api/files/*` — secure file view/download/public APIs
+- `components` — reusable UI + feature components
+- `lib/actions` — server actions for user and file operations
+- `lib/appwrite` — Appwrite clients/config
+- `lib/utils.ts` — helpers for file types, URLs, formatting, and avatars
+
+## 🚀 Installation Guide
+
+1. **Clone repository**
 
 ```bash
 git clone https://github.com/Gazi2050/Drop.git
 cd Drop
 ```
 
-2. Install dependencies
+2. **Install dependencies**
 
 ```bash
 pnpm install
 ```
 
-3. Create `.env.local` and set your Appwrite variables:
+3. **Create `.env.local`**
 
 ```bash
 NEXT_PUBLIC_APPWRITE_ENDPOINT=
@@ -66,25 +93,25 @@ NEXT_PUBLIC_APPWRITE_BUCKET=
 NEXT_APPWRITE_KEY=
 ```
 
-4. Run development server
+4. **Run development server**
 
 ```bash
 pnpm dev
 ```
 
-5. Build for production
+5. **Build & start production**
 
 ```bash
 pnpm build
 pnpm start
 ```
 
-## Notes
+## ℹ️ Notes
 
-- Max upload size is `50MB` per file.
+- Max upload size is **50MB** per file.
 - File access is permission-checked for owner/shared users.
-- Public file links are token-based.
+- Public links are tokenized and validated through API routes.
 
-## License
+## 📄 License
 
-This project is for educational and personal development use unless otherwise specified.
+This project is for educational and personal development use unless stated otherwise.
