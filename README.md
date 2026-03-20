@@ -1,7 +1,7 @@
 # 🚀 Drop — Modern File Storage & Management Platform
 
 <p align="center">
-  <img src="https://ik.imagekit.io/uc8ejfj1j/drop-folder/readme-hero_zCOqLXkV61.png" alt="Drop Hero" width="700" />
+  <img src="https://ik.imagekit.io/uc8ejfj1j/drop-folder/readme-hero_zCOqLXkV61.png" alt="Drop Hero" width="900" />
 </p>
 
 Welcome to **Drop** 🚀 — a modern full-stack file storage and management app built with **Next.js + Appwrite**.  
