@@ -22,7 +22,7 @@ declare interface FileDocument {
 
 declare interface ActionType {
   label: string;
-  icon: string;
+  icon: import("lucide-react").LucideIcon;
   value: string;
 }
 

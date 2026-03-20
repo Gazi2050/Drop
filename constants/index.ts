@@ -6,6 +6,12 @@ import {
   Video,
   Music,
   PieChart,
+  Pencil,
+  Info,
+  Share2,
+  Link,
+  Download,
+  Trash2,
 } from "lucide-react";
 
 export const navItems: { name: string; icon: LucideIcon; url: string }[] = [
@@ -25,32 +31,32 @@ export const categoryIconsByName = Object.fromEntries(
 export const actionsDropdownItems = [
   {
     label: "Rename",
-    icon: "/assets/icons/edit.svg",
+    icon: Pencil,
     value: "rename",
   },
   {
     label: "Details",
-    icon: "/assets/icons/info.svg",
+    icon: Info,
     value: "details",
   },
   {
     label: "Share",
-    icon: "/assets/icons/share.svg",
+    icon: Share2,
     value: "share",
   },
   {
     label: "Make Public",
-    icon: "/assets/icons/link.svg",
+    icon: Link,
     value: "makePublic",
   },
   {
     label: "Download",
-    icon: "/assets/icons/download.svg",
+    icon: Download,
     value: "download",
   },
   {
     label: "Delete",
-    icon: "/assets/icons/delete.svg",
+    icon: Trash2,
     value: "delete",
   },
 ];

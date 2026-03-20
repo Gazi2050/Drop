@@ -250,21 +250,17 @@ const ActionDropdown = ({ file }: { file: FileDocument }) => {
                   download={file.name}
                   className="flex items-center gap-2"
                 >
-                  <Image
-                    src={actionItem.icon}
-                    alt={actionItem.label}
-                    width={30}
-                    height={30}
+                  <actionItem.icon
+                    className="size-4 text-light-100"
+                    aria-hidden="true"
                   />
                   {actionItem.label}
                 </Link>
               ) : (
                 <div className="flex items-center gap-2">
-                  <Image
-                    src={actionItem.icon}
-                    alt={actionItem.label}
-                    width={30}
-                    height={30}
+                  <actionItem.icon
+                    className="size-4 text-light-100"
+                    aria-hidden="true"
                   />
                   {actionItem.label}
                 </div>
