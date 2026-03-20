@@ -23,6 +23,10 @@ const nextConfig: NextConfig = {
         hostname: "sgp.cloud.appwrite.io",
         pathname: "/**",
       },
+      {
+        protocol: "https",
+        hostname: "api.dicebear.com",
+      },
     ],
   },
 };

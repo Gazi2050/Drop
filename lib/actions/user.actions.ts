@@ -3,7 +3,7 @@
 import { createAdminClient, createSessionClient } from "@/lib/appwrite";
 import { appwriteConfig } from "@/lib/appwrite/config";
 import { Query, ID } from "node-appwrite";
-import { parseStringify } from "@/lib/utils";
+import { generateAvatarFromName, parseStringify } from "@/lib/utils";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { avatarPlaceholderUrl } from "@/constants";
@@ -59,7 +59,7 @@ export const createAccount = async ({
       {
         fullName,
         email,
-        avatar: avatarPlaceholderUrl,
+        avatar: generateAvatarFromName(fullName || email),
         accountId,
       },
     );
@@ -109,7 +109,38 @@ export const getCurrentUser = async () => {
 
     if (user.total <= 0) return null;
 
-    return parseStringify(user.documents[0]);
+    const currentUser = user.documents[0] as {
+      $id: string;
+      fullName?: string;
+      email?: string;
+      avatar?: string;
+    };
+
+    const needsGeneratedAvatar =
+      !currentUser.avatar || currentUser.avatar === avatarPlaceholderUrl;
+    const hasLegacyDicebearSvg =
+      typeof currentUser.avatar === "string" &&
+      currentUser.avatar.includes("api.dicebear.com") &&
+      currentUser.avatar.includes("/svg?");
+
+    if (needsGeneratedAvatar || hasLegacyDicebearSvg) {
+      const generatedAvatar = generateAvatarFromName(
+        currentUser.fullName || currentUser.email || result.email,
+      );
+
+      const updatedUser = await databases.updateDocument(
+        appwriteConfig.databaseId,
+        appwriteConfig.usersCollectionId,
+        currentUser.$id,
+        {
+          avatar: generatedAvatar,
+        },
+      );
+
+      return parseStringify(updatedUser);
+    }
+
+    return parseStringify(currentUser);
   } catch {
     return null;
   }

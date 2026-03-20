@@ -177,7 +177,7 @@ const FileUploader = ({ ownerId, accountId, className }: Props) => {
             prev.filter((uploadItem) => uploadItem.id !== item.id),
           );
 
-          return toast({
+          toast({
             description: (
               <p className="text-[14px] leading-[20px] font-normal text-white">
                 <span className="font-semibold">{file.name}</span> is too large.
@@ -186,6 +186,7 @@ const FileUploader = ({ ownerId, accountId, className }: Props) => {
             ),
             className: "bg-red rounded-[10px]",
           });
+          return;
         }
 
         try {
@@ -228,6 +229,8 @@ const FileUploader = ({ ownerId, accountId, className }: Props) => {
             ),
           );
         }
+
+        return;
       });
 
       await Promise.all(uploadPromises);

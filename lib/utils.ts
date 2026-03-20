@@ -10,6 +10,13 @@ export const parseStringify = (value: unknown) =>
 
 export const convertFileToUrl = (file: File) => URL.createObjectURL(file);
 
+export const generateAvatarFromName = (name: string) => {
+  const seed = (name || "user").trim();
+  const encodedSeed = encodeURIComponent(seed);
+
+  return `https://api.dicebear.com/9.x/micah/png?seed=${encodedSeed}&size=80&radius=50`;
+};
+
 export const calculatePercentage = (sizeInBytes: number) => {
   const totalSizeInBytes = 2 * 1024 * 1024 * 1024; // 2GB in bytes
   const percentage = (sizeInBytes / totalSizeInBytes) * 100;
@@ -239,7 +246,20 @@ export const getFileDownloadUrl = (
   return `/api/files/${bucketFileId}/download?ext=${ext}&name=${encodeURIComponent(name)}`;
 };
 
-export const getUsageSummary = (totalSpace: any) => {
+type UsageCategory = {
+  size: number;
+  latestDate: string;
+};
+
+type UsageSummaryInput = {
+  document: UsageCategory;
+  image: UsageCategory;
+  video: UsageCategory;
+  audio: UsageCategory;
+  other: UsageCategory;
+};
+
+export const getUsageSummary = (totalSpace: UsageSummaryInput) => {
   return [
     {
       title: "Documents",
