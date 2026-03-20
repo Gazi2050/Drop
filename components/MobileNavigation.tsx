@@ -38,13 +38,18 @@ const MobileNavigation = ({
 
   return (
     <header className="mobile-header">
-      <Image
-        src="/assets/images/logo-2.png"
-        alt="Drop"
-        width={40}
-        height={40}
-        className="size-10 object-contain"
-      />
+      <Link href="/" aria-label="Drop home" className="flex items-center gap-2">
+        <Image
+          src="/assets/images/logo-2.png"
+          alt="Drop"
+          width={40}
+          height={40}
+          className="size-10 object-contain"
+        />
+        <span className="text-xl font-bold leading-none tracking-tight text-brand">
+          Drop
+        </span>
+      </Link>
 
       <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger>

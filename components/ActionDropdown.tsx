@@ -31,6 +31,21 @@ import {
 import { usePathname } from "next/navigation";
 import { FileDetails, ShareInput } from "@/components/ActionsModalContent";
 
+const formatFileNameWithExtension = (fileName: string, maxBaseLength = 8) => {
+  const dotIndex = fileName.lastIndexOf(".");
+  if (dotIndex <= 0 || dotIndex === fileName.length - 1) {
+    return fileName.length > maxBaseLength + 3
+      ? `${fileName.slice(0, maxBaseLength)}...`
+      : fileName;
+  }
+
+  const baseName = fileName.slice(0, dotIndex);
+  const extension = fileName.slice(dotIndex + 1);
+
+  if (baseName.length <= maxBaseLength) return fileName;
+  return `${baseName.slice(0, maxBaseLength)}...${extension}`;
+};
+
 const ActionDropdown = ({ file }: { file: FileDocument }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -138,7 +153,7 @@ const ActionDropdown = ({ file }: { file: FileDocument }) => {
                     onClick={() => {
                       navigator.clipboard.writeText(publicLink);
                     }}
-                    className="h-[52px] w-full flex-1 rounded-full border-0 bg-brand text-[14px] font-medium leading-[20px] text-white transition-all hover:bg-brand-100"
+                    className="h-[52px] w-full rounded-full border border-brand/30 bg-brand text-[14px] font-medium leading-[20px] text-white shadow-none"
                   >
                     Copy Link
                   </Button>
@@ -211,9 +226,9 @@ const ActionDropdown = ({ file }: { file: FileDocument }) => {
             height={34}
           />
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          <DropdownMenuLabel className="max-w-[200px] truncate">
-            {file.name}
+        <DropdownMenuContent className="w-[220px] min-w-[220px] max-w-[220px]">
+          <DropdownMenuLabel className="w-full truncate">
+            {formatFileNameWithExtension(file.name)}
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           {actionsDropdownItems.map((actionItem) => (
