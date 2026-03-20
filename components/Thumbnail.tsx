@@ -34,7 +34,6 @@ export const Thumbnail = ({
         className={cn(
           "size-8 object-contain",
           imageClassName,
-          isImage && "size-full object-cover object-center",
         )}
       />
     </figure>

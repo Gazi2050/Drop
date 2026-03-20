@@ -13,6 +13,7 @@ const Dashboard = async () => {
     getFiles({ types: [], limit: 10 }),
     getTotalSpaceUsed(),
   ]);
+  const recentFiles = files?.documents?.slice(0, 8) ?? [];
 
   const used = Number(totalSpace?.used ?? 0);
   const all = Number(totalSpace?.all ?? 2 * BYTES_PER_GB);
@@ -49,16 +50,16 @@ const Dashboard = async () => {
         <h2 className="h4 shrink-0 text-light-100 xl:h3">
           Recent files uploaded
         </h2>
-        {files?.documents?.length > 0 ? (
+        {recentFiles.length > 0 ? (
           <>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:hidden">
-              {files.documents.map((file: FileDocument) => (
+              {recentFiles.map((file: FileDocument) => (
                 <Card key={file.$id} file={file} />
               ))}
             </div>
 
             <ul className="mt-3 hidden flex-col gap-3 xl:mt-4 xl:gap-4 lg:flex">
-            {files.documents.map((file: FileDocument) => (
+            {recentFiles.map((file: FileDocument) => (
               <Link
                 href={getFileOpenUrl(file.bucketFileId, file.type, file.extension, file.name)}
                 target="_blank"
