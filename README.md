@@ -1,4 +1,4 @@
-# ⚡ Drop — Fast & Simple File Hosting Platform 🌐
+# ⚡ [Drop](https://drop-a1.vercel.app) — Fast & Simple File Hosting Platform 🌐
 
 Welcome to **Drop**, a lightweight and lightning-fast web app designed for effortlessly uploading and sharing files like PDFs and images. Share instantly via public links—no sign-up required! For registered users, enjoy the added benefit of full file history and management. 🚀
 
